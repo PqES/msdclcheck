@@ -5,8 +5,8 @@
  */
 package controller;
 
-import Services.ServiceException;
-import Services.Services;
+import services.ServiceException;
+import services.Services;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
