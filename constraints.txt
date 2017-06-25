@@ -1,0 +1,18 @@
+MsProduct: http://localhost:8080/; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/MsProduct; Java
+	module Controller: msproduct.controller.*
+	module DAO: msproduct.dao.*
+	module SpringBoot: org.springframework.boot.**
+	module Main: msproduct.ProductApp
+	Main must-depend SpringBoot
+	only Controller can-depend DAO
+	Controller must-useannotation org.springframework.stereotype.Controller
+	only DAO can-useannotation JPA
+MsCustomer: http://localhost:9000; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/MsCustomer; Java
+SaleMicroservice: http://localhost:8086; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/SaleMicroservice; Java
+NewsletterMicroservice: http://localhost:8089/; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/NewsletterMicroservice; Cs
+AuthenticationMicroservice: http://localhost:8084/; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/AuthenticationMicroservice; Cs
+MsProduct cannot-communicate MsCustomer
+only SaleMicroservice can-communicate AuthenticationMicroservice 
+MsCustomer, MsProduct can-communicate-only NewsletterMicroservice
+MsCustomer, MsProduct must-communicate NewsletterMicroservice
+SaleMicroservice must-communicate AuthenticationMicroservice, MsProduct, MsCustomer
