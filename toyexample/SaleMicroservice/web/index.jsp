@@ -82,8 +82,8 @@
                 </c:if>
                 <form action="service" method="post">
                     <input type="hidden" value="AuthenticationController" name="logic" />
-                    <input type="text" name="user" placeholder="Username">
-                    <input type="password" name="pass" placeholder="Password">
+                    <input type="text" name="username" placeholder="Username">
+                    <input type="password" name="password" placeholder="Password">
                     <input type="submit" class="login loginmodal-submit" value="Login">
                 </form>
             </div>
