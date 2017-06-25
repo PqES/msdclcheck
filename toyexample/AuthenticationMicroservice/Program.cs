@@ -16,7 +16,7 @@ namespace AuthenticationMicroservice
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
-                .UseUrls("http://localhost:5000")
+                .UseUrls("")
                 .Build();
 
             host.Run();

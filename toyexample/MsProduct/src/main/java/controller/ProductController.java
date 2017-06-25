@@ -107,7 +107,7 @@ public class ProductController {
 	@ResponseBody
 	public String publisNewsLetter() {
 
-		String getCustomer = "http://localhost:5000/?method=Publish";
+		String getCustomer = "http://localhost:5001/?method=Publish";
 		try {
 			URL url = new URL(getCustomer);
 			HttpURLConnection requestCustomer = (HttpURLConnection) url.openConnection();
