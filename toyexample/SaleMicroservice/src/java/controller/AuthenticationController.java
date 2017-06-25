@@ -5,8 +5,8 @@
  */
 package controller;
 
-import services.ServiceException;
-import services.Services;
+import Services.ServiceException;
+import Services.Services;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,7 +15,7 @@ public class AuthenticationController implements Logic {
 
     @Override
     public String executa(HttpServletRequest req, HttpServletResponse res) throws Exception {
-        String user = req.getParameter("user");
+        String user = req.getParameter("username");
         String password = req.getParameter("password");
         try {
             if (Services.serviceAuthentication(user, password)) {

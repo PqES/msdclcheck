@@ -1,4 +1,4 @@
-package services;
+package Services;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -9,7 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 public class Services {
 
-    private static final String linkAuthentication = "";
+    private static final String linkAuthentication = "http://localhost:5000/?";
     private static final String linkGetClient = "http://sample-env-3.psebiyinbj.us-east-2.elasticbeanstalk.com/getCustomerCpf/";
     private static final String linkUpdateStock = "http://192.168.1.119:8080/venda";
     private static final String linkGetProducts = "http://sample-env-4.psebiyinbj.us-east-2.elasticbeanstalk.com/getProducts";
@@ -53,7 +53,10 @@ public class Services {
     }
 
     public static boolean serviceAuthentication(String user, String password) throws IOException, ServiceException {
-        return true;
+        final String link = linkAuthentication + "username="+user+"&password="+password;
+        String result = callServiceViaGet(link);
+        System.out.println(result+": "+link);
+        return result.equalsIgnoreCase("True");
     }
 
     public static String serviceGetClient(String cpf) throws IOException, ServiceException {
