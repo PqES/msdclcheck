@@ -7,7 +7,7 @@ using Entities;
 namespace Email{
 	public class EmailManager{
 
-        public static bool sendEmail(User user){
+        public static void sendEmail(User user){
 
             Console.WriteLine("fake email to "+ user.Email);
             var message = new MimeMessage ();
@@ -17,7 +17,8 @@ namespace Email{
 			message.Body = new TextPart ("plain") {
 				Text = "There are a new products in ToyExample"
 			};
-			using (var client = new SmtpClient ()) {
+			try{
+				using (var client = new SmtpClient ()) {
 				client.ServerCertificateValidationCallback = (s,c,h,e) => true;
 				client.Connect ("smtp-mail.outlook.com", 587, false);
 				client.AuthenticationMechanisms.Remove ("XOAUTH2");
@@ -25,7 +26,10 @@ namespace Email{
 				client.Send (message);
 				client.Disconnect (true);
 			}
-            return true;
+			}catch(Exception ex){
+				Console.WriteLine("Fail to send email to "+user.Email);
+				Console.WriteLine(ex.Message);
+			}
         }
 	}
 }

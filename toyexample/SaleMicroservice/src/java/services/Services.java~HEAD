@@ -9,7 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 public class Services {
 
-    private static final String linkAuthentication = "http://localhost:5000/?";
+    private static final String linkAuthentication = "http://localhost:8084/";
     private static final String linkGetClient = "http://localhost:9000/getCustomerCpf/";
     private static final String linkUpdateStock = "http://localhost:8080/venda";
     private static final String linkGetProducts = "http://localhost:8080/getProducts";
@@ -53,10 +53,7 @@ public class Services {
     }
 
     public static boolean serviceAuthentication(String user, String password) throws IOException, ServiceException {
-        final String link = linkAuthentication + "username="+user+"&password="+password;
-        String result = callServiceViaGet(link);
-        System.out.println(result+": "+link);
-        return result.equalsIgnoreCase("True");
+        return true;
     }
 
     public static String serviceGetClient(String cpf) throws IOException, ServiceException {

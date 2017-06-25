@@ -9,8 +9,8 @@ MsProduct: http://localhost:8080/; /home/elena/Documents/Mestrado/Artigo/msdclch
 	only DAO can-useannotation JPA
 MsCustomer: http://localhost:9000; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/MsCustomer; Java
 SaleMicroservice: http://localhost:8086; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/SaleMicroservice; Java
-NewsletterMicroservice: http://localhost:8089/; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/NewsletterMicroservice; Cs
-AuthenticationMicroservice: http://localhost:8084/; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/AuthenticationMicroservice; Cs
+NewsletterMicroservice: localhost:5001/; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/NewsletterMicroservice; Cs
+AuthenticationMicroservice: localhost:5000; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/AuthenticationMicroservice; Cs
 MsProduct cannot-communicate MsCustomer
 only SaleMicroservice can-communicate AuthenticationMicroservice 
 MsCustomer, MsProduct can-communicate-only NewsletterMicroservice

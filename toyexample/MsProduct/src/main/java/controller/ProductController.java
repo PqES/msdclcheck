@@ -103,5 +103,26 @@ public class ProductController {
 		}
 
 	}
+	@RequestMapping(value = "/publish", method = RequestMethod.POST)
+	@ResponseBody
+	public String publisNewsLetter() {
+
+		String getCustomer = "http://localhost:5000/?method=Publish";
+		try {
+			URL url = new URL(getCustomer);
+			HttpURLConnection requestCustomer = (HttpURLConnection) url.openConnection();
+			requestCustomer.connect();
+
+			JsonParser jp = new JsonParser();
+			JsonElement getCustomerResult = jp.parse(new InputStreamReader((InputStream) requestCustomer.getContent()));
+			return getCustomerResult.toString();
+
+		} catch (Exception e) {
+			System.out.println("" + e.getMessage());
+			e.printStackTrace();
+			return "Erro:" + e.getMessage();
+		}
+
+	}
 
 }
