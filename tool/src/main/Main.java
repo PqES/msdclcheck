@@ -10,33 +10,34 @@ import java.util.Set;
 import analyser.AccessAnalyser;
 import analyser.ConstraintsAnalyser;
 import entities.AccessDefinition;
+import entities.ArchitecturalDrift;
 import entities.MicroserviceDefinition;
 import entities.ConstraintDefinition;
 import inputManager.InputManager;
 
 public class Main {
-	public static void main(String[] args) throws IOException {
-	
-		
-		File arquivo = new File("/home/elena/Documents/Mestrado/Artigo/msdclcheck/constraints.txt");
-		
-		InputManager i = new InputManager();
-		i.readFile(arquivo);
-		
-		System.out.println("\n");
-		
+	public static void main(String[] args) {
 		try {
-			HashMap<MicroserviceDefinition, Set<AccessDefinition>> accessMap = AccessAnalyser.getInstance().analyseAll(i.getMicroservice());
-			HashMap<MicroserviceDefinition, Set<ConstraintDefinition>> constraintMap = i.getMap();
-			i.printHash();
-			System.out.println("\n");
-			for(Entry<MicroserviceDefinition, Set<AccessDefinition>> e : accessMap.entrySet()){
-				System.out.println(e.getKey()+" "+e.getValue());
-			}
-			System.out.println("\n");
-						
-			ConstraintsAnalyser.getInstance().analyseConstraints(constraintMap, accessMap); //analisador das regras, retorna um conjunto de acessos inválidos
+			InputManager.getInstance().readFile(new File("constraints.txt"));
 			
+			//obtem Microserviços, DCL's e regras do arquivo
+			Set<MicroserviceDefinition> allServices = InputManager.getInstance().getAllServices();
+			HashMap<MicroserviceDefinition, Set<ConstraintDefinition>> constraintMap = InputManager.getInstance().getServiceMap();
+			HashMap<MicroserviceDefinition, String> dclMap = InputManager.getInstance().getDclMap();
+			
+			//checa acesso dos microserviços
+			HashMap<MicroserviceDefinition, Set<AccessDefinition>> accessMap = AccessAnalyser.getInstance().analyseAll(allServices);
+			System.out.println("==== ACCESSES ====");
+			for(Entry<MicroserviceDefinition, Set<AccessDefinition>> entry : accessMap.entrySet()){
+				System.out.println(entry.getKey()+": "+entry.getValue());
+			}
+			
+			//verifica violações
+			Set<ArchitecturalDrift> drifts = ConstraintsAnalyser.getInstance().analyseConstraints(constraintMap, accessMap);
+			System.out.println("==== DRIFTS =====");
+			for(ArchitecturalDrift a : drifts){
+				System.out.println(a.getMessage());
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

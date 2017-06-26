@@ -1,6 +1,7 @@
 package enums;
 
 public enum Constraint {
+	
 	CAN_COMMUNICATE("can-communicate",ConstraintType.CAN_COMMUNICATE),
 	CANNOT_COMMUNICATE("cannot-communicate",ConstraintType.CANNOT_COMMUNICATE),
 	CAN_COMMUNICATE_ONLY("can-communicate-only", ConstraintType.CAN_COMMUNICATE_ONLY),
@@ -15,7 +16,8 @@ public enum Constraint {
 		this.value = value;
 		this.constraintType = constraintType;
 	}
-	 Constraint(){
+	
+	Constraint(){
 		
 	}
 

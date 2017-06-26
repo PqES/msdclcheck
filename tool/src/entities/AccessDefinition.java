@@ -38,6 +38,6 @@ public class AccessDefinition {
 	
 	@Override
 	public String toString(){
-		return  callee.getName();
+		return  caller.getName() + " access " + callee.getName();
 	}
 }

@@ -14,11 +14,7 @@ public class ConstraintDefinition {
 		this.microserviceDestin = microserviceDestin;
 		this.constraint = constraint;
 	}
-	public ConstraintDefinition(String microserviceOrigin, String microserviceDestin){
-		this.microserviceOrigin = microserviceOrigin;
-		this.microserviceDestin = microserviceDestin;
 
-	}
 	public String getMicroserviceOrigin(){
 		return this.microserviceOrigin;
 	}
@@ -30,9 +26,10 @@ public class ConstraintDefinition {
 	public Constraint getConstraint(){
 		return this.constraint;
 	}
+	
 	@Override
 	public String toString(){
-		return " "+getConstraint() + " "+ getMicroserviceDestin();
+		return getMicroserviceOrigin() + " "+getConstraint().toString() + " "+ getMicroserviceDestin();
 	}
 }
 

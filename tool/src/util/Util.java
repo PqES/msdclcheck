@@ -17,9 +17,8 @@ public class Util {
 	}
 	
 	public static List<File> getAllFiles(File dir) throws IOException{
-		
 		if(!dir.getCanonicalFile().isDirectory()){
-			throw new IOException("Folder " + dir.getCanonicalFile().isDirectory()+ " is not a folder");
+			throw new IOException("Folder " + dir.getCanonicalFile()+ " is not a folder");
 		}
 		List<File> anyFiles = new LinkedList<>();
 		File files[] = dir.listFiles();

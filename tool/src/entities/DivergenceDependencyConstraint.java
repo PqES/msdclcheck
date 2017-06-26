@@ -1,25 +1,22 @@
 package entities;
 
-public class DivergenceDependencyConstraint extends ArchitecturalDrift{
-	private  final String forbiddenDependency;
-	
-	public DivergenceDependencyConstraint(ConstraintDefinition violate, String forbiddenDependency) {
-		super(violate);
-		this.forbiddenDependency = forbiddenDependency;
-	}
+import com.sun.accessibility.internal.resources.accessibility;
 
-	public String getForbiddenDependency() {
-		return forbiddenDependency;
+public class DivergenceDependencyConstraint extends ArchitecturalDrift{
+	
+	private final AccessDefinition access; 
+	
+	public DivergenceDependencyConstraint(ConstraintDefinition violate, AccessDefinition access) {
+		super(violate);
+		this.access = access;
 	}
 	
 	public String getViolationType(){
-		return "Divergence";
+		return ArchitecturalDrift.DIVERGENCE;
 	}
 
 	@Override
 	public String getMessage() {
-		// TODO Auto-generated method stub
-		return this.getViolateConstraint().getMicroserviceOrigin()+ " not " + ""+ 
-				this.getViolateConstraint().getConstraint() + " " + this.getViolateConstraint().getMicroserviceDestin();
+		return "Divergence: " + getViolateConstraint().toString() + " (" + access.toString() + ")";
 	}
 }
