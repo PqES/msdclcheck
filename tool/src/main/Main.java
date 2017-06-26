@@ -18,12 +18,13 @@ import inputManager.InputManager;
 public class Main {
 	public static void main(String[] args) {
 		try {
-			InputManager.getInstance().readFile(new File("constraints.txt"));
+			InputManager inputManager = new InputManager();
+			inputManager.readFile(new File("constraints.txt"));
 			
 			//obtem Microserviços, DCL's e regras do arquivo
-			Set<MicroserviceDefinition> allServices = InputManager.getInstance().getAllServices();
-			HashMap<MicroserviceDefinition, Set<ConstraintDefinition>> constraintMap = InputManager.getInstance().getServiceMap();
-			HashMap<MicroserviceDefinition, String> dclMap = InputManager.getInstance().getDclMap();
+			Set<MicroserviceDefinition> allServices = inputManager.getAllServices();
+			HashMap<MicroserviceDefinition, Set<ConstraintDefinition>> constraintMap = inputManager.getServiceMap();
+			HashMap<MicroserviceDefinition, String> dclMap = inputManager.getDclMap();
 			
 			//checa acesso dos microserviços
 			HashMap<MicroserviceDefinition, Set<AccessDefinition>> accessMap = AccessAnalyser.getInstance().analyseAll(allServices);

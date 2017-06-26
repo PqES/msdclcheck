@@ -14,19 +14,13 @@ import enums.Constraint;
 import util.RulesRegex;
 
 public class InputManager {
-
-	private final static InputManager instance = new InputManager();
 	
 	//retornos
 	private HashMap<MicroserviceDefinition, Set<ConstraintDefinition>> serviceMap = new HashMap<>();
 	private HashMap<MicroserviceDefinition, String> dclMap = new HashMap<>();
 	
-	private InputManager() {
+	public InputManager() {
 
-	}
-
-	public static InputManager getInstance(){
-		return instance;
 	}
 	
 	public Constraint findConstraint(String constraint) {
