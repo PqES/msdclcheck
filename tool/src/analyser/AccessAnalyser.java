@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import entities.AccessDefinition;
+import entities.CommunicateDefinition;
 import entities.MicroserviceDefinition;
 import util.Util;
 
@@ -24,9 +24,9 @@ public class AccessAnalyser {
 		return instance;
 	}
 
-	private Set<AccessDefinition> checkAccess(File f, MicroserviceDefinition caller,
+	private Set<CommunicateDefinition> checkAccess(File f, MicroserviceDefinition caller,
 			Set<MicroserviceDefinition> allMicroservices) throws IOException {
-		Set<AccessDefinition> accesses = new HashSet<>();
+		Set<CommunicateDefinition> accesses = new HashSet<>();
 		FileReader fr = new FileReader(f);
 		BufferedReader buffer = new BufferedReader(fr);
 		String line;
@@ -36,7 +36,7 @@ public class AccessAnalyser {
 
 				if (line.contains(m.getLink())) {
 
-					accesses.add(new AccessDefinition(caller, m));
+					accesses.add(new CommunicateDefinition(caller, m));
 				}
 			}
 		}
@@ -45,10 +45,10 @@ public class AccessAnalyser {
 		return accesses;
 	}
 
-	public Set<AccessDefinition> analyse(MicroserviceDefinition caller, Set<MicroserviceDefinition> allMicroservices)
+	public Set<CommunicateDefinition> analyse(MicroserviceDefinition caller, Set<MicroserviceDefinition> allMicroservices)
 			throws IOException {
 
-		Set<AccessDefinition> accesses = new HashSet<>();
+		Set<CommunicateDefinition> accesses = new HashSet<>();
 
 		List<File> javaFiles = Util.getAllFiles(new File(caller.getPath()));
 		for (File f : javaFiles) {
@@ -57,13 +57,13 @@ public class AccessAnalyser {
 		return accesses;
 	}
 
-	public HashMap<MicroserviceDefinition, Set<AccessDefinition>> analyseAll(
+	public HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> analyseAll(
 			Set<MicroserviceDefinition> allMicroservices) throws IOException {
 
-		HashMap<MicroserviceDefinition, Set<AccessDefinition>> map = new HashMap<>();
+		HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> map = new HashMap<>();
 		for (MicroserviceDefinition caller : allMicroservices) {
 
-			Set<AccessDefinition> accesses = new HashSet<>();
+			Set<CommunicateDefinition> accesses = new HashSet<>();
 			accesses.addAll(this.analyse(caller, allMicroservices));
 			map.put(caller, accesses);
 		}

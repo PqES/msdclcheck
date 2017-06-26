@@ -1,15 +1,15 @@
 package entities;
 
-public class AccessDefinition {
+public class CommunicateDefinition {
 
 	private MicroserviceDefinition caller;
 	private MicroserviceDefinition callee;
 	
-	public AccessDefinition(MicroserviceDefinition caller, MicroserviceDefinition callee){
+	public CommunicateDefinition(MicroserviceDefinition caller, MicroserviceDefinition callee){
 		this.caller = caller;
 		this.callee = callee;
 	}
-	public AccessDefinition(MicroserviceDefinition callee){
+	public CommunicateDefinition(MicroserviceDefinition callee){
 		
 		this.callee = callee;
 	}
@@ -29,8 +29,8 @@ public class AccessDefinition {
 	
 	@Override
 	public boolean equals(Object obj){
-		if(obj instanceof AccessDefinition){
-			AccessDefinition access = (AccessDefinition) obj;
+		if(obj instanceof CommunicateDefinition){
+			CommunicateDefinition access = (CommunicateDefinition) obj;
 			return this.caller.equals(access.caller) && this.callee.equals(access.callee);
 		}
 		return false;
@@ -38,6 +38,6 @@ public class AccessDefinition {
 	
 	@Override
 	public String toString(){
-		return  caller.getName() + " access " + callee.getName();
+		return  caller.getName() + " communicate " + callee.getName();
 	}
 }

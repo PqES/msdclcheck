@@ -1,4 +1,4 @@
-MsProduct: http://localhost:8080/; /home/elderjr/Documents/git_repositories/msdclcheck/toyexample/MsProduct; Java
+MsProduct: http://localhost:8080/; ../toyexample/MsProduct; Java
 	module Controller: msCustomer.controller.*
 	module DAO: msProduct.dao.*
 	module SpringBoot: org.springframework.boot.**
@@ -7,7 +7,7 @@ MsProduct: http://localhost:8080/; /home/elderjr/Documents/git_repositories/msdc
 	only Controller can-depend DAO
 	Controller must-useannotation org.springframework.stereotype.Controller
 	only DAO can-useannotation JPA	
-MsCustomer: http://localhost:9000; /home/elderjr/Documents/git_repositories/msdclcheck/toyexample/MsCustomer; Java
+MsCustomer: http://localhost:9000; ../toyexample/MsCustomer; Java
 	module Controller: msCustomer.controller.*
 	module DAO: msCustomer.dao.*
 	module SpringBoot: org.springframework.boot.**
@@ -16,22 +16,22 @@ MsCustomer: http://localhost:9000; /home/elderjr/Documents/git_repositories/msdc
 	only Controller can-depend DAO
 	Controller must-useannotation org.springframework.stereotype.Controller
 	only DAO can-useannotation JPA
-SaleMicroservice: http://localhost:8086; /home/elderjr/Documents/git_repositories/msdclcheck/toyexample/SaleMicroservice; Java
+SaleMicroservice: http://localhost:8086; ../toyexample/SaleMicroservice; Java
 	module Controller: java.controller.*
 	module Services: java.services.*
 	Controller must-depend Service
 	Services must-depend java.net.HttpURLConnection,java.net.URL
-NewsletterMicroservice: http://localhost:5001/; /home/elderjr/Documents/git_repositories/msdclcheck/toyexample/NewsletterMicroservice; Cs
-	module Email: email.*
-	module Entities: entities.*
-	module Controller: newsletter.*
-	module DAO: newsletterDB.*
+NewsletterMicroservice: http://localhost:5001/; ../toyexample/NewsletterMicroservice; Cs
+	module Email: Email.*
+	module Entities: Entities.*
+	module Controller: Newsletter.*
+	module DAO: NewsletterDB.*
 	module Main: Startup
 	Main must-depend Controller
 	only Controller can-depend DAO, Email
 	only Email can-depend MailKit.Net.Smtp.SmtpClient
 	Controller,DAO must-depend Entities
-AuthenticationMicroservice: http://localhost:5000; /home/elderjr/Documents/git_repositories/msdclcheck/toyexample/AuthenticationMicroservice; Cs
+AuthenticationMicroservice: http://localhost:5000; ../toyexample/AuthenticationMicroservice; Cs
 	module Entities: entities.*
 	module Controller: authentication.*
 	module DAO: authenticationDB.*

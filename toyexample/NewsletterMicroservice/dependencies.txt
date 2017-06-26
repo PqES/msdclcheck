@@ -41,3 +41,4 @@ AuthenticationMicroservice.Startup,declare,string
 AuthenticationMicroservice.Startup,access,Newsletter
 AuthenticationMicroservice.Program,declare,WebHostBuilder
 AuthenticationMicroservice.Program,access,Directory
+NewsletterMicroservice.NewsletterDB,access,NewsletterMicroservice.EmailManager

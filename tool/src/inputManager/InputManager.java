@@ -100,11 +100,11 @@ public class InputManager {
 				String dcl = line.replaceAll("\t", "");
 				String dclContent = dclMap.get(currentService); 
 				dclMap.put(currentService, dclContent + dcl + '\n');
-				 
 			}else if(line.matches(RulesRegex.CONSTRAINT_REGEX)){
 				String tokens[] = line.split(RulesRegex.CONSTRAINT_TOKENS);
 				buildConstraint(tokens);
 			}else{
+				
 			}
 		}
 

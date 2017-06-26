@@ -1,6 +1,6 @@
 package entities;
 
-public class ClassifiedAccess extends AccessDefinition{
+public class ClassifiedAccess extends CommunicateDefinition{
 
 	
 	private ArchitecturalDrift classificate;

@@ -8,7 +8,7 @@ import java.util.Set;
 import javax.sound.midi.Soundbank;
 
 import entities.AbsenceDependencyConstraint;
-import entities.AccessDefinition;
+import entities.CommunicateDefinition;
 import entities.ArchitecturalDrift;
 import entities.ClassifiedAccess;
 import entities.ConstraintDefinition;
@@ -30,12 +30,12 @@ public class ConstraintsAnalyser {
 	}
 	
 	//valida comunicação only can-communicate
-	private ArchitecturalDrift validateOnlyCan(ConstraintDefinition c, HashMap<MicroserviceDefinition, Set<AccessDefinition>> mapAccess){
-		for(Entry<MicroserviceDefinition, Set<AccessDefinition>> entry : mapAccess.entrySet()){
+	private ArchitecturalDrift validateOnlyCan(ConstraintDefinition c, HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> mapAccess){
+		for(Entry<MicroserviceDefinition, Set<CommunicateDefinition>> entry : mapAccess.entrySet()){
 			MicroserviceDefinition service = entry.getKey();
-			Set<AccessDefinition> accesses = entry.getValue();
+			Set<CommunicateDefinition> accesses = entry.getValue();
 			if(!service.getName().equals(c.getMicroserviceOrigin())){
-				for(AccessDefinition a : accesses){
+				for(CommunicateDefinition a : accesses){
 					if(a.getCalle().getName().equals(c.getMicroserviceDestin())){
 						return new DivergenceDependencyConstraint(c, a);
 					}
@@ -47,22 +47,28 @@ public class ConstraintsAnalyser {
 	
 	//valida comunicação can-communicate-only: se não tiver o acesso é considerado abscence?
 	private ArchitecturalDrift validateCanOnly(ConstraintDefinition c, MicroserviceDefinition service,
-			Set<AccessDefinition> accesses) {
+			Set<CommunicateDefinition> accesses) {
+		boolean abscence = true;
 		if(service.getName().equals(c.getMicroserviceOrigin())){
-			for (AccessDefinition a : accesses) {
+			for (CommunicateDefinition a : accesses) {
 				if (!a.getCalle().getName().equals(c.getMicroserviceDestin())) {
 					return new DivergenceDependencyConstraint(c, a);
+				}else if(a.getCalle().getName().equals(c.getMicroserviceDestin())){
+					abscence = false;
 				}
 			}	
+		}
+		if(abscence){
+			return new AbsenceDependencyConstraint(c);
 		}
 		return null;
 	}
 	
 	//valida comunicação cannot-communicate
 	private ArchitecturalDrift validateCannotCommunicate(ConstraintDefinition c, MicroserviceDefinition service,
-			Set<AccessDefinition> accesses) {
+			Set<CommunicateDefinition> accesses) {
 		if(service.getName().equals(c.getMicroserviceOrigin())){
-			for (AccessDefinition a : accesses) {
+			for (CommunicateDefinition a : accesses) {
 				if (a.getCalle().getName().equals(c.getMicroserviceDestin())) {
 					return new DivergenceDependencyConstraint(c, a);
 				}
@@ -73,9 +79,9 @@ public class ConstraintsAnalyser {
 	
 	//valida comunicação must-communicate
 	private ArchitecturalDrift validateMustCommunicate(ConstraintDefinition c, MicroserviceDefinition service,
-			Set<AccessDefinition> accesses) {
+			Set<CommunicateDefinition> accesses) {
 		if(service.getName().equals(c.getMicroserviceOrigin())){
-			for (AccessDefinition a : accesses) {
+			for (CommunicateDefinition a : accesses) {
 				if (a.getCalle().getName().equals(c.getMicroserviceDestin())) {
 					return null;
 				}
@@ -84,7 +90,7 @@ public class ConstraintsAnalyser {
 		return new AbsenceDependencyConstraint(c);
 	}
 	
-	private ArchitecturalDrift validateConstraint(ConstraintDefinition c, MicroserviceDefinition service, HashMap<MicroserviceDefinition, Set<AccessDefinition>> accessMap){
+	private ArchitecturalDrift validateConstraint(ConstraintDefinition c, MicroserviceDefinition service, HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> accessMap){
 		if(c.getConstraint().getConstraintType() == ConstraintType.CAN_COMMUNICATE){
 			//tem o que fazer aqui?
 		}else if(c.getConstraint().getConstraintType() == ConstraintType.CAN_COMMUNICATE_ONLY){
@@ -100,7 +106,7 @@ public class ConstraintsAnalyser {
 	}
 
 	public Set<ArchitecturalDrift> analyseConstraints(HashMap<MicroserviceDefinition, Set<ConstraintDefinition>> mapConstraint,
-			HashMap<MicroserviceDefinition, Set<AccessDefinition>> mapAccess) {
+			HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> mapAccess) {
 		Set<ArchitecturalDrift> drifts = new HashSet<>();
 		for (MicroserviceDefinition m : mapConstraint.keySet()) { 
 			for (ConstraintDefinition c : mapConstraint.get(m)) {

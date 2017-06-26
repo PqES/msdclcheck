@@ -4,9 +4,9 @@ import com.sun.accessibility.internal.resources.accessibility;
 
 public class DivergenceDependencyConstraint extends ArchitecturalDrift{
 	
-	private final AccessDefinition access; 
+	private final CommunicateDefinition access; 
 	
-	public DivergenceDependencyConstraint(ConstraintDefinition violate, AccessDefinition access) {
+	public DivergenceDependencyConstraint(ConstraintDefinition violate, CommunicateDefinition access) {
 		super(violate);
 		this.access = access;
 	}
