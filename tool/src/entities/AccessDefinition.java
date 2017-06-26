@@ -3,43 +3,41 @@ package entities;
 public class AccessDefinition {
 
 	private MicroserviceDefinition caller;
-	private MicroserviceDefinition calle;
+	private MicroserviceDefinition callee;
 	
-	public AccessDefinition(MicroserviceDefinition caller, MicroserviceDefinition calle){
+	public AccessDefinition(MicroserviceDefinition caller, MicroserviceDefinition callee){
 		this.caller = caller;
-		this.calle = calle;
+		this.callee = callee;
 	}
-
+	public AccessDefinition(MicroserviceDefinition callee){
+		
+		this.callee = callee;
+	}
+	
 	public MicroserviceDefinition getCaller() {
 		return caller;
 	}
 
 	public MicroserviceDefinition getCalle() {
-		return calle;
+		return callee;
 	}
 	
 	@Override
 	public int hashCode(){
-		if(caller != null && calle != null){
-			return caller.getName().length() + calle.getName().length();
-		}else{
-			return 0;
-		}
+		return caller.getName().length() + callee.getName().length();
 	}
 	
 	@Override
 	public boolean equals(Object obj){
 		if(obj instanceof AccessDefinition){
 			AccessDefinition access = (AccessDefinition) obj;
-			if(caller != null && calle != null){
-				return this.caller.equals(access.caller) && this.calle.equals(access.calle);
-			}
+			return this.caller.equals(access.caller) && this.callee.equals(access.callee);
 		}
 		return false;
 	}
 	
 	@Override
 	public String toString(){
-		return caller.getName()+" access "+calle.getName();
+		return  callee.getName();
 	}
 }

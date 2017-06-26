@@ -16,22 +16,25 @@ public class Util {
 		}
 	}
 	
-	public static List<File> getAllJavaFiles(File dir) throws IOException{
-		if(!dir.isDirectory()){
-			throw new IOException("Folder " + dir.getAbsolutePath() + " is not a folder");
+	public static List<File> getAllFiles(File dir) throws IOException{
+		
+		if(!dir.getCanonicalFile().isDirectory()){
+			throw new IOException("Folder " + dir.getCanonicalFile().isDirectory()+ " is not a folder");
 		}
-		List<File> javaFiles = new LinkedList<>();
+		List<File> anyFiles = new LinkedList<>();
 		File files[] = dir.listFiles();
 		for(File f : files){
 			if(f.isDirectory()){
-				javaFiles.addAll(getAllJavaFiles(f));
+				anyFiles.addAll(getAllFiles(f));
 			}else{
 				String extension = getExtensionOfFile(f);
-				if(extension != null && extension.equalsIgnoreCase("java")){
-					javaFiles.add(f);
+				if((extension != null) && ((extension.equalsIgnoreCase("cs")) || (extension.equalsIgnoreCase("java")))){
+					anyFiles.add(f);
 				}
 			}
 		}
-		return javaFiles;
+		return anyFiles;
 	}
+	
 }
+
