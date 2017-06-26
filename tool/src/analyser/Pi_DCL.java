@@ -36,12 +36,12 @@ public class Pi_DCL {
 			
 			ByteArrayInputStream deps = getDependencies(entry.getKey());
 			ByteArrayInputStream dcls = new ByteArrayInputStream(entry.getValue().getBytes());
-			System.out.println(entry.getKey().getName());
+			//System.out.println(entry.getKey().getName());
 			Collection<ArchitecturalDrift> drifts = Main.validateLocalArchitecture(deps, dcls);
-			for(ArchitecturalDrift drift : drifts){
+			/*for(ArchitecturalDrift drift : drifts){
 				System.out.println(drift.getInfoMessage() + ",[" + drift.getViolatedConstraint() + "]");
 			}
-			System.out.println("fim");
+			System.out.println("fim");*/
 		}
 	}
 }

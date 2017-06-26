@@ -13,8 +13,9 @@ import analyser.Pi_DCL;
 import entities.CommunicateDefinition;
 import entities.ArchitecturalDrift;
 import entities.MicroserviceDefinition;
+import fileManager.InputManager;
+import fileManager.OutputManager;
 import entities.ConstraintDefinition;
-import inputManager.InputManager;
 import pidclcheck.exception.ParseException;
 
 public class Main {
@@ -43,6 +44,8 @@ public class Main {
 			for (ArchitecturalDrift a : drifts) {
 				System.out.println(a.getMessage());
 			}
+			OutputManager output = new OutputManager();
+			output.violates(drifts);
 
 			Pi_DCL.validateLocalArchitecture(mapDcl);
 
