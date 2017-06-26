@@ -7,7 +7,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.repository.CrudRepository;
 
-import Model.Customer;
+import entities.Customer;
 
 
 

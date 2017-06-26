@@ -1,4 +1,4 @@
-package MsCustomer;
+package msCustomer;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;

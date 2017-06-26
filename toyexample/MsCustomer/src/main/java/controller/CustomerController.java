@@ -1,4 +1,4 @@
-package Controller;
+package controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import DAO.CustomerDAO;
-import Model.Customer;
+import entities.Customer;
 
 @Controller
 public class CustomerController {

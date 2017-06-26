@@ -1,16 +1,44 @@
 MsProduct: http://localhost:8080/; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/MsProduct; Java
-	module Controller: msproduct.controller.*
-	module DAO: msproduct.dao.*
+	module Controller: msCustomer.controller.*
+	module DAO: msProduct.dao.*
 	module SpringBoot: org.springframework.boot.**
-	module Main: msproduct.ProductApp
+	module Main: msProduct.ProductApp
 	Main must-depend SpringBoot
 	only Controller can-depend DAO
 	Controller must-useannotation org.springframework.stereotype.Controller
 	only DAO can-useannotation JPA
 MsCustomer: http://localhost:9000; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/MsCustomer; Java
+	module Controller: msCustomer.controller.*
+	module DAO: msCustomer.dao.*
+	module SpringBoot: org.springframework.boot.**
+	module Main: msProduct.CustomerApp
+	Main must-depend SpringBoot
+	only Controller can-depend DAO
+	Controller must-useannotation org.springframework.stereotype.Controller
+	only DAO can-useannotation JPA
 SaleMicroservice: http://localhost:8086; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/SaleMicroservice; Java
+	module Controller: java.controller.*
+	module Services: java.services.*
+	Controller must-depend Service
+	Services must-depend java.net.HttpURLConnection,java.net.URL
 NewsletterMicroservice: http://localhost:5001/; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/NewsletterMicroservice; Cs
+	module Email: email.*
+	module Entities: entities.*
+	module Controller: newsletter.*
+	module DAO: newsletterDB.*
+	module Main: Startup
+	Main must-depend Controller
+	only Controller can-depend DAO, Email
+	only Email can-depend MailKit.Net.Smtp.SmtpClient
+	Controller,DAO must-depend Entities
 AuthenticationMicroservice: http://localhost:5000; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/AuthenticationMicroservice; Cs
+	module Entities: entities.*
+	module Controller: authentication.*
+	module DAO: authenticationDB.*
+	module Main: Startup
+	Main must-depend Controller
+	only Controller can-depend DAO
+	Controller,DAO must-depend Entities
 MsProduct cannot-communicate MsCustomer
 only SaleMicroservice can-communicate AuthenticationMicroservice 
 MsCustomer, MsProduct can-communicate-only NewsletterMicroservice
