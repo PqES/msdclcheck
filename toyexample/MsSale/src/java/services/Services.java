@@ -85,10 +85,7 @@ public class Services {
         for (int i = 0; i < qtds.length; i++) {
             urlParameters.append("&qt=").append(qtds[i]);
         }
-        System.out.println(urlParameters.toString());
-        String result = "";
-        //String result = Services.callServiceViaPost(linkUpdateStock, urlParameters.toString().getBytes());
-        System.out.println(result);
+        String result = Services.callServiceViaPost(linkUpdateStock, urlParameters.toString());
         return result.equalsIgnoreCase("sucess");
     }
 
