@@ -16,31 +16,31 @@ MsCustomer: http://localhost:9000; /home/elena/Documents/Mestrado/Artigo/msdclch
 	only Controller can-depend DAO
 	Controller must-useannotation org.springframework.stereotype.Controller
 	only DAO can-useannotation JPA
-SaleMicroservice: http://localhost:8086; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/SaleMicroservice; Java
+MsSale: http://localhost:8086; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/MsSale; Java
 	module Controller: java.controller.*
 	module Services: java.services.*
 	Controller must-depend Service
 	Services must-depend java.net.HttpURLConnection,java.net.URL
-NewsletterMicroservice: http://localhost:5001/; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/NewsletterMicroservice; Cs
-	module Email: email.*
-	module Entities: entities.*
-	module Controller: newsletter.*
-	module DAO: newsletterDB.*
-	module Main: Startup
+MsNewsletter: http://localhost:5001/; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/MsNewsletter; Cs
+	module Email: MsNewsletter.Email.*
+	module Entities: MsNewsletter.Entities.*
+	module Controller: MsNewsletter.Controllers.*
+	module DAO: MsNewsletter.DAO.*
+	module Main: MsNewsletter.Startup
 	Main must-depend Controller
 	only Controller can-depend DAO, Email
 	only Email can-depend MailKit.Net.Smtp.SmtpClient
 	Controller,DAO must-depend Entities
-AuthenticationMicroservice: http://localhost:5000; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/AuthenticationMicroservice; Cs
-	module Entities: entities.*
-	module Controller: authentication.*
-	module DAO: authenticationDB.*
-	module Main: Startup
+MsAuthenticate: http://localhost:5000; /home/elena/Documents/Mestrado/Artigo/msdclcheck/toyexample/MsAuthenticate; Cs
+	module Entities: MsAuthenticate.Entities.*
+	module Controller: MsAuthenticate.Controllers.*
+	module DAO: MsAuthenticate.DAO.*
+	module Main: MsAuthenticate.Startup
 	Main must-depend Controller
 	only Controller can-depend DAO
 	Controller,DAO must-depend Entities
 MsProduct cannot-communicate MsCustomer
-only SaleMicroservice can-communicate AuthenticationMicroservice 
-MsCustomer, MsProduct can-communicate-only NewsletterMicroservice
-MsCustomer, MsProduct must-communicate NewsletterMicroservice
-SaleMicroservice must-communicate AuthenticationMicroservice, MsProduct, MsCustomer
+only MsSale can-communicate MsAuthenticate 
+MsCustomer, MsProduct can-communicate-only MsNewsletter
+MsCustomer, MsProduct must-communicate MsNewsletter
+MsSale must-communicate MsAuthenticate, MsProduct, MsCustomer
