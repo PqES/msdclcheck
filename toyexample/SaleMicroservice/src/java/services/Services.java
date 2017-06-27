@@ -7,9 +7,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 public class Services {
 
-    private static final String linkAuthentication = "http://localhost:5000/?";
+    private static final String linkAuthentication = "http://localhost:5000/api/authenticate";
     private static final String linkGetClient = "http://localhost:9000/getCustomerCpf/";
     private static final String linkUpdateStock = "http://localhost:8080/venda";
     private static final String linkGetProducts = "http://localhost:8080/getProducts";
@@ -30,13 +31,17 @@ public class Services {
         return sb.toString();
     }
 
-    private static String callServiceViaPost(String link, byte[] valuesToSend) throws ServiceException, MalformedURLException, IOException {
+    private static String callServiceViaPost(String link, String urlParameters) throws ServiceException, MalformedURLException, IOException {
+        byte bytes[] = urlParameters.getBytes(StandardCharsets.UTF_8);
         URL obj = new URL(link);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("POST");
+        con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        con.setRequestProperty("Content-Length", Integer.toString(bytes.length));
+        con.setRequestProperty("Accept", "application/json");        
         con.setDoOutput(true);
         DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        wr.write(valuesToSend);
+        wr.write(bytes);
         wr.flush();
         wr.close();
         if (!(con.getResponseCode() >= 200 && con.getResponseCode() <= 299)) {
@@ -53,10 +58,9 @@ public class Services {
     }
 
     public static boolean serviceAuthentication(String user, String password) throws IOException, ServiceException {
-        final String link = linkAuthentication + "username="+user+"&password="+password;
-        String result = callServiceViaGet(link);
-        System.out.println(result+": "+link);
-        return result.equalsIgnoreCase("True");
+        String parameters = "username="+user+"&password="+password;
+        String result = callServiceViaPost(linkAuthentication, parameters);
+        return result.equalsIgnoreCase("true");
     }
 
     public static String serviceGetClient(String cpf) throws IOException, ServiceException {
@@ -82,7 +86,8 @@ public class Services {
             urlParameters.append("&qt=").append(qtds[i]);
         }
         System.out.println(urlParameters.toString());
-        String result = Services.callServiceViaPost(linkUpdateStock, urlParameters.toString().getBytes());
+        String result = "";
+        //String result = Services.callServiceViaPost(linkUpdateStock, urlParameters.toString().getBytes());
         System.out.println(result);
         return result.equalsIgnoreCase("sucess");
     }
