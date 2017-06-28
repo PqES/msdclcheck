@@ -16,6 +16,9 @@
             window.client = null;
             <c:if test="${jsonProducts != null}">
                 window.products = $.parseJSON('${jsonProducts}');
+                if(!(window.products instanceof Array)){
+                    window.products = [window.products];
+                }
             </c:if>
             <c:if test="${client != null}">
                 window.client = $.parseJSON('${client}');

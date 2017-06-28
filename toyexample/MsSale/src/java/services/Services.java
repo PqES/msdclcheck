@@ -59,7 +59,7 @@ public class Services {
 
     public static boolean serviceAuthentication(String user, String password) throws IOException, ServiceException {
         String parameters = "username="+user+"&password="+password;
-        String result = callServiceViaPost(linkAuthentication, parameters);
+        String result = callServiceViaPost(linkAuthentication, parameters);        
         return result.equalsIgnoreCase("true");
     }
 
