@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>MsSale</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
@@ -35,8 +35,8 @@
                             alert('Invalid quantity');
                         }else{
                             var id = $scope.productSelected.id;
-                            var name = $scope.productSelected.nome;
-                            var price = parseFloat($scope.productSelected.preco);
+                            var name = $scope.productSelected.name;
+                            var price = parseFloat($scope.productSelected.value);
                             var qt = $scope.qt;
                             $scope.cart[$scope.productSelected.id] = {id: id, name: name, qt: qt, price: price};
                             $scope.total += qt * price;
@@ -48,7 +48,7 @@
                     delete $scope.cart[id];
                 }
                 $scope.selectedItemChanged = function(){
-                    $scope.qtStock = $scope.productSelected.quantidade;
+                    $scope.qtStock = $scope.productSelected.number;
                 }
             }]);
         </script>
@@ -84,22 +84,22 @@
             </c:if>
             <c:if test="${sale_submitted && success}">
                 <div class="alert alert-success">
-                    A venda foi efetuada com sucesso
+                    The sale was successfully registered.
                 </div>
             </c:if>
             <c:if test="${sale_submitted && !success}">
                 <div class="alert alert-danger">
-                    Não foi possível realizar a venda
+                    Could not register the sale
                 </div>
             </c:if>
             <c:if test="${client_search && client == null}">
                 <div class="alert alert-danger">
-                    Client not found
+                    Customer not found
                 </div>
             </c:if>
             <form action="service" method="post">
                 <input type="hidden" value="ClientController" name="logic" />
-                <label for="cpf">Client CPF:</label>
+                <label for="cpf">Customer CPF:</label>
                 <div class="form-inline">
                     <input name="cpf" id="cpf" class="form-control" />
                     <input type="submit" class="btn btn-default" id="btSearch" value="send" />
@@ -107,12 +107,12 @@
             </form>
             <c:if test="${client_search && client != null}">
                 <hr>
-                <h3> Client: {{client.nome}} ({{client.cpf}}) </h3>
+                <h3> Customer: {{client.name}} ( {{client.email}} - {{client.cpf}}) </h3>
                 
                 <div>
                     <div class="form-group col-md-3">
                         <label>Product</label>
-                        <select id="product" class="form-control" ng-model="productSelected" ng-options="p.nome for p in products"  ng-change='selectedItemChanged()'>
+                        <select id="product" class="form-control" ng-model="productSelected" ng-options="p.name for p in products"  ng-change='selectedItemChanged()'>
                         </select>
                     </div>
                     <div class="form-group col-md-1">
@@ -153,7 +153,7 @@
                         </tbody>
                     </table>
                     <span><b>Total: $ {{total}}</b></span><br/>
-                    <input type="submit" value="cadastrar venda" class="btn btn-default" />
+                    <input type="submit" value="register sale" class="btn btn-default" />
                 </form>
             </c:if>
         </div>
