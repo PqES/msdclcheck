@@ -20,7 +20,7 @@ public class SaleController implements Logic {
     public String executa(HttpServletRequest req, HttpServletResponse res) throws Exception {
         String ids[] = req.getParameterValues("product_id");
         String qtds[] = req.getParameterValues("product_qtd");
-        if(ids != null && qtds != null){
+        if(ids != null && qtds != null && ids.length > 0 && qtds.length > 0 && ids.length == qtds.length){
             try{
                 boolean success = Services.serviceUpdateStock(ids, qtds);
                 req.setAttribute("sale_submitted", true);
