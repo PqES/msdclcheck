@@ -13,6 +13,7 @@ MsNewsletter.DAO.UserDAO,declare,System.Collections.Generic.LinkedList<User>
 MsNewsletter.DAO.UserDAO,access,System.Collections.Generic.LinkedList<User>
 MsNewsletter.DAO.UserDAO,access,string
 MsNewsletter.DAO.UserDAO,access,System.IO.StreamReader
+MsNewsletter.DAO.UserDAO,declare,MsNewsletter.Entities.User
 MsNewsletter.Controllers.NewsletterController,useannotation,Microsoft.AspNetCore.Mvc.Route
 MsNewsletter.Controllers.NewsletterController,useannotation,Microsoft.AspNetCore.Mvc.HttpPost
 MsNewsletter.Controllers.NewsletterController,declare,bool
@@ -22,6 +23,7 @@ MsNewsletter.Controllers.NewsletterController,declare,MsAuthenticate.Entities.Us
 MsNewsletter.Controllers.NewsletterController,useannotation,Microsoft.AspNetCore.Mvc.HttpGet
 MsNewsletter.Controllers.NewsletterController,declare,System.Collections.Generic.LinkedList<User>
 MsNewsletter.Controllers.NewsletterController,access,MsNewsletter.Email.EmailManager
+MsNewsletter.Controllers.NewsletterController,declare,MsNewsletter.Entities.User
 MsNewsletter.Email.EmailManager,declare,MsNewsletter.Entities.User
 MsNewsletter.Email.EmailManager,access,System.Console
 MsNewsletter.Email.EmailManager,declare,string
@@ -34,6 +36,7 @@ MsNewsletter.Email.EmailManager,access,MailtKit.Net.Smtp.MailboxAddress.SmtpClie
 MsNewsletter.Email.EmailManager,declare,bool
 MsNewsletter.Email.EmailManager,declare,System.Exception
 MsNewsletter.Email.EmailManager,access,System.Exception
+MsNewsletter.Email.EmailManager,access,MsNewsletter.Entities.User
 MsNewsletter.Entities.User,declare,string
 MsNewsletter.Program,declare,declare,string
 MsNewsletter.Program,declare,Microsoft.AspNetCore.Hosting.WebHostBuilder
