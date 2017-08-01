@@ -1,6 +1,9 @@
-package entities;
+package communicationAnalyser.drift;
 
 import com.sun.accessibility.internal.resources.accessibility;
+
+import communicationExtractor.CommunicateDefinition;
+import entities.ConstraintDefinition;
 
 public class DivergenceDependencyConstraint extends ArchitecturalDrift{
 	

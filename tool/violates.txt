@@ -1,4 +1,1 @@
-Divergence: MsProduct can-communicate-only NewsletterMicroservice (MsProduct communicate MsCustomer)
-Abscence: MsCustomer can-communicate-only NewsletterMicroservice
 Divergence: MsProduct cannot-communicate MsCustomer (MsProduct communicate MsCustomer)
-Abscence: MsCustomer must-communicate NewsletterMicroservice

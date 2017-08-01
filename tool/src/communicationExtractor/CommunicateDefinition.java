@@ -1,4 +1,6 @@
-package entities;
+package communicationExtractor;
+
+import entities.MicroserviceDefinition;
 
 public class CommunicateDefinition {
 
@@ -9,6 +11,7 @@ public class CommunicateDefinition {
 		this.caller = caller;
 		this.callee = callee;
 	}
+	
 	public CommunicateDefinition(MicroserviceDefinition callee){
 		
 		this.callee = callee;

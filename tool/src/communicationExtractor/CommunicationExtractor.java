@@ -1,4 +1,4 @@
-package analyser;
+package communicationExtractor;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,19 +8,19 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import entities.CommunicateDefinition;
+
 import entities.MicroserviceDefinition;
 import util.Util;
 
-public class AccessAnalyser {
+public class CommunicationExtractor {
 
-	private final static AccessAnalyser instance = new AccessAnalyser();
+	private final static CommunicationExtractor instance = new CommunicationExtractor();
 
-	public AccessAnalyser() {
+	public CommunicationExtractor() {
 
 	}
 
-	public static AccessAnalyser getInstance() {
+	public static CommunicationExtractor getInstance() {
 		return instance;
 	}
 

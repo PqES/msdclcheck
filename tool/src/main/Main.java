@@ -7,12 +7,13 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import analyser.AccessAnalyser;
-import analyser.ConstraintsAnalyser;
-import analyser.Pi_DCL;
-import entities.CommunicateDefinition;
-import entities.ArchitecturalDrift;
+import communicationAnalyser.CommunicationAnalyser;
+import communicationAnalyser.drift.ArchitecturalDrift;
+import communicationExtractor.CommunicateDefinition;
+import communicationExtractor.CommunicationExtractor;
+import communicationExtractor.Pi_DCL;
 import entities.MicroserviceDefinition;
+import enums.Constraint;
 import fileManager.InputManager;
 import fileManager.OutputManager;
 import entities.ConstraintDefinition;
@@ -30,15 +31,14 @@ public class Main {
 			HashMap<MicroserviceDefinition, String> mapDcl = inputManager.getDclMap();
 
 			// checa acesso dos microserviços
-			HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> accessMap = AccessAnalyser.getInstance()
+			HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> accessMap = CommunicationExtractor.getInstance()
 					.analyseAll(allServices);
 			System.out.println("==== ACCESSES ====");
 			for (Entry<MicroserviceDefinition, Set<CommunicateDefinition>> entry : accessMap.entrySet()) {
 				System.out.println(entry.getKey() + ": " + entry.getValue());
 			}
-
 			// verifica violações
-			Set<ArchitecturalDrift> drifts = ConstraintsAnalyser.getInstance().analyseConstraints(constraintMap,
+			Set<ArchitecturalDrift> drifts = CommunicationAnalyser.getInstance().analyseCommunications(constraintMap,
 					accessMap);
 			System.out.println("==== DRIFTS =====");
 			for (ArchitecturalDrift a : drifts) {
@@ -47,11 +47,10 @@ public class Main {
 			OutputManager output = new OutputManager();
 			output.violates(drifts);
 
-			Pi_DCL.validateLocalArchitecture(mapDcl);
+			//Pi_DCL.validateLocalArchitecture(mapDcl);
 
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		//} catch (ParseException e) {
+			//e.printStackTrace();
 
 		} catch (IOException e) {
 			e.printStackTrace();

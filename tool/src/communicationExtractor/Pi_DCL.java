@@ -1,4 +1,4 @@
-package analyser;
+package communicationExtractor;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;

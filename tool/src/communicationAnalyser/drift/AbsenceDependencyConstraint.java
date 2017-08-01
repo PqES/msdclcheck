@@ -1,4 +1,6 @@
-package entities;
+package communicationAnalyser.drift;
+
+import entities.ConstraintDefinition;
 
 public class AbsenceDependencyConstraint extends ArchitecturalDrift{
 	
