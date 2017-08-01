@@ -44,6 +44,7 @@ public class Main {
 			for (ArchitecturalDrift a : drifts) {
 				System.out.println(a.getMessage());
 			}
+			System.out.println("=================");
 			OutputManager output = new OutputManager();
 			output.violates(drifts);
 

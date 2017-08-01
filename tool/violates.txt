@@ -1,1 +1,2 @@
 Divergence: MsProduct cannot-communicate MsCustomer (MsProduct communicate MsCustomer)
+Abscence: MsCustomer must-communicate MsNewsletter
