@@ -4,6 +4,9 @@ using MimeKit;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MsNewsletter.Entities;
+using MsNewsletter.DAO;
+using System.Collections.Generic;
+using System.Linq;
 namespace MsNewsletter.Email{
 	public class EmailManager{
 
@@ -30,5 +33,12 @@ namespace MsNewsletter.Email{
 				Console.WriteLine(ex.Message);
 			}
         }
+
+		public static void sendEmailToAll(){
+			LinkedList<User> users = UserDAO.GetAllUsers();
+			foreach(var u in users){
+				EmailManager.sendEmail(u);
+			}
+		}
 	}
 }
