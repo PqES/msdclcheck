@@ -1,6 +1,6 @@
 using System;
 
-namespace MsAuthenticate.Entities{
+namespace MsAuthentication.Entities{
 	public class User{
 		private string name;
 		private string password;

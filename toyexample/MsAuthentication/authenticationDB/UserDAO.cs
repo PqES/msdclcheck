@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using System.Text;
-using MsAuthenticate.Entities;
+using MsAuthentication.Entities;
 
-namespace MsAuthenticate.DAO{
+namespace MsAuthentication.DAO{
 	public class UserDAO{
 
 		private static StreamReader OpenDB(){
@@ -19,14 +19,15 @@ namespace MsAuthenticate.DAO{
 			}
 		}
 
-		public static User GetUserByUsername(string username){
+		public static string GetUserByUsername(string username){
 			StreamReader sr = OpenDB ();
 			if(sr != null){
 				while(sr.Peek() >= 0){
 					string line = sr.ReadLine();
 					string[] splitedLine = line.Split(';');
 					if(splitedLine[0] == username){
-						return new User (splitedLine [0], splitedLine [1]);
+						return line;
+						//return new User (splitedLine [0], splitedLine [1]);
 					}
 				}
 			}
