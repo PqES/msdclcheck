@@ -46,12 +46,19 @@ public class InputManager {
 		dclMap.put(microservice, "");
 	}
 	
-	public void addConstraint(String[] leftServices, String[] rightServices, Constraint constraint) {
+	public void addConstraint(String[] leftServices, String[] rightServices, String[] usings, Constraint constraint) {
 		for(String leftService : leftServices){
 			MicroserviceDefinition service = getMicroserviceDefinitionByName(leftService);
 			Set<ConstraintDefinition> constraints = serviceMap.get(service);
 			for(String rightService : rightServices){
-				constraints.add(new ConstraintDefinition(leftService, constraint, rightService));
+				if(usings == null){
+					constraints.add(new ConstraintDefinition(leftService, constraint, rightService));
+				}else{
+					for(String using : usings){
+						ConstraintDefinition c = new ConstraintDefinition(leftService, constraint, rightService, using);
+						constraints.add(c);
+					}
+				}
 			}
 		}
 	}
@@ -61,6 +68,7 @@ public class InputManager {
 		int indexOfConstraintName = -1;
 		int indexOfLeftServices = -1;
 		int indexOfRightServices = -1;
+		int indexOfUsing = tokens.length;
 		for (int i = 0; i < tokens.length; i++) {
 			if (tokens[i].contains("-")) {
 				indexOfConstraintName = i;
@@ -72,13 +80,18 @@ public class InputManager {
 					indexOfLeftServices = 0;
 					constraintName = tokens[i];
 				}
-				break;
+			}else if(tokens[i].equalsIgnoreCase("using")){
+				indexOfUsing = i;
 			}
 		}
 		String leftServices[] = Arrays.copyOfRange(tokens, indexOfLeftServices, indexOfConstraintName);
-		String rightServices[] = Arrays.copyOfRange(tokens, indexOfRightServices, tokens.length);
+		String rightServices[] = Arrays.copyOfRange(tokens, indexOfRightServices, indexOfUsing);
+		String usings[] = null;
+		if(indexOfUsing + 1 < tokens.length){
+			usings = Arrays.copyOfRange(tokens, indexOfUsing + 1, tokens.length);
+		}
 		Constraint constraint = findConstraint(constraintName);
-		addConstraint(leftServices, rightServices, constraint);
+		addConstraint(leftServices, rightServices, usings, constraint);
 	}
 	
 	public void readFile(File f) throws IOException {
@@ -104,7 +117,7 @@ public class InputManager {
 				String tokens[] = line.split(RulesRegex.CONSTRAINT_TOKENS);
 				buildConstraint(tokens);
 			}else{
-				
+				System.out.println("line error");
 			}
 		}
 

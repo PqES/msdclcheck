@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import entities.MicroserviceDefinition;
 import util.Util;
@@ -24,6 +26,24 @@ public class CommunicationExtractor {
 		return instance;
 	}
 
+	private String extractUsing(String line, String link) {
+		Pattern p = Pattern.compile("\".*" + link + "(/\\w*)*\"");
+		Matcher m = p.matcher(line);
+		String using = "";
+		while (m.find()) {
+			String completeLink = m.group().replaceAll("\"", "");
+			if (completeLink.endsWith("/")) {
+				completeLink = completeLink.substring(0, completeLink.length() - 1);
+			}
+			String route[] = completeLink.split(link);
+			using = route[route.length - 1];
+		}
+		if (!using.isEmpty()) {
+			return using;
+		}
+		return null;
+	}
+
 	private Set<CommunicateDefinition> checkAccess(File f, MicroserviceDefinition caller,
 			Set<MicroserviceDefinition> allMicroservices) throws IOException {
 		Set<CommunicateDefinition> accesses = new HashSet<>();
@@ -33,10 +53,9 @@ public class CommunicationExtractor {
 		while (buffer.ready()) {
 			line = buffer.readLine();
 			for (MicroserviceDefinition m : allMicroservices) {
-
 				if (line.contains(m.getLink())) {
-
-					accesses.add(new CommunicateDefinition(caller, m));
+					String using = extractUsing(line, m.getLink());
+					accesses.add(new CommunicateDefinition(caller, m, using));
 				}
 			}
 		}
@@ -45,11 +64,9 @@ public class CommunicationExtractor {
 		return accesses;
 	}
 
-	public Set<CommunicateDefinition> analyse(MicroserviceDefinition caller, Set<MicroserviceDefinition> allMicroservices)
-			throws IOException {
-
+	public Set<CommunicateDefinition> analyse(MicroserviceDefinition caller,
+			Set<MicroserviceDefinition> allMicroservices) throws IOException {
 		Set<CommunicateDefinition> accesses = new HashSet<>();
-
 		List<File> javaFiles = Util.getAllFiles(new File(caller.getPath()));
 		for (File f : javaFiles) {
 			accesses.addAll(checkAccess(f, caller, allMicroservices));
@@ -62,7 +79,6 @@ public class CommunicationExtractor {
 
 		HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> map = new HashMap<>();
 		for (MicroserviceDefinition caller : allMicroservices) {
-
 			Set<CommunicateDefinition> accesses = new HashSet<>();
 			accesses.addAll(this.analyse(caller, allMicroservices));
 			map.put(caller, accesses);
@@ -70,3 +86,4 @@ public class CommunicationExtractor {
 		return map;
 	}
 }
+

@@ -6,15 +6,18 @@ public class CommunicateDefinition {
 
 	private MicroserviceDefinition caller;
 	private MicroserviceDefinition callee;
+	private String using;
+	
+	public CommunicateDefinition(MicroserviceDefinition caller, MicroserviceDefinition callee, String using){
+		this.caller = caller;
+		this.callee = callee;
+		this.using = using;
+	}
 	
 	public CommunicateDefinition(MicroserviceDefinition caller, MicroserviceDefinition callee){
 		this.caller = caller;
 		this.callee = callee;
-	}
-	
-	public CommunicateDefinition(MicroserviceDefinition callee){
-		
-		this.callee = callee;
+		this.using = null;
 	}
 	
 	public MicroserviceDefinition getCaller() {
@@ -25,6 +28,9 @@ public class CommunicateDefinition {
 		return callee;
 	}
 	
+	public String getUsing(){
+		return this.using;
+	}
 	@Override
 	public int hashCode(){
 		return caller.getName().length() + callee.getName().length();
@@ -41,6 +47,10 @@ public class CommunicateDefinition {
 	
 	@Override
 	public String toString(){
-		return  caller.getName() + " communicate " + callee.getName();
+		String s = caller.getName() + " communicate " + callee.getName(); 
+		if(using != null){
+			s += " using " + this.using;
+		}
+		return s;
 	}
 }

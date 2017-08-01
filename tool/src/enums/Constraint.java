@@ -1,5 +1,7 @@
 package enums;
 
+import entities.ConstraintDefinition;
+
 public enum Constraint {
 	
 	CAN_COMMUNICATE("can-communicate",ConstraintType.CAN_COMMUNICATE),
@@ -11,16 +13,11 @@ public enum Constraint {
 	private String value;
 	private ConstraintType constraintType;
 	
-	
 	Constraint(String value, ConstraintType constraintType){
 		this.value = value;
 		this.constraintType = constraintType;
 	}
 	
-	Constraint(){
-		
-	}
-
 	public String getValue() {
 		return value;
 	}
@@ -35,7 +32,6 @@ public enum Constraint {
 		return constraintType;
 	}
 
-
 	public void setConstraintType(ConstraintType constraintType) {
 		this.constraintType = constraintType;
 	}
@@ -43,15 +39,5 @@ public enum Constraint {
 	public  Constraint getConstraint(String value){
 		return Constraint.valueOf(value.toUpperCase().replaceAll("-", "_"));
 	}
-	public void getAll(){
-		
-	}
-	public String toString(){
-		return value;
-		
-	}
-	
-	
-	
 
 }
