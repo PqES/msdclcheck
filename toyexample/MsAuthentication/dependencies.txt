@@ -1,32 +1,45 @@
-MsAuthenticate.DAO.UserDAO,declare,System.IO.StreamReader
-MsAuthenticate.DAO.UserDAO,declare,System.IO.FileStream
-MsAuthenticate.DAO.UserDAO,declare,string
-MsAuthenticate.DAO.UserDAO,access,System.IO.FileMode
-MsAuthenticate.DAO.UserDAO,declare,Exception
-MsAuthenticate.DAO.UserDAO,access,System.Console
-MsAuthenticate.DAO.UserDAO,access,Exception
-MsAuthenticate.DAO.UserDAO,declare,MsAuthenticate.Entities.User
-MsAuthenticate.DAO.UserDAO,access,string
-MsAuthenticate.Controllers.AuthenticateController,useannotation,Microsoft.AspNetCore.Mvc.Route
-MsAuthenticate.Controllers.AuthenticateController,declare,bool
-MsAuthenticate.Controllers.AuthenticateController,declare,string
-MsAuthenticate.Controllers.AuthenticateController,useannotation,Microsoft.AspNetCore.Mvc.HttpPost
-MsAuthenticate.Controllers.AuthenticateController,declare,MsAuthenticate.Entities.User
-MsAuthenticate.Controllers.AuthenticateController,access,MsAuthenticate.Entities.User
-MsAuthenticate.Entities.User,declare,string
-MsAuthenticate.Program,declare,declare,string
-MsAuthenticate.Program,declare,Microsoft.AspNetCore.Hosting.WebHostBuilder
-MsAuthenticate.Program,access,System.Directory
-MsAuthenticate.Startup,declare,Microsoft.AspNetCore.Hosting.IHostingEnvironment
-MsAuthenticate.Startup,declare,Microsoft.AspNetCore.Builder.ConfigurationBuilder
-MsAuthenticate.Startup,access,Microsoft.AspNetCore.Hosting.IHostingEnvironment
-MsAuthenticate.Startup,declare,string
-MsAuthenticate.Startup,declare,bool
-MsAuthenticate.Startup,access,Microsoft.AspNetCore.Builder.ConfigurationBuilder
-MsAuthenticate.Startup,declare,Microsoft.Extensions.Configuration
-MsAuthenticate.Startup,declare,Microsoft.AspNetCore.Hosting.IServiceCollection
-MsAuthenticate.Startup,access,Microsoft.AspNetCore.Hosting.IServiceCollection
-MsAuthenticate.Startup,declare,Microsoft.AspNetCore.Builder.IConfigurationRoot
-MsAuthenticate.Startup,declare,Microsoft.AspNetCore.Hosting.IApplicationBuilder
-MsAuthenticate.Startup,declare,Microsoft.Logging.ILoggerFactory
-MsAuthenticate.Startup,access,Microsoft.AspNetCore.Hosting.IApplicationBuilder
+MsAuthentication.Startup, declare, IHostingEnvironment
+MsAuthentication.Startup, declare, string
+MsAuthentication.Startup, declare, bool
+MsAuthentication.Startup, access, ConfigurationBuilder
+MsAuthentication.Startup, create, ConfigurationBuilder
+MsAuthentication.Startup, access, IHostingEnvironment
+MsAuthentication.Startup, declare, IServiceCollection
+MsAuthentication.Startup, access, IServiceCollection
+MsAuthentication.Startup, declare, IApplicationBuilder
+MsAuthentication.Startup, declare, ILoggerFactory
+MsAuthentication.Startup, access, ILoggerFactory
+MsAuthentication.Startup, access, IConfigurationRoot
+MsAuthentication.Startup, access, IApplicationBuilder
+MsAuthentication.Program, declare, string[]
+MsAuthentication.Program, declare, string
+MsAuthentication.Program, access, WebHostBuilder
+MsAuthentication.Program, create, WebHostBuilder
+MsAuthentication.Program, access, System.IO.Directory
+MsAuthentication.Controllers.AuthenticateController, extend, Controller
+MsAuthentication.Controllers.AuthenticateController, useannotation, Route
+MsAuthentication.Controllers.AuthenticateController, declare, bool
+MsAuthentication.Controllers.AuthenticateController, useannotation, HttpPost
+MsAuthentication.Controllers.AuthenticateController, declare, string
+MsAuthentication.Controllers.AuthenticateController, access, MsAuthentication.DAO.UserDAO
+MsAuthentication.Controllers.AuthenticateController, declare, string[]
+MsAuthentication.Controllers.AuthenticateController, declare, char
+MsAuthentication.Controllers.AuthenticateController, access, string
+MsAuthentication.Controllers.AuthenticateController, declare, MsAuthentication.Entities.User
+MsAuthentication.Controllers.AuthenticateController, create, MsAuthentication.Entities.User
+MsAuthentication.Controllers.AuthenticateController, access, MsAuthentication.Entities.User
+MsAuthentication.DAO.UserDAO, declare, System.IO.StreamReader
+MsAuthentication.DAO.UserDAO, declare, System.IO.FileStream
+MsAuthentication.DAO.UserDAO, create, System.IO.FileStream
+MsAuthentication.DAO.UserDAO, access, System.IO.FileMode
+MsAuthentication.DAO.UserDAO, create, System.IO.StreamReader
+MsAuthentication.DAO.UserDAO, declare, System.Exception
+MsAuthentication.DAO.UserDAO, declare, string
+MsAuthentication.DAO.UserDAO, access, System.Console
+MsAuthentication.DAO.UserDAO, access, System.Exception
+MsAuthentication.DAO.UserDAO, access, System.IO.StreamReader
+MsAuthentication.DAO.UserDAO, declare, string[]
+MsAuthentication.DAO.UserDAO, declare, char
+MsAuthentication.DAO.UserDAO, access, string
+MsAuthentication.Entities.User, declare, string
+MsAuthentication.Entities.User, access, MsAuthentication.Entities.User
