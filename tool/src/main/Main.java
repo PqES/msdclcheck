@@ -7,12 +7,13 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import communicationAnalyser.CommunicationAnalyser;
+import communicationAnalyser.CommunicationChecker;
 import communicationAnalyser.drift.ArchitecturalDrift;
 import communicationExtractor.CommunicateDefinition;
 import communicationExtractor.CommunicationExtractor;
 import communicationExtractor.Pi_DCL;
 import entities.MicroserviceDefinition;
+import entities.MicroservicesSystem;
 import enums.Constraint;
 import fileManager.InputManager;
 import fileManager.OutputManager;
@@ -23,31 +24,25 @@ public class Main {
 	public static void main(String[] args) {
 		try {
 			InputManager inputManager = new InputManager();
-			inputManager.readFile(new File("constraints.txt"));
-
-			// obtem Microserviços, DCL's e regras do arquivo
-			Set<MicroserviceDefinition> allServices = inputManager.getAllServices();
-			HashMap<MicroserviceDefinition, Set<ConstraintDefinition>> constraintMap = inputManager.getServiceMap();
-			HashMap<MicroserviceDefinition, String> mapDcl = inputManager.getDclMap();
+			MicroservicesSystem system = inputManager.readFile(new File("constraints.txt"));
 
 			// checa acesso dos microserviços
-			HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> accessMap = CommunicationExtractor.getInstance()
-					.analyseAll(allServices);
+			system.setCommunications(CommunicationExtractor.getInstance().analyseAll(system));
+			
 			System.out.println("==== ACCESSES ====");
-			for (Entry<MicroserviceDefinition, Set<CommunicateDefinition>> entry : accessMap.entrySet()) {
-				System.out.println(entry.getKey() + ": " + entry.getValue());
+			for (MicroserviceDefinition ms : system.getMicroservices()) {
+				System.out.println(ms + ": " + system.getCommunications(ms));
 			}
+
 			// verifica violações
-			Set<ArchitecturalDrift> drifts = CommunicationAnalyser.getInstance().analyseCommunications(constraintMap,
-					accessMap);
+			Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
 			System.out.println("==== DRIFTS =====");
 			for (ArchitecturalDrift a : drifts) {
 				System.out.println(a.getMessage());
 			}
 			System.out.println("=================");
 			OutputManager output = new OutputManager();
-			output.violates(drifts);
-
+			//output.violates(drifts);
 			//Pi_DCL.validateLocalArchitecture(mapDcl);
 
 		//} catch (ParseException e) {

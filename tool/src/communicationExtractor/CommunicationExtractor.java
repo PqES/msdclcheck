@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import entities.MicroserviceDefinition;
+import entities.MicroservicesSystem;
 import util.Util;
 
 public class CommunicationExtractor {
@@ -45,7 +47,7 @@ public class CommunicationExtractor {
 	}
 
 	private Set<CommunicateDefinition> checkAccess(File f, MicroserviceDefinition caller,
-			Set<MicroserviceDefinition> allMicroservices) throws IOException {
+			Collection<MicroserviceDefinition> allMicroservices) throws IOException {
 		Set<CommunicateDefinition> accesses = new HashSet<>();
 		FileReader fr = new FileReader(f);
 		BufferedReader buffer = new BufferedReader(fr);
@@ -64,8 +66,7 @@ public class CommunicationExtractor {
 		return accesses;
 	}
 
-	public Set<CommunicateDefinition> analyse(MicroserviceDefinition caller,
-			Set<MicroserviceDefinition> allMicroservices) throws IOException {
+	public Set<CommunicateDefinition> analyse(MicroserviceDefinition caller, Collection<MicroserviceDefinition> allMicroservices) throws IOException {
 		Set<CommunicateDefinition> accesses = new HashSet<>();
 		List<File> javaFiles = Util.getAllFiles(new File(caller.getPath()));
 		for (File f : javaFiles) {
@@ -74,13 +75,11 @@ public class CommunicationExtractor {
 		return accesses;
 	}
 
-	public HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> analyseAll(
-			Set<MicroserviceDefinition> allMicroservices) throws IOException {
-
+	public HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> analyseAll(MicroservicesSystem system) throws IOException {
 		HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> map = new HashMap<>();
-		for (MicroserviceDefinition caller : allMicroservices) {
+		for (MicroserviceDefinition caller : system.getMicroservices()) {
 			Set<CommunicateDefinition> accesses = new HashSet<>();
-			accesses.addAll(this.analyse(caller, allMicroservices));
+			accesses.addAll(this.analyse(caller, system.getMicroservices()));
 			map.put(caller, accesses);
 		}
 		return map;

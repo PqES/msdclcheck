@@ -8,7 +8,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import communicationAnalyser.CommunicationAnalyser;
+import communicationAnalyser.CommunicationChecker;
 import communicationAnalyser.drift.ArchitecturalDrift;
 import communicationExtractor.CommunicateDefinition;
 import entities.ConstraintDefinition;
@@ -33,7 +33,7 @@ public class CommunicationAnalyserTest {
 		mapConstraint.put(ms2, ms2Constraints);
 		ms1Communications.add(new CommunicateDefinition(ms1, ms2));
 		ms1Constraints.add(new ConstraintDefinition(ms1.getName(), Constraint.CAN_COMMUNICATE, ms2.getName()));
-		Set<ArchitecturalDrift> drifts = CommunicationAnalyser.getInstance().analyseCommunications(mapConstraint, mapCommunicate);
+		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(mapConstraint, mapCommunicate);
 		assertEquals(0, drifts.size());
 	}
 	
@@ -53,7 +53,7 @@ public class CommunicationAnalyserTest {
 		mapConstraint.put(ms2, ms2Constraints);
 		ms1Communications.add(new CommunicateDefinition(ms1, ms2));
 		ms1Constraints.add(new ConstraintDefinition(ms1.getName(), Constraint.CANNOT_COMMUNICATE, ms2.getName()));
-		Set<ArchitecturalDrift> drifts = CommunicationAnalyser.getInstance().analyseCommunications(mapConstraint, mapCommunicate);
+		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(mapConstraint, mapCommunicate);
 		assertEquals(1, drifts.size());
 	}
 	
@@ -74,7 +74,7 @@ public class CommunicationAnalyserTest {
 		ms1Communications.add(new CommunicateDefinition(ms1, ms1));
 		ms1Communications.add(new CommunicateDefinition(ms1, ms2));
 		ms1Constraints.add(new ConstraintDefinition(ms1.getName(), Constraint.CAN_COMMUNICATE_ONLY, ms2.getName()));
-		Set<ArchitecturalDrift> drifts = CommunicationAnalyser.getInstance().analyseCommunications(mapConstraint, mapCommunicate);
+		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(mapConstraint, mapCommunicate);
 		assertEquals(1, drifts.size());
 	}
 	
@@ -95,7 +95,7 @@ public class CommunicationAnalyserTest {
 		ms1Communications.add(new CommunicateDefinition(ms1, ms2));
 		ms2Communications.add(new CommunicateDefinition(ms2, ms2));
 		ms1Constraints.add(new ConstraintDefinition(ms1.getName(), Constraint.ONLY_CAN_COMMUNICATE, ms2.getName()));
-		Set<ArchitecturalDrift> drifts = CommunicationAnalyser.getInstance().analyseCommunications(mapConstraint, mapCommunicate);
+		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(mapConstraint, mapCommunicate);
 		assertEquals(1, drifts.size());
 	}
 	
@@ -114,7 +114,7 @@ public class CommunicationAnalyserTest {
 		mapCommunicate.put(ms2, ms2Communications);
 		mapConstraint.put(ms2, ms2Constraints);
 		ms1Constraints.add(new ConstraintDefinition(ms1.getName(), Constraint.MUST_COMMUNICATE, ms2.getName()));
-		Set<ArchitecturalDrift> drifts = CommunicationAnalyser.getInstance().analyseCommunications(mapConstraint, mapCommunicate);
+		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(mapConstraint, mapCommunicate);
 		assertEquals(1, drifts.size());
 	}
 	
@@ -133,7 +133,7 @@ public class CommunicationAnalyserTest {
 		mapCommunicate.put(ms2, ms2Communications);
 		mapConstraint.put(ms2, ms2Constraints);
 		ms1Communications.add(new CommunicateDefinition(ms1, ms2));
-		Set<ArchitecturalDrift> drifts = CommunicationAnalyser.getInstance().analyseCommunications(mapConstraint, mapCommunicate);
+		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(mapConstraint, mapCommunicate);
 		assertEquals(1, drifts.size());
 	}
 }

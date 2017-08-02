@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Set;
 
-import communicationAnalyser.CommunicationAnalyser;
+import communicationAnalyser.CommunicationChecker;
 import communicationAnalyser.drift.ArchitecturalDrift;
 
 public class OutputManager {

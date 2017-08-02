@@ -14,17 +14,18 @@ import java.util.Set;
 
 import entities.ConstraintDefinition;
 import entities.MicroserviceDefinition;
+import entities.MicroservicesSystem;
 import enums.ConstraintType;
 
-public class CommunicationAnalyser {
+public class CommunicationChecker {
 
-	private final static CommunicationAnalyser instance = new CommunicationAnalyser();
+	private final static CommunicationChecker instance = new CommunicationChecker();
 	
-	public CommunicationAnalyser() {
+	public CommunicationChecker() {
 
 	}
 
-	public static CommunicationAnalyser getInstance() {
+	public static CommunicationChecker getInstance() {
 		return instance;
 	}
 	
@@ -39,8 +40,8 @@ public class CommunicationAnalyser {
 	}
 	
 	//checa localmente se um microservico pode se comunicar com outro
-	private ClassifiedCommunicate canCommunicateLocal(CommunicateDefinition communicate, Set<ConstraintDefinition> constraints){
-		for(ConstraintDefinition constraint : constraints){
+	private ClassifiedCommunicate canCommunicateLocal(CommunicateDefinition communicate, MicroservicesSystem system){
+		for(ConstraintDefinition constraint : system.getConstraints(communicate.getCaller())){
 			Boolean canCommunicate = constraint.canCommunicate(communicate);
 			if(canCommunicate != null && canCommunicate == true){
 				return new ClassifiedCommunicate(true, constraint);
@@ -53,10 +54,10 @@ public class CommunicationAnalyser {
 	}
 	
 	//checa globalmente se um microservico pode se comunicar com outro
-	private ArchitecturalDrift canCommunicateGlobal(CommunicateDefinition communicate, MicroserviceDefinition service, HashMap<MicroserviceDefinition, Set<ConstraintDefinition>> mapConstraint){
-		for(MicroserviceDefinition ms : mapConstraint.keySet()){
-			if(!ms.equals(service)){
-				for(ConstraintDefinition constraint : mapConstraint.get(ms)){
+	private ArchitecturalDrift canCommunicateGlobal(CommunicateDefinition communicate, MicroservicesSystem system){
+		for(MicroserviceDefinition ms : system.getMicroservices()){
+			if(!ms.equals(communicate.getCaller())){
+				for(ConstraintDefinition constraint : system.getConstraints(ms)){
 					if(constraint.match(communicate) && constraint.getConstraint().getConstraintType() == ConstraintType.ONLY_CAN_COMMUNICATE){
 						return new DivergenceDependencyConstraint(constraint, communicate);
 					}
@@ -67,10 +68,10 @@ public class CommunicationAnalyser {
 	}
 	
 	
-	public ArchitecturalDrift canCommunicate(CommunicateDefinition communicate, MicroserviceDefinition service, HashMap<MicroserviceDefinition, Set<ConstraintDefinition>> mapConstraint){
-		ArchitecturalDrift drift = canCommunicateGlobal(communicate, service, mapConstraint);
+	public ArchitecturalDrift canCommunicate(CommunicateDefinition communicate, MicroservicesSystem system){
+		ArchitecturalDrift drift = canCommunicateGlobal(communicate, system);
 		if(drift == null){
-			ClassifiedCommunicate classifiedCommunicate = canCommunicateLocal(communicate, mapConstraint.get(service));
+			ClassifiedCommunicate classifiedCommunicate = canCommunicateLocal(communicate, system);
 			if(classifiedCommunicate == null){
 				drift = new WarningConstraint(communicate);
 			}else if(!classifiedCommunicate.canCommunicate){
@@ -81,13 +82,12 @@ public class CommunicationAnalyser {
 	}
 	
 	//obtem ausencias
-	private Set<ArchitecturalDrift> getAbsences(MicroserviceDefinition service, Set<ConstraintDefinition> constraints,
-			Set<CommunicateDefinition> communications) {
+	private Set<ArchitecturalDrift> getAbsences(MicroserviceDefinition service, MicroservicesSystem system) {
 		Set<ArchitecturalDrift> absences = new HashSet<>();
-		for (ConstraintDefinition constraint : constraints) {
+		for (ConstraintDefinition constraint : system.getConstraints(service)) {			
 			if (constraint.getConstraint().getConstraintType() == ConstraintType.MUST_COMMUNICATE) {
 				boolean absence = true;
-				for (CommunicateDefinition communicate : communications) {
+				for (CommunicateDefinition communicate : system.getCommunications(service)) {
 					if(constraint.match(communicate)){
 						absence = false;
 						break;
@@ -103,18 +103,17 @@ public class CommunicationAnalyser {
 	
 	
 	
-	public Set<ArchitecturalDrift> analyseCommunications(HashMap<MicroserviceDefinition, Set<ConstraintDefinition>> mapConstraint,
-			HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> mapCommunications) {
+	public Set<ArchitecturalDrift> check(MicroservicesSystem system) {
 		Set<ArchitecturalDrift> drifts = new HashSet<>();
 		ArchitecturalDrift drift;
-		for (MicroserviceDefinition m : mapConstraint.keySet()) {
-			for (CommunicateDefinition communicate : mapCommunications.get(m)) {
-				drift = canCommunicate(communicate, m, mapConstraint);
+		for (MicroserviceDefinition ms : system.getMicroservices()) {
+			for (CommunicateDefinition communicate : system.getCommunications(ms)) {
+				drift = canCommunicate(communicate, system);
 				if(drift != null){
 					drifts.add(drift);
 				}
 			}
-			drifts.addAll(getAbsences(m, mapConstraint.get(m), mapCommunications.get(m)));
+			drifts.addAll(getAbsences(ms, system));
 		}
 		return drifts;
 	}

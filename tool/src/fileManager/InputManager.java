@@ -10,14 +10,12 @@ import java.util.HashSet;
 import java.util.Set;
 import entities.ConstraintDefinition;
 import entities.MicroserviceDefinition;
+import entities.MicroservicesSystem;
 import enums.Constraint;
 import util.RulesRegex;
 
 public class InputManager {
 	
-	//retornos
-	private HashMap<MicroserviceDefinition, Set<ConstraintDefinition>> serviceMap = new HashMap<>();
-	private HashMap<MicroserviceDefinition, String> dclMap = new HashMap<>();
 	
 	public InputManager() {
 
@@ -32,24 +30,9 @@ public class InputManager {
 		return null;
 	}
 	
-	private MicroserviceDefinition getMicroserviceDefinitionByName(String name){
-		for(MicroserviceDefinition m : serviceMap.keySet()){
-			if(m.getName().equals(name)){
-				return m;
-			}
-		}
-		return null;
-	}
-	
-	private void addMicroservice(MicroserviceDefinition microservice){
-		serviceMap.put(microservice, new HashSet<>());
-		dclMap.put(microservice, "");
-	}
-	
-	public void addConstraint(String[] leftServices, String[] rightServices, String[] usings, Constraint constraint) {
+	public Set<ConstraintDefinition> generateConstraints(String[] leftServices, String[] rightServices, String[] usings, Constraint constraint) {
+		Set<ConstraintDefinition> constraints = new HashSet<>();
 		for(String leftService : leftServices){
-			MicroserviceDefinition service = getMicroserviceDefinitionByName(leftService);
-			Set<ConstraintDefinition> constraints = serviceMap.get(service);
 			for(String rightService : rightServices){
 				if(usings == null){
 					constraints.add(new ConstraintDefinition(leftService, constraint, rightService));
@@ -61,9 +44,10 @@ public class InputManager {
 				}
 			}
 		}
+		return constraints;
 	}
 	
-	private void buildConstraint(String tokens[]){
+	private Set<ConstraintDefinition> extractConstraints(String tokens[]){
 		String constraintName = "";
 		int indexOfConstraintName = -1;
 		int indexOfLeftServices = -1;
@@ -91,10 +75,11 @@ public class InputManager {
 			usings = Arrays.copyOfRange(tokens, indexOfUsing + 1, tokens.length);
 		}
 		Constraint constraint = findConstraint(constraintName);
-		addConstraint(leftServices, rightServices, usings, constraint);
+		return generateConstraints(leftServices, rightServices, usings, constraint);
 	}
 	
-	public void readFile(File f) throws IOException {
+	public MicroservicesSystem readFile(File f) throws IOException {
+		MicroservicesSystem system = new MicroservicesSystem();
 		FileReader file = new FileReader(f);
 		BufferedReader buffer = new BufferedReader(file);
 		String line;
@@ -108,14 +93,14 @@ public class InputManager {
 				String path = tokens[2];
 				String language = tokens[3];
 				currentService = new MicroserviceDefinition(name, link, path, language);
-				addMicroservice(currentService);
+				system.addMicroservice(currentService);
 			}else if(line.matches(RulesRegex.DCL_REGEX)){
 				String dcl = line.replaceAll("\t", "");
-				String dclContent = dclMap.get(currentService); 
-				dclMap.put(currentService, dclContent + dcl + '\n');
+				system.addDcl(currentService, dcl);
 			}else if(line.matches(RulesRegex.CONSTRAINT_REGEX)){
 				String tokens[] = line.split(RulesRegex.CONSTRAINT_TOKENS);
-				buildConstraint(tokens);
+				Set<ConstraintDefinition> constraints = extractConstraints(tokens);
+				system.addConstraints(constraints);
 			}else{
 				System.out.println("line error");
 			}
@@ -123,19 +108,6 @@ public class InputManager {
 
 		buffer.close();
 		file.close();
+		return system;
 	}
-
-
-	public HashMap<MicroserviceDefinition, Set<ConstraintDefinition>> getServiceMap(){
-		return this.serviceMap;
-	}
-	
-	public HashMap<MicroserviceDefinition, String> getDclMap(){
-		return this.dclMap;
-	}
-	
-	public Set<MicroserviceDefinition> getAllServices(){
-		return this.serviceMap.keySet();
-	}
-
 }
