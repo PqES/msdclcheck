@@ -19,7 +19,7 @@ public class CommunicationExtractor {
 
 	private final static CommunicationExtractor instance = new CommunicationExtractor();
 	//private final Pattern pattern = Pattern.compile("\"(http://)(\\w|:|/|\\?|=|\\.|%)+\"");
-	private final Pattern urlPattern = Pattern.compile("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]",Pattern.CASE_INSENSITIVE);
+	private final Pattern urlPattern = Pattern.compile("\"(((https?|ftp|file)://)|www)[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]\"",Pattern.CASE_INSENSITIVE);
 	private final Pattern protocolPattern = Pattern.compile("(https?|ftp|file)://");
 	//private final Pattern pattern = Pattern.compile("\"(http://)(.)+\"");
 	
@@ -35,8 +35,10 @@ public class CommunicationExtractor {
 		if(matcher.find()){
 			String stringMatched = matcher.group();
 			Matcher protocolMatched = this.protocolPattern.matcher(stringMatched);
-			protocolMatched.find();
-			String protocolExtracted = protocolMatched.group();
+			String protocolExtracted = "";
+			if(protocolMatched.find()){
+				protocolExtracted = protocolMatched.group();
+			}
 			String split[] = stringMatched.replaceAll("(https?|ftp|file)://|(\")", "").split("/", 2);
 			String baseLink = protocolExtracted + split[0];
 			String using = null;
