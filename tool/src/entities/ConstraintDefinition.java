@@ -47,7 +47,7 @@ public class ConstraintDefinition {
 	
 	public boolean match(CommunicateDefinition communicate){
 		return (this.using != null && this.using.equals(communicate.getUsing()) || this.using == null)
-				&& this.microserviceDestin.equalsIgnoreCase(communicate.getCalle().getName());
+				&& this.microserviceDestin.equalsIgnoreCase(communicate.getMicroserviceDestin());
 	}
 	
 	public Boolean canCommunicate(CommunicateDefinition communicate) {
@@ -57,7 +57,7 @@ public class ConstraintDefinition {
 			}else{
 				return true;
 			}
-		}else if(!this.microserviceDestin.equalsIgnoreCase(communicate.getCalle().getName()) &&
+		}else if(!this.microserviceDestin.equalsIgnoreCase(communicate.getMicroserviceDestin()) &&
 				this.getConstraint().getConstraintType() == ConstraintType.CAN_COMMUNICATE_ONLY){
 			return false;
 		}

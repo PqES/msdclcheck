@@ -4,28 +4,26 @@ import entities.MicroserviceDefinition;
 
 public class CommunicateDefinition {
 
-	private MicroserviceDefinition caller;
-	private MicroserviceDefinition callee;
+	private String microserviceOrigin;
+	private String microserviceDestin;
 	private String using;
 	
-	public CommunicateDefinition(MicroserviceDefinition caller, MicroserviceDefinition callee, String using){
-		this.caller = caller;
-		this.callee = callee;
+	public CommunicateDefinition(String microserviceOrigin, String microserviceDestin, String using){
+		this.microserviceOrigin = microserviceOrigin;
+		this.microserviceDestin = microserviceDestin;
 		this.using = using;
 	}
 	
-	public CommunicateDefinition(MicroserviceDefinition caller, MicroserviceDefinition callee){
-		this.caller = caller;
-		this.callee = callee;
-		this.using = null;
+	public CommunicateDefinition(String microserviceOrigin, String microserviceDestin){
+		this(microserviceOrigin, microserviceDestin, null);
 	}
 	
-	public MicroserviceDefinition getCaller() {
-		return caller;
+	public String getMicroserviceOrigin() {
+		return this.microserviceOrigin;
 	}
 
-	public MicroserviceDefinition getCalle() {
-		return callee;
+	public String getMicroserviceDestin() {
+		return this.microserviceDestin;
 	}
 	
 	public String getUsing(){
@@ -33,21 +31,22 @@ public class CommunicateDefinition {
 	}
 	@Override
 	public int hashCode(){
-		return caller.getName().length() + callee.getName().length();
+		return microserviceOrigin.length() + microserviceDestin.length();
 	}
 	
 	@Override
 	public boolean equals(Object obj){
 		if(obj instanceof CommunicateDefinition){
 			CommunicateDefinition access = (CommunicateDefinition) obj;
-			return this.caller.equals(access.caller) && this.callee.equals(access.callee);
+			return this.microserviceOrigin.equals(access.microserviceOrigin)
+					&& this.microserviceDestin.equals(access.microserviceDestin);
 		}
 		return false;
 	}
 	
 	@Override
 	public String toString(){
-		String s = caller.getName() + " communicate " + callee.getName(); 
+		String s = microserviceOrigin + " communicate " + microserviceDestin; 
 		if(using != null){
 			s += " using " + this.using;
 		}

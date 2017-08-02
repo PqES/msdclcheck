@@ -55,7 +55,7 @@ public class MicroservicesSystem {
 	}
 	
 	public void addCommunication(CommunicateDefinition c){
-		MicroserviceDefinition ms = this.getMicroserviceDefinition(c.getCaller().getName());
+		MicroserviceDefinition ms = this.getMicroserviceDefinition(c.getMicroserviceOrigin());
 		if(ms != null){
 			this.mapCommunications.get(ms).add(c);
 		}

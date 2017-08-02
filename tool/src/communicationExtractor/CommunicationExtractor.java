@@ -57,7 +57,7 @@ public class CommunicationExtractor {
 			for (MicroserviceDefinition m : allMicroservices) {
 				if (line.contains(m.getLink())) {
 					String using = extractUsing(line, m.getLink());
-					accesses.add(new CommunicateDefinition(caller, m, using));
+					accesses.add(new CommunicateDefinition(caller.getName(), m.getName(), using));
 				}
 			}
 		}

@@ -41,7 +41,8 @@ public class CommunicationChecker {
 	
 	//checa localmente se um microservico pode se comunicar com outro
 	private ClassifiedCommunicate canCommunicateLocal(CommunicateDefinition communicate, MicroservicesSystem system){
-		for(ConstraintDefinition constraint : system.getConstraints(communicate.getCaller())){
+		MicroserviceDefinition msOrigin = system.getMicroserviceDefinition(communicate.getMicroserviceOrigin());
+		for(ConstraintDefinition constraint : system.getConstraints(msOrigin)){
 			Boolean canCommunicate = constraint.canCommunicate(communicate);
 			if(canCommunicate != null && canCommunicate == true){
 				return new ClassifiedCommunicate(true, constraint);
@@ -55,8 +56,9 @@ public class CommunicationChecker {
 	
 	//checa globalmente se um microservico pode se comunicar com outro
 	private ArchitecturalDrift canCommunicateGlobal(CommunicateDefinition communicate, MicroservicesSystem system){
+		MicroserviceDefinition msOrigin = system.getMicroserviceDefinition(communicate.getMicroserviceOrigin());
 		for(MicroserviceDefinition ms : system.getMicroservices()){
-			if(!ms.equals(communicate.getCaller())){
+			if(!ms.equals(msOrigin)){
 				for(ConstraintDefinition constraint : system.getConstraints(ms)){
 					if(constraint.match(communicate) && constraint.getConstraint().getConstraintType() == ConstraintType.ONLY_CAN_COMMUNICATE){
 						return new DivergenceDependencyConstraint(constraint, communicate);
