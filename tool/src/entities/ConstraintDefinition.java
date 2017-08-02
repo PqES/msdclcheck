@@ -46,8 +46,23 @@ public class ConstraintDefinition {
 
 	
 	public boolean match(CommunicateDefinition communicate){
-		return (this.using != null && this.using.equals(communicate.getUsing()) || this.using == null)
-				&& this.microserviceDestin.equalsIgnoreCase(communicate.getMicroserviceDestin());
+		if(this.microserviceDestin.equalsIgnoreCase(communicate.getMicroserviceDestin())){
+			if(this.using != null && communicate.getUsing() != null){
+				String constraintRoute[] = this.using.split("/");
+				String communicateRoute[] = communicate.getUsing().split("/");
+				if(constraintRoute.length == communicateRoute.length){
+					for(int i = 0; i < constraintRoute.length; i++){
+						if(!constraintRoute[i].equals("{dynamic}") && !constraintRoute[i].equals(communicateRoute[i])){
+							return false;
+						}
+					}
+					return true;
+				}
+			}else if(this.using == null){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public Boolean canCommunicate(CommunicateDefinition communicate) {

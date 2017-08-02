@@ -90,6 +90,23 @@ public class CommunicationCheckerTest {
 	}
 	
 	@Test
+	public void usingAbsence(){
+		MicroservicesSystem system = createMicroserviceSystem(2);
+		system.addConstraint(new ConstraintDefinition("MS1", Constraint.MUST_COMMUNICATE, "MS2", "/rest1/rest2"));
+		system.addCommunication(new CommunicateDefinition("ms1", "ms2", "/rest1"));
+		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
+		assertEquals(1, drifts.size());
+	}
+	
+	@Test
+	public void dynamicUsing(){
+		MicroservicesSystem system = createMicroserviceSystem(2);
+		system.addConstraint(new ConstraintDefinition("ms1", Constraint.MUST_COMMUNICATE, "ms2", "/rest1/{dynamic}/rest3"));
+		system.addCommunication(new CommunicateDefinition("ms1", "ms2", "/rest1/rest2/rest3"));
+		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
+		assertEquals(0, drifts.size());
+	}
+	@Test
 	public void toyExample(){						
 		String servicesName[] = {"MsProduct", "MsCustomer", "MsSale", "MsAuthentication", "MsNewsletter"};
 		MicroservicesSystem system = createMicroserviceSystem(servicesName);
