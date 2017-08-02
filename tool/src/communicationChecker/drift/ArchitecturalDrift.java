@@ -1,4 +1,4 @@
-package communicationAnalyser.drift;
+package communicationChecker.drift;
 
 import entities.ConstraintDefinition;
 
@@ -25,14 +25,5 @@ public abstract class ArchitecturalDrift {
 	@Override
 	public int hashCode(){
 		return getViolationType().length();
-	}
-	
-	@Override
-	public boolean equals(Object obj){
-		if(obj instanceof ArchitecturalDrift){
-			ArchitecturalDrift drift = (ArchitecturalDrift) obj;
-			return this.violateConstraint.equals(drift.violateConstraint) && getViolationType().equals(drift.getViolationType());
-		}
-		return false;
 	}
 }

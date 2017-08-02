@@ -1,4 +1,4 @@
-package communicationAnalyser.drift;
+package communicationChecker.drift;
 
 import entities.ConstraintDefinition;
 
@@ -16,6 +16,15 @@ public class AbsenceDependencyConstraint extends ArchitecturalDrift{
 	@Override
 	public String getMessage() {
 		return "Abscence: "+ getViolateConstraint().toString();
+	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof AbsenceDependencyConstraint){
+			AbsenceDependencyConstraint absence = (AbsenceDependencyConstraint) obj;
+			return this.getViolateConstraint().equals(absence.getViolateConstraint());
+		}
+		return false;
 	}
 
 }

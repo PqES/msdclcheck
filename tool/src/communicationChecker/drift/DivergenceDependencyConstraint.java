@@ -1,4 +1,4 @@
-package communicationAnalyser.drift;
+package communicationChecker.drift;
 
 import com.sun.accessibility.internal.resources.accessibility;
 
@@ -25,9 +25,9 @@ public class DivergenceDependencyConstraint extends ArchitecturalDrift{
 	
 	@Override
 	public boolean equals(Object obj){
-		if(super.equals(obj) && obj instanceof DivergenceDependencyConstraint){
+		if(obj instanceof DivergenceDependencyConstraint){
 			DivergenceDependencyConstraint divergence = (DivergenceDependencyConstraint) obj;
-			return this.communication.equals(divergence.communication);
+			return this.communication.equals(divergence.communication) && this.getViolateConstraint().equals(divergence.getViolateConstraint());
 		}
 		return false;
 	}

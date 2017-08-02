@@ -1,13 +1,13 @@
-package communicationAnalyser;
+package communicationChecker;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
 
-import communicationAnalyser.drift.AbsenceDependencyConstraint;
-import communicationAnalyser.drift.ArchitecturalDrift;
-import communicationAnalyser.drift.DivergenceDependencyConstraint;
-import communicationAnalyser.drift.WarningConstraint;
+import communicationChecker.drift.AbsenceDependencyConstraint;
+import communicationChecker.drift.ArchitecturalDrift;
+import communicationChecker.drift.DivergenceDependencyConstraint;
+import communicationChecker.drift.WarningConstraint;
 import communicationExtractor.CommunicateDefinition;
 
 import java.util.Set;
@@ -86,7 +86,7 @@ public class CommunicationChecker {
 	//obtem ausencias
 	public Set<ArchitecturalDrift> getAbsences(MicroserviceDefinition service, MicroservicesSystem system) {
 		Set<ArchitecturalDrift> absences = new HashSet<>();
-		for (ConstraintDefinition constraint : system.getConstraints(service)) {			
+		for (ConstraintDefinition constraint : system.getConstraints(service)) {
 			if (constraint.getConstraint().getConstraintType() == ConstraintType.MUST_COMMUNICATE) {
 				boolean absence = true;
 				for (CommunicateDefinition communicate : system.getCommunications(service)) {

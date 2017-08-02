@@ -8,8 +8,8 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import communicationAnalyser.CommunicationChecker;
-import communicationAnalyser.drift.ArchitecturalDrift;
+import communicationChecker.CommunicationChecker;
+import communicationChecker.drift.ArchitecturalDrift;
 import communicationExtractor.CommunicateDefinition;
 import entities.ConstraintDefinition;
 import entities.MicroserviceDefinition;

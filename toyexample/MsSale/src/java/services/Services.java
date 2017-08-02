@@ -9,7 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 public class Services {
-
+	
     private static final String linkAuthentication = "http://localhost:5000/api/authenticate";
     private static final String linkGetClient = "http://localhost:9000/getCustomerCpf/";
     private static final String linkUpdateStock = "http://localhost:8080/venda";

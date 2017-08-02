@@ -7,8 +7,8 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import communicationAnalyser.CommunicationChecker;
-import communicationAnalyser.drift.ArchitecturalDrift;
+import communicationChecker.CommunicationChecker;
+import communicationChecker.drift.ArchitecturalDrift;
 import communicationExtractor.CommunicateDefinition;
 import communicationExtractor.CommunicationExtractor;
 import communicationExtractor.Pi_DCL;

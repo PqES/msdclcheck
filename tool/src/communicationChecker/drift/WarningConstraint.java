@@ -1,4 +1,4 @@
-package communicationAnalyser.drift;
+package communicationChecker.drift;
 
 import communicationExtractor.CommunicateDefinition;
 import entities.ConstraintDefinition;
@@ -23,7 +23,7 @@ public class WarningConstraint extends ArchitecturalDrift{
 	
 	@Override
 	public boolean equals(Object obj){
-		if(super.equals(obj) && obj instanceof WarningConstraint){
+		if(obj instanceof WarningConstraint){
 			WarningConstraint warning = (WarningConstraint) obj;
 			return this.communicate.equals(warning.communicate);
 		}
