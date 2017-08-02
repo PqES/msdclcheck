@@ -7,11 +7,11 @@ import entities.ConstraintDefinition;
 
 public class DivergenceDependencyConstraint extends ArchitecturalDrift{
 	
-	private final CommunicateDefinition access; 
+	private final CommunicateDefinition communication; 
 	
 	public DivergenceDependencyConstraint(ConstraintDefinition violate, CommunicateDefinition access) {
 		super(violate);
-		this.access = access;
+		this.communication = access;
 	}
 	
 	public String getViolationType(){
@@ -20,6 +20,15 @@ public class DivergenceDependencyConstraint extends ArchitecturalDrift{
 
 	@Override
 	public String getMessage() {
-		return "Divergence: " + getViolateConstraint().toString() + " (" + access.toString() + ")";
+		return "Divergence: " + getViolateConstraint().toString() + " (" + communication.toString() + ")";
+	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if(super.equals(obj) && obj instanceof DivergenceDependencyConstraint){
+			DivergenceDependencyConstraint divergence = (DivergenceDependencyConstraint) obj;
+			return this.communication.equals(divergence.communication);
+		}
+		return false;
 	}
 }

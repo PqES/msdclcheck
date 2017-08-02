@@ -20,5 +20,14 @@ public class WarningConstraint extends ArchitecturalDrift{
 	public String getMessage() {
 		return "Warning: no constraint for communication: "+communicate.toString();
 	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if(super.equals(obj) && obj instanceof WarningConstraint){
+			WarningConstraint warning = (WarningConstraint) obj;
+			return this.communicate.equals(warning.communicate);
+		}
+		return false;
+	}
 
 }

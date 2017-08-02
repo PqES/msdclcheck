@@ -45,8 +45,38 @@ public class ConstraintDefinition {
 	}
 
 	
-	public boolean match(CommunicateDefinition communicate){
+	public boolean match2(CommunicateDefinition communicate){
+		System.out.println("1");
 		if(this.microserviceDestin.equalsIgnoreCase(communicate.getMicroserviceDestin())){
+			System.out.println("2");
+			if(this.using != null && communicate.getUsing() != null){
+				System.out.println("3");
+				System.out.println(this.using+" "+communicate.getUsing());
+				String constraintRoute[] = this.using.split("/");
+				String communicateRoute[] = communicate.getUsing().split("/");
+				if(constraintRoute.length == communicateRoute.length){
+					System.out.println("4");
+					for(int i = 0; i < constraintRoute.length; i++){
+						if(!constraintRoute[i].equals("{dynamic}") && !constraintRoute[i].equals(communicateRoute[i])){
+							System.out.println("5");
+							return false;
+						}
+					}
+					System.out.println("6");
+					return true;
+				}
+			}else if(this.using == null){
+				System.out.println("7");
+				return true;
+			}
+		}
+		System.out.println("8");
+		return false;
+	}
+	
+	public boolean match(CommunicateDefinition communicate){
+		if(this.microserviceOrigin.equalsIgnoreCase(communicate.getMicroserviceOrigin())
+				&& this.microserviceDestin.equalsIgnoreCase(communicate.getMicroserviceDestin())){
 			if(this.using != null && communicate.getUsing() != null){
 				String constraintRoute[] = this.using.split("/");
 				String communicateRoute[] = communicate.getUsing().split("/");

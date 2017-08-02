@@ -84,7 +84,7 @@ public class CommunicationChecker {
 	}
 	
 	//obtem ausencias
-	private Set<ArchitecturalDrift> getAbsences(MicroserviceDefinition service, MicroservicesSystem system) {
+	public Set<ArchitecturalDrift> getAbsences(MicroserviceDefinition service, MicroservicesSystem system) {
 		Set<ArchitecturalDrift> absences = new HashSet<>();
 		for (ConstraintDefinition constraint : system.getConstraints(service)) {			
 			if (constraint.getConstraint().getConstraintType() == ConstraintType.MUST_COMMUNICATE) {
@@ -115,7 +115,8 @@ public class CommunicationChecker {
 					drifts.add(drift);
 				}
 			}
-			drifts.addAll(getAbsences(ms, system));
+			Set<ArchitecturalDrift> absences = getAbsences(ms, system);
+			drifts.addAll(absences);
 		}
 		return drifts;
 	}

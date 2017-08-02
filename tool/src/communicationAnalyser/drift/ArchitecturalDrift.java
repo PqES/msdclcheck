@@ -21,4 +21,18 @@ public abstract class ArchitecturalDrift {
 	public abstract String getMessage();
 
 	public abstract String getViolationType();
+	
+	@Override
+	public int hashCode(){
+		return getViolationType().length();
+	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof ArchitecturalDrift){
+			ArchitecturalDrift drift = (ArchitecturalDrift) obj;
+			return this.violateConstraint.equals(drift.violateConstraint) && getViolationType().equals(drift.getViolationType());
+		}
+		return false;
+	}
 }

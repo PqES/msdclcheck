@@ -75,8 +75,10 @@ public class CommunicationCheckerTest {
 	
 	@Test
 	public void mustCommunicate() {
-		MicroservicesSystem system = createMicroserviceSystem(2);
-		system.addConstraint(new ConstraintDefinition("ms1", Constraint.MUST_COMMUNICATE, "ms2"));
+		MicroservicesSystem system = createMicroserviceSystem(3);
+		system.addConstraint(new ConstraintDefinition("ms1", Constraint.CAN_COMMUNICATE, "ms2"));
+		system.addConstraint(new ConstraintDefinition("ms1", Constraint.MUST_COMMUNICATE, "ms3"));
+		system.addCommunication(new CommunicateDefinition("ms1", "ms2"));
 		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
 		assertEquals(1, drifts.size());
 	}
@@ -90,10 +92,10 @@ public class CommunicationCheckerTest {
 	}
 	
 	@Test
-	public void usingAbsence(){
+	public void usingOnly(){
 		MicroservicesSystem system = createMicroserviceSystem(2);
-		system.addConstraint(new ConstraintDefinition("MS1", Constraint.MUST_COMMUNICATE, "MS2", "/rest1/rest2"));
-		system.addCommunication(new CommunicateDefinition("ms1", "ms2", "/rest1"));
+		system.addConstraint(new ConstraintDefinition("ms1", Constraint.CAN_COMMUNICATE_ONLY, "ms2", "/rest1"));
+		system.addCommunication(new CommunicateDefinition("ms1", "ms2", "/rest1/rest2"));
 		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
 		assertEquals(1, drifts.size());
 	}
@@ -101,11 +103,13 @@ public class CommunicationCheckerTest {
 	@Test
 	public void dynamicUsing(){
 		MicroservicesSystem system = createMicroserviceSystem(2);
+		system.addConstraint(new ConstraintDefinition("ms1", Constraint.CAN_COMMUNICATE, "ms2", "/rest1/{dynamic}"));
 		system.addConstraint(new ConstraintDefinition("ms1", Constraint.MUST_COMMUNICATE, "ms2", "/rest1/{dynamic}/rest3"));
-		system.addCommunication(new CommunicateDefinition("ms1", "ms2", "/rest1/rest2/rest3"));
+		system.addCommunication(new CommunicateDefinition("ms1", "ms2", "/rest1/2"));
 		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
-		assertEquals(0, drifts.size());
+		assertEquals(1, drifts.size());
 	}
+	
 	@Test
 	public void toyExample(){						
 		String servicesName[] = {"MsProduct", "MsCustomer", "MsSale", "MsAuthentication", "MsNewsletter"};
