@@ -1,9 +1,8 @@
-/unitTests/
-/main/
-/communicationAnalyser/
-/communicationExtractor/
-/fileManager/
-/util/
-/enums/
-/entities/
 /communicationChecker/
+/communicationExtractor/
+/entities/
+/enums/
+/fileManager/
+/main/
+/unitTests/
+/util/
