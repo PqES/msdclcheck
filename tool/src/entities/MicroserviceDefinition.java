@@ -1,7 +1,5 @@
 package entities;
 
-import java.util.Set;
-
 public class MicroserviceDefinition {
 
 	private String name;
@@ -36,6 +34,7 @@ public class MicroserviceDefinition {
 	public int hashCode(){
 		return this.name.length();
 	}
+	
 	
 	@Override
 	public boolean equals(Object obj){

@@ -1,7 +1,6 @@
 package entities;
 
 
-import communicationChecker.drift.DivergenceDependencyConstraint;
 import communicationExtractor.CommunicateDefinition;
 import enums.Constraint;
 import enums.ConstraintType;
