@@ -105,10 +105,7 @@ public class CommunicationExtractor {
 		return communications;
 	}
 	
-	private CommunicateDefinition extractCommunicationFromLine(MicroservicesSystem system) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	private void extractCoomunicationsFromZull(String declaration, MicroservicesSystem system) {
 		Set dependencies = dependenciesFromService.get(declaration);
@@ -117,7 +114,7 @@ public class CommunicationExtractor {
 		for(Object dep : dependencies) {
 			if(dep instanceof ClassNormalAnnotationDependency) { 
 				if(((ClassNormalAnnotationDependency) dep).getNameClass2().equals("FeignClient")) {
-					CommunicateDefinition communication = extractCommunicationFromLine(system);
+					CommunicateDefinition communication = extractCommunicationFromLine(system, dependencies);
 				}
 				
 			}
