@@ -4,7 +4,7 @@ public class MicroserviceDefinition {
 
 	private String name;
 	private String link;
-	private String path;
+	private String path; 
 	private String language;
 	
 	public MicroserviceDefinition(String name, String link, String path, String language){

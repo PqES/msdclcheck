@@ -38,7 +38,7 @@ public class CommunicationExtractor {
 			Pattern.CASE_INSENSITIVE);
 	private final Pattern protocolPattern = Pattern.compile("(https?|ftp|file)://");
 	// private final Pattern pattern = Pattern.compile("\"(http://)(.)+\"");
-	private HashMap<String, Set> dependencies;
+	HashMap<String, Set> dependenciesFromService = new HashMap<>();
 
 	public CommunicationExtractor() {
 	}
@@ -55,8 +55,8 @@ public class CommunicationExtractor {
 	}
 
 	public CommunicateDefinition extractCommunicationFromString(String line, MicroserviceDefinition currentService,
-			MicroservicesSystem system) { 
-		Matcher matcher = this.urlPattern.matcher(line); 
+			MicroservicesSystem system) {
+		Matcher matcher = this.urlPattern.matcher(line);
 
 		if (matcher.find()) {
 			String stringMatched = matcher.group();
@@ -104,85 +104,59 @@ public class CommunicationExtractor {
 		fr.close();
 		return communications;
 	}
-
-	public Set<CommunicateDefinition> extractCommunicationFromFiles(File f, MicroserviceDefinition caller,
-			MicroservicesSystem system) throws IOException, MsDCLException {
-
-		MsDCLDependencyVisitor visitor = new MsDCLDependencyVisitor();
-		String filePath = f.getAbsolutePath();
-		filePath = f.getAbsolutePath();
-		String s = f.getName();
-		if (f.isFile()) {
-			String service = Util.readFileToCharArray(filePath);
-			visitor = new MsDCLDependencyVisitor(s, service);
-
-		}
-
-		getAnnotations(visitor);
-
+	
+	private CommunicateDefinition extractCommunicationFromLine(MicroservicesSystem system) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
-
-	public void getAnnotations(MsDCLDependencyVisitor visitor) {
-
-		dependencies = visitor.getDependencies2();
-
-		for (String nameClass : dependencies.keySet()) {
-			if (!dependencies.get(nameClass).isEmpty()) {
-
-				for (Object d : dependencies.get(nameClass)) {
-
-					if (d instanceof FieldAnnotationDependency) {
-						if (((AnnotationDependency) d).getNameClass2().equals("Autowired")) {
-							extractCommunicationsFromZull(((FieldAnnotationDependency) d).getDeclaration());
-							System.out.println(((FieldAnnotationDependency) d).toString());
-						}
-
-					}
-					if (d instanceof ClassNormalAnnotationDependency) {
-						if (((ClassNormalAnnotationDependency) d).getNameClass2().equals("FeignClient")) {
-							System.out.println(((ClassNormalAnnotationDependency) d).toString());
-						}
-					}
-					System.out.println();
-				}
-			}
-
-		}
-	}
-	
-	public void extractCommunicationsFromZull(String className) {
+	private void extractCoomunicationsFromZull(String declaration, MicroservicesSystem system) {
+		Set dependencies = dependenciesFromService.get(declaration);
 		Set<CommunicateDefinition> communications = new HashSet<>();
-		Set dependenciesOfClass = this.dependencies.get(className);
-		for(Object dep : dependenciesOfClass) {
-			if(dep instanceof ClassNormalAnnotationDependency) {
-				for(MemberPair m : ((ClassNormalAnnotationDependency) dep).getMembersValues()) {
-					if(m.getValue().equals("MsCustomer")); // Apenas teste para verificação
-						//TODO: verificar os metodos e definir as comunicações
+		
+		for(Object dep : dependencies) {
+			if(dep instanceof ClassNormalAnnotationDependency) { 
+				if(((ClassNormalAnnotationDependency) dep).getNameClass2().equals("FeignClient")) {
+					CommunicateDefinition communication = extractCommunicationFromLine(system);
+				}
+				
+			}
+		}
+
+	}
+	
+	
+
+	
+
+	private void verifyCommunicationsByAnnotations(Set dependenciesFile, MicroservicesSystem system) {
+		
+		for (Object dep : dependenciesFile) {
+			if (dep instanceof FieldAnnotationDependency) {
+				if (((AnnotationDependency) dep).getNameClass2().equals("Autowired")) {
+					extractCoomunicationsFromZull(((FieldAnnotationDependency) dep).getDeclaration(), system);
+
 				}
 			}
 		}
 	}
-	
-
 	public Set<CommunicateDefinition> extractCommunicationsFromService(MicroserviceDefinition caller,
 			MicroservicesSystem system) throws IOException, MsDCLException {
-		Set<CommunicateDefinition> accesses = new HashSet<>();
-		System.out.println("File: " + caller.getPath());
+		
+		dependenciesFromService = DependencyExtractor.getInstance().extractDependenciesFromService(caller);
 		List<File> javaFiles = Util.getAllFiles(new File(caller.getPath()));
-
 		for (File f : javaFiles) {
-			System.out.println("f:  " + f.getName());
-			extractCommunicationFromFiles(f, caller, system);
-			
+			String fileName = f.getName();
+			Set dependenciesFile = dependenciesFromService.get(fileName);
+			verifyCommunicationsByAnnotations(dependenciesFile, system);
 		}
-		return accesses;
-	}
 
+		return null;
+	}
+	
 	public HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> analyseAll(MicroservicesSystem system)
 			throws IOException, MsDCLException {
+		
 		HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> map = new HashMap<>();
 		for (MicroserviceDefinition caller : system.getMicroservices()) {
 			Set<CommunicateDefinition> accesses = new HashSet<>();

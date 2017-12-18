@@ -25,7 +25,7 @@ public class CommunicateDefinition {
 	}
 	
 	public String getUsing(){
-		return this.using;
+		return this.using; 
 	}
 	@Override
 	public int hashCode(){

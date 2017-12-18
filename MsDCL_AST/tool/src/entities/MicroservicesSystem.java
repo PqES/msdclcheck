@@ -9,15 +9,17 @@ public class MicroservicesSystem {
 
 	private HashMap<MicroserviceDefinition, Set<ConstraintDefinition>> mapConstraints;
 	private HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> mapCommunications;
-	private HashMap<MicroserviceDefinition, StringBuilder> mapDcl;
+	private HashMap<MicroserviceDefinition, StringBuilder> mapDcl; 
 	private HashMap<String, MicroserviceDefinition> mapService;
+	private Set<String> allMicrosservice;
 	
 	
-	public MicroservicesSystem(){
+	public MicroservicesSystem(){ 
 		this.mapConstraints = new HashMap<>();
 		this.mapCommunications = new HashMap<>();
 		this.mapDcl = new HashMap<>();
 		this.mapService = new HashMap<>();
+		this.allMicrosservice = new HashSet<>();
 	}
 	
 	public void addMicroservice(MicroserviceDefinition ms){
@@ -74,4 +76,8 @@ public class MicroservicesSystem {
 	public Collection<MicroserviceDefinition> getMicroservices(){
 		return this.mapService.values();
 	}
+	
+	
+	
+	
 }

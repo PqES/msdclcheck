@@ -49,7 +49,7 @@ public class MsDCLDependencyVisitor extends ASTVisitor {
 	private CompilationUnit compUnit;
 	private CompilationUnit fullClass;
 	private String className;
-	private HashMap<String, Set> dependencies2;
+	private Set allDependenciesOfFile;
 
 	public MsDCLDependencyVisitor() {
 	}
@@ -71,7 +71,7 @@ public class MsDCLDependencyVisitor extends ASTVisitor {
 
 			this.declarations = new LinkedHashSet<TypeDeclaration>();
 
-			this.dependencies2 = new HashMap<>();
+			this.allDependenciesOfFile = new HashSet<>();
 
 			this.fullClass.accept(this);
 
@@ -123,7 +123,7 @@ public class MsDCLDependencyVisitor extends ASTVisitor {
 			}
 		
 	
-		this.dependencies2.put(className, this.dependencies);
+		this.allDependenciesOfFile.addAll(this.dependencies);
 		return true;
 	}
 	@Override
@@ -168,7 +168,8 @@ public class MsDCLDependencyVisitor extends ASTVisitor {
 					method.getName().getIdentifier(),
 					memberPairs));
 		}
-		this.dependencies2.put(className, this.dependencies);
+		this.allDependenciesOfFile.addAll(this.dependencies);
+
 		return true;
 	}
 	@Override
@@ -185,7 +186,7 @@ public class MsDCLDependencyVisitor extends ASTVisitor {
 		}
 		else if(node.getParent().getNodeType() == ASTNode.FIELD_DECLARATION) {
 			FieldDeclaration field = (FieldDeclaration) node.getParent();
-			Type type = field.getType();
+			Type type = field.getType(); 
 			String typeDependency = addNameOfTypes(type);
 			this.dependencies.add(new FieldSingleAnnotationDependency(this.className, 
 							node.getTypeName().getFullyQualifiedName(),
@@ -196,7 +197,9 @@ public class MsDCLDependencyVisitor extends ASTVisitor {
 							typeDependency, 
 							expression));
 		}
-		this.dependencies2.put(className, this.dependencies);
+		
+		this.allDependenciesOfFile.addAll(this.dependencies);
+
 		return true;
 		
 	}
@@ -219,7 +222,7 @@ public class MsDCLDependencyVisitor extends ASTVisitor {
 		return dependencies;
 	}
 
-	public Set<TypeDeclaration> getDeclarations() {
+	public Set<TypeDeclaration> getDeclarations() { 
 		return declarations;
 	}
 
@@ -231,8 +234,8 @@ public class MsDCLDependencyVisitor extends ASTVisitor {
 		return this.fullClass;
 	}
 
-	public HashMap<String, Set> getDependencies2() {
-		return dependencies2;
+	public Set getDependencies2() {
+		return allDependenciesOfFile;
 	}
 
 	

@@ -24,7 +24,7 @@ import pidclcheck.exception.ParseException;
 public class Main {
 	public static void main(String[] args) throws MsDCLException {
 		try {
-			InputManager inputManager = new InputManager();
+			InputManager inputManager = new InputManager(); 
 			MicroservicesSystem system = inputManager.readFile(new File("constraints.txt"));
 
 			// checa acesso dos microserviços
