@@ -7,6 +7,7 @@ import java.util.Set;
 
 public class MicroservicesSystem {
 
+
 	private HashMap<MicroserviceDefinition, Set<ConstraintDefinition>> mapConstraints;
 	private HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> mapCommunications;
 	private HashMap<MicroserviceDefinition, StringBuilder> mapDcl; 
@@ -76,7 +77,13 @@ public class MicroservicesSystem {
 	public Collection<MicroserviceDefinition> getMicroservices(){
 		return this.mapService.values();
 	}
-	
+	public Set<String> getAllMicrosservice() {
+		return allMicrosservice;
+	}
+
+	public void setAllMicrosservice(Set<String> allMicrosservice) {
+		this.allMicrosservice = allMicrosservice;
+	}
 	
 	
 	

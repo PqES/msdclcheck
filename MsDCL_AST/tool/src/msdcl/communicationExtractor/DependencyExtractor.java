@@ -9,12 +9,11 @@ import java.util.Set;
 
 import entities.CommunicateDefinition;
 import entities.MicroserviceDefinition;
-import entities.MicroservicesSystem;
 import msdcl.ast.MsDCLDependencyVisitor;
 import msdcl.dependencies.AnnotationDependency;
 import msdcl.dependencies.ClassNormalAnnotationDependency;
 import msdcl.dependencies.FieldAnnotationDependency;
-import msdcl.dependencies.MemberPair;
+import msdcl.dependencies.MethodNormalAnnotationDependency;
 import msdcl.exception.MsDCLException;
 import util.Util;
 
@@ -28,10 +27,9 @@ public class DependencyExtractor {
 	public static DependencyExtractor getInstance() {
 		return instance;
 	}
-	
-	
 
-	public HashMap<String, Set> extractDependenciesFromService(MicroserviceDefinition caller) throws IOException, MsDCLException {
+	public HashMap<String, Set> extractDependenciesFromService(MicroserviceDefinition caller)
+			throws IOException, MsDCLException {
 
 		HashMap<String, Set> allMicrosserviceDependencies = new HashMap<>();
 		Set dependencies = new HashSet<>();
@@ -39,16 +37,14 @@ public class DependencyExtractor {
 
 		for (File f : javaFiles) {
 			String fileName = f.getName();
-			dependencies = this.extractDependenciesFromFiles(f, caller);
+			dependencies = this.extractDependenciesFromFiles(f);
 			allMicrosserviceDependencies.put(fileName, dependencies);
 		}
 
-
 		return allMicrosserviceDependencies;
 	}
-	
-	public Set extractDependenciesFromFiles(File f, MicroserviceDefinition caller)
-			throws IOException, MsDCLException {
+
+	public Set extractDependenciesFromFiles(File f) throws IOException, MsDCLException {
 
 		Set dependencies = new HashSet<>();
 		MsDCLDependencyVisitor visitor = new MsDCLDependencyVisitor();
@@ -87,10 +83,45 @@ public class DependencyExtractor {
 						System.out.println();
 					}
 
+				} else if (d instanceof MethodNormalAnnotationDependency) {
+					System.out.println("eh metoodo?  ");
+					System.out.println(((MethodNormalAnnotationDependency) d).getMembersValues());
+					System.out.println();
 				}
 
 			}
 		}
 	}
+
+	public void imprime(Set allFiles) {
+
+		for (Object d : allFiles) {
+
+			if (d instanceof FieldAnnotationDependency) {
+				if (((AnnotationDependency) d).getNameClass2().equals("Autowired")) {
+					// extractCommunicationsFromZull(((FieldAnnotationDependency)
+					// d).getDeclaration(),
+					// dependencies);
+					System.out.println(((FieldAnnotationDependency) d).toString());
+					System.out.println();
+				}
+
+			} else if (d instanceof ClassNormalAnnotationDependency) {
+				if (((ClassNormalAnnotationDependency) d).getNameClass2().equals("FeignClient")) {
+					System.out.println(((ClassNormalAnnotationDependency) d).toString());
+					System.out.println();
+				}
+
+			} else if (d instanceof MethodNormalAnnotationDependency) {
+
+				System.out.println(((MethodNormalAnnotationDependency) d).toString());
+				System.out.println();
+			}
+
+		}
+
+	}
+
+	
 
 }

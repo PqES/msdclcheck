@@ -12,6 +12,7 @@ public class CommunicateDefinition {
 		this.using = using;
 	}
 	
+	public CommunicateDefinition() {}
 	public CommunicateDefinition(String microserviceOrigin, String microserviceDestin){
 		this(microserviceOrigin, microserviceDestin, null);
 	}

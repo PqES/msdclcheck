@@ -30,10 +30,10 @@ public class Main {
 			// checa acesso dos microserviços
 			system.setCommunications(CommunicationExtractor.getInstance().analyseAll(system)); 
 			
-//			System.out.println("==== ACCESSES ====");
-//			for (MicroserviceDefinition ms : system.getMicroservices()) {
-//				System.out.println(ms + ": " + system.getCommunications(ms));
-//			}
+			System.out.println("==== ACCESSES ====");
+			for (MicroserviceDefinition ms : system.getMicroservices()) {
+				System.out.println(ms + ": " + system.getCommunications(ms));
+			}
 //
 //			// verifica violações
 //			Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);

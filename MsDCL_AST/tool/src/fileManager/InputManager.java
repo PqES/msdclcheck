@@ -94,6 +94,7 @@ public class InputManager {
 				String language = tokens[3];
 				currentService = new MicroserviceDefinition(name, link, path, language);
 				system.addMicroservice(currentService);
+				system.getAllMicrosservice().add(currentService.getName());
 			}else if(line.matches(RulesRegex.DCL_REGEX)){
 				String dcl = line.replaceAll("\t", "");
 				system.addDcl(currentService, dcl);

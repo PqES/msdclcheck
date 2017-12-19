@@ -7,6 +7,9 @@ public class MemberPair {
 		this.name = name;
 		this.value = value;
 	}
+	public MemberPair(String value) {
+		this.value = value;
+	}
 	public String getName() { 
 		return name;
 	}

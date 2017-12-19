@@ -25,6 +25,7 @@ import msdcl.dependencies.FieldAnnotationDependency;
 import msdcl.dependencies.FieldNormalAnnotationDependency;
 import msdcl.dependencies.MemberPair;
 import msdcl.dependencies.MethodAnnotationDependency;
+import msdcl.dependencies.MethodNormalAnnotationDependency;
 import msdcl.exception.MsDCLException;
 import util.Util;
 
@@ -104,59 +105,77 @@ public class CommunicationExtractor {
 		fr.close();
 		return communications;
 	}
-	
-	
 
-	private void extractCoomunicationsFromZull(String declaration, MicroservicesSystem system) {
+	
+	private Set<CommunicateDefinition> extractCommunicationsFromZull(String declaration,Set<CommunicateDefinition> communications,
+			MicroserviceDefinition caller) {
+
 		Set dependencies = dependenciesFromService.get(declaration);
-		Set<CommunicateDefinition> communications = new HashSet<>();
-		
-		for(Object dep : dependencies) {
-			if(dep instanceof ClassNormalAnnotationDependency) { 
-				if(((ClassNormalAnnotationDependency) dep).getNameClass2().equals("FeignClient")) {
-					CommunicateDefinition communication = extractCommunicationFromLine(system, dependencies);
+		//Set<CommunicateDefinition> communications = new HashSet<>();
+		CommunicateDefinition communication = new CommunicateDefinition();
+		String msName = "";
+		for (Object dep : dependencies) {
+			if (dep instanceof ClassNormalAnnotationDependency) {
+				if (((ClassNormalAnnotationDependency) dep).getNameClass2().equals("FeignClient")) {
+					msName = ((ClassNormalAnnotationDependency) dep).getValue();
 				}
-				
+
+			}
+			else if (dep instanceof MethodNormalAnnotationDependency) {
+				communication = new CommunicateDefinition(caller.getName(), msName, ((MethodNormalAnnotationDependency) dep).getValue());
+			}
+
+			if (communication != null) {
+				communications.add(communication);
 			}
 		}
+		return communications;
 
 	}
-	
-	
 
-	
-
-	private void verifyCommunicationsByAnnotations(Set dependenciesFile, MicroservicesSystem system) {
-		
+	private Set<CommunicateDefinition> verifyCommunicationsByAnnotations(Set dependenciesFile,
+			Set<CommunicateDefinition> communications, MicroserviceDefinition caller) {
+		//Set<CommunicateDefinition> communications = new HashSet<>();
 		for (Object dep : dependenciesFile) {
 			if (dep instanceof FieldAnnotationDependency) {
 				if (((AnnotationDependency) dep).getNameClass2().equals("Autowired")) {
-					extractCoomunicationsFromZull(((FieldAnnotationDependency) dep).getDeclaration(), system);
+					extractCommunicationsFromZull(((FieldAnnotationDependency) dep).getDeclaration(),
+							communications, caller);
 
 				}
+				else
+					return null;
 			}
 		}
+		DependencyExtractor.getInstance().imprime(dependenciesFile);
+		return communications;
 	}
+
 	public Set<CommunicateDefinition> extractCommunicationsFromService(MicroserviceDefinition caller,
 			MicroservicesSystem system) throws IOException, MsDCLException {
-		
+		Set<CommunicateDefinition> communications = new HashSet<>();
+
+		// vem todas as dependências das classes do microsserviço analisado.
 		dependenciesFromService = DependencyExtractor.getInstance().extractDependenciesFromService(caller);
 		List<File> javaFiles = Util.getAllFiles(new File(caller.getPath()));
 		for (File f : javaFiles) {
 			String fileName = f.getName();
 			Set dependenciesFile = dependenciesFromService.get(fileName);
-			verifyCommunicationsByAnnotations(dependenciesFile, system);
+			DependencyExtractor.getInstance().imprime(dependenciesFile);
+			verifyCommunicationsByAnnotations(dependenciesFile, communications, caller);
+				communications = verifyCommunicationsByAnnotations(dependenciesFile, communications, caller);
 		}
-
-		return null;
+		
+		return communications;
 	}
-	
+
 	public HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> analyseAll(MicroservicesSystem system)
 			throws IOException, MsDCLException {
-		
+
 		HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> map = new HashMap<>();
 		for (MicroserviceDefinition caller : system.getMicroservices()) {
 			Set<CommunicateDefinition> accesses = new HashSet<>();
+//			extractCommunicationsFromService(caller, system);
 			accesses.addAll(this.extractCommunicationsFromService(caller, system));
 			map.put(caller, accesses);
 		}

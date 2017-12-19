@@ -128,21 +128,26 @@ public class MsDCLDependencyVisitor extends ASTVisitor {
 	}
 	@Override
 	public boolean visit(NormalAnnotation node) {
+		String value = "";
+	
 		List<MemberValuePair> members = node.values();
 		//MemberPair memberPairs = null;
 		Set<MemberPair> memberPairs = new HashSet<>();
 		for(MemberValuePair m : members) {
-			memberPairs.add(new MemberPair(m.getName().getIdentifier(), m.getValue().toString()));
+			if(m.getName().getIdentifier().equals("value")) {
+				value = m.getValue().toString();
+			}
+			//memberPairs.add(new MemberPair(m.getValue().toString()));
+		//	memberPairs.add(new MemberPair(m.getName().getIdentifier(), m.getValue().toString()));
 			
 		}
-		
 		if(node.getParent().getNodeType() == ASTNode.TYPE_DECLARATION) {
 			
 			this.dependencies.add(new ClassNormalAnnotationDependency(this.className,
 					node.getTypeName().getFullyQualifiedName(), 
 					fullClass.getLineNumber(node.getStartPosition()),
 					node.getStartPosition(),
-					node.getLength(), memberPairs));
+					node.getLength(), value));
 		}
 		
 		else if(node.getParent().getNodeType() == ASTNode.FIELD_DECLARATION) {
@@ -156,17 +161,18 @@ public class MsDCLDependencyVisitor extends ASTVisitor {
 							node.getLength(),
 							((VariableDeclarationFragment) field.fragments().get(0)).getName().getIdentifier(),
 							typeDependency, 
-							memberPairs
+							value
 							));
 		}
-		else if(node.getParent().getNodeType() == ASTNode.METHOD_DECLARATION) {
+		else if (node.getParent().getNodeType() == ASTNode.METHOD_DECLARATION) {
 			MethodDeclaration method = (MethodDeclaration) node.getParent();
 			this.dependencies.add(new MethodNormalAnnotationDependency(this.className,
+					node.getTypeName().getFullyQualifiedName(),
 					fullClass.getLineNumber(node.getStartPosition()),
 					node.getStartPosition(), 
 					node.getLength(), 
 					method.getName().getIdentifier(),
-					memberPairs));
+					value));
 		}
 		this.allDependenciesOfFile.addAll(this.dependencies);
 
@@ -198,7 +204,7 @@ public class MsDCLDependencyVisitor extends ASTVisitor {
 							expression));
 		}
 		
-		this.allDependenciesOfFile.addAll(this.dependencies);
+ 		this.allDependenciesOfFile.addAll(this.dependencies);
 
 		return true;
 		
