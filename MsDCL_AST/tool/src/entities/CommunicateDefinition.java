@@ -12,7 +12,7 @@ public class CommunicateDefinition {
 		this.using = using;
 	}
 	
-	public CommunicateDefinition() {}
+	//public CommunicateDefinition() {}
 	public CommunicateDefinition(String microserviceOrigin, String microserviceDestin){
 		this(microserviceOrigin, microserviceDestin, null);
 	}
@@ -27,11 +27,11 @@ public class CommunicateDefinition {
 	
 	public String getUsing(){
 		return this.using; 
-	}
-	@Override
-	public int hashCode(){
-		return microserviceOrigin.length() + microserviceDestin.length();
-	}
+	} 
+//	@Override
+//	public int hashCode(){
+//		return microserviceOrigin.length() + microserviceDestin.length();
+//	}
 	
 	@Override
 	public boolean equals(Object obj){

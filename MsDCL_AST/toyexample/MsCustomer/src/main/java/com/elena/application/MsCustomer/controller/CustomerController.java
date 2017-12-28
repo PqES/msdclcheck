@@ -22,7 +22,7 @@ public class CustomerController {
 	private CustomerService customer;
 
 	@Autowired
-	CustomerProductInterface product;
+	private CustomerProductInterface product;
 
 	private CustomerController() {
 	}

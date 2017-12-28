@@ -106,13 +106,20 @@ public class CommunicationExtractor {
 		return communications;
 	}
 
-	
-	private Set<CommunicateDefinition> extractCommunicationsFromZull(String declaration,Set<CommunicateDefinition> communications,
-			MicroserviceDefinition caller) {
+	private Set<CommunicateDefinition> extractCommunicationsFromZull(String declaration,
+			Set<CommunicateDefinition> communications, MicroserviceDefinition caller) {
+		String declaration2 = declaration + ".java";
+		Set dependencies = new HashSet<>();
+		// DependencyExtractor.getInstance().imprime(dependenciesFromService);
 
-		Set dependencies = dependenciesFromService.get(declaration);
-		//Set<CommunicateDefinition> communications = new HashSet<>();
-		CommunicateDefinition communication = new CommunicateDefinition();
+		dependencies = dependenciesFromService.get(declaration2);
+
+		// Set<CommunicateDefinition> communications = new HashSet<>();
+		CommunicateDefinition communication = null;
+
+		System.out.println("quem foi chamado:  " + declaration);
+
+		//DependencyExtractor.getInstance().imprime(dependencies);
 		String msName = "";
 		for (Object dep : dependencies) {
 			if (dep instanceof ClassNormalAnnotationDependency) {
@@ -120,12 +127,17 @@ public class CommunicationExtractor {
 					msName = ((ClassNormalAnnotationDependency) dep).getValue();
 				}
 
-			}
-			else if (dep instanceof MethodNormalAnnotationDependency) {
-				communication = new CommunicateDefinition(caller.getName(), msName, ((MethodNormalAnnotationDependency) dep).getValue());
+			} else if (dep instanceof MethodNormalAnnotationDependency) {
+				communication = new CommunicateDefinition(caller.getName(), msName,
+						((MethodNormalAnnotationDependency) dep).getValue());
 			}
 
 			if (communication != null) {
+				System.out.println(" ORIGEM: " + communication.getMicroserviceOrigin() 
+				+ "  DESTINO: " + communication.getMicroserviceDestin() + 
+				"  USING:  "+communication.getUsing() + 
+				" QUEM DECLAROU: " + declaration);
+				
 				communications.add(communication);
 			}
 		}
@@ -133,39 +145,49 @@ public class CommunicationExtractor {
 
 	}
 
-	private Set<CommunicateDefinition> verifyCommunicationsByAnnotations(Set dependenciesFile,
-			Set<CommunicateDefinition> communications, MicroserviceDefinition caller) {
-		//Set<CommunicateDefinition> communications = new HashSet<>();
+	private boolean verifyDependency(String declaration2) {
+		if (dependenciesFromService.get(declaration2) == null)
+			return false;
+		return true;
+
+	}
+
+	private boolean verifyCommunicationsByAnnotations(Set dependenciesFile, Set<CommunicateDefinition> communications,
+			MicroserviceDefinition caller) {
 		for (Object dep : dependenciesFile) {
 			if (dep instanceof FieldAnnotationDependency) {
 				if (((AnnotationDependency) dep).getNameClass2().equals("Autowired")) {
-					extractCommunicationsFromZull(((FieldAnnotationDependency) dep).getDeclaration(),
-							communications, caller);
-
+					if(verifyDependency(((FieldAnnotationDependency) dep).getDeclaration() +".java")) {
+						extractCommunicationsFromZull(((FieldAnnotationDependency) dep).getDeclaration(), communications,
+							caller);
+						return true;
+					}
+					
 				}
-				else
-					return null;
 			}
 		}
-		DependencyExtractor.getInstance().imprime(dependenciesFile);
-		return communications;
+
+		return false;
 	}
 
 	public Set<CommunicateDefinition> extractCommunicationsFromService(MicroserviceDefinition caller,
 			MicroservicesSystem system) throws IOException, MsDCLException {
 		Set<CommunicateDefinition> communications = new HashSet<>();
 
+		Set dependencies = new HashSet<>();
 		// vem todas as dependências das classes do microsserviço analisado.
-		dependenciesFromService = DependencyExtractor.getInstance().extractDependenciesFromService(caller);
+
 		List<File> javaFiles = Util.getAllFiles(new File(caller.getPath()));
 		for (File f : javaFiles) {
 			String fileName = f.getName();
-			Set dependenciesFile = dependenciesFromService.get(fileName);
-			DependencyExtractor.getInstance().imprime(dependenciesFile);
-			verifyCommunicationsByAnnotations(dependenciesFile, communications, caller);
-				communications = verifyCommunicationsByAnnotations(dependenciesFile, communications, caller);
+
+			dependencies = DependencyExtractor.getInstance().extractDependenciesFromFiles(f);
+
+			// DependencyExtractor.getInstance().imprime(dependenciesFromService);
+			verifyCommunicationsByAnnotations(dependencies, communications, caller);
+
 		}
-		
+
 		return communications;
 	}
 
@@ -175,9 +197,10 @@ public class CommunicationExtractor {
 		HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> map = new HashMap<>();
 		for (MicroserviceDefinition caller : system.getMicroservices()) {
 			Set<CommunicateDefinition> accesses = new HashSet<>();
-//			extractCommunicationsFromService(caller, system);
+			dependenciesFromService = DependencyExtractor.getInstance().extractDependenciesFromService(caller);
 			accesses.addAll(this.extractCommunicationsFromService(caller, system));
 			map.put(caller, accesses);
+			this.dependenciesFromService.clear();
 		}
 		return map;
 	}

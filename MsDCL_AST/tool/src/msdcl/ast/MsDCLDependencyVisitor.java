@@ -67,8 +67,10 @@ public class MsDCLDependencyVisitor extends ASTVisitor {
 
 			List types = fullClass.types();
 			TypeDeclaration typeDec = (TypeDeclaration) types.get(0);
+		//	+ "." + unit.getElementName().substring(0, unit.getElementName().length() - 5);
 			this.className = typeDec.getName().getFullyQualifiedName();
-
+			
+			
 			this.declarations = new LinkedHashSet<TypeDeclaration>();
 
 			this.allDependenciesOfFile = new HashSet<>();
@@ -96,6 +98,8 @@ public class MsDCLDependencyVisitor extends ASTVisitor {
 				FieldDeclaration field = (FieldDeclaration) node.getParent();
 				Type type = field.getType();
 				String typeDependency = addNameOfTypes(type);
+				
+			//	System.out.println("classe dep2: " + typeDependency);
 				this.dependencies
 						.add(new FieldAnnotationDependency(this.className, 
 								node.getTypeName().getFullyQualifiedName(),
@@ -240,7 +244,7 @@ public class MsDCLDependencyVisitor extends ASTVisitor {
 		return this.fullClass;
 	}
 
-	public Set getDependencies2() {
+	public Set getAllDependenciesOfFile() {
 		return allDependenciesOfFile;
 	}
 

@@ -29,13 +29,13 @@ public class Main {
 
 			// checa acesso dos microserviços
 			system.setCommunications(CommunicationExtractor.getInstance().analyseAll(system)); 
-			
+			 
 			System.out.println("==== ACCESSES ====");
 			for (MicroserviceDefinition ms : system.getMicroservices()) {
 				System.out.println(ms + ": " + system.getCommunications(ms));
 			}
-//
-//			// verifica violações
+
+			// verifica violações
 //			Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
 //			System.out.println("==== DRIFTS =====");
 //			for (ArchitecturalDrift a : drifts) {
@@ -43,11 +43,11 @@ public class Main {
 //			}
 //			System.out.println("=================");
 //			OutputManager output = new OutputManager();
-		//	output.violates(drifts);
-		//	Pi_DCL.validateLocalArchitecture(mapDcl);
+//			output.violates(drifts);
+			//Pi_DCL.validateLocalArchitecture(mapDcl);
 
-		//} catch (ParseException e) {
-			//e.printStackTrace();
+//		} catch (ParseException e) {
+//			e.printStackTrace();
 
 		} catch (IOException e) {
 			e.printStackTrace();
