@@ -9,7 +9,7 @@ import com.elena.application.MsSaleSpring.intercomm.ProductInterface;
 public class Services {
 	
 	@Autowired
-	ProductInterface product;
+	private ProductInterface product;
 	
 	
 	public boolean serviceUpdateStock(String ids[], String qtds[]) throws IOException {
@@ -22,7 +22,6 @@ public class Services {
             urlParameters.append("&qt=").append(qtds[i]);
         }
        String result = product.updateStock(ids, qtds);
-      	//	Services.callServiceViaPost(linkUpdateStock, urlParameters.toString());
-        return result.equalsIgnoreCase("sucess");
+        return result.equalsIgnoreCase("success");
     }
 }

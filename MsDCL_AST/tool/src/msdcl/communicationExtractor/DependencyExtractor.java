@@ -52,10 +52,11 @@ public class DependencyExtractor {
 		MsDCLDependencyVisitor visitor = new MsDCLDependencyVisitor();
 		String filePath = f.getAbsolutePath();
 		filePath = f.getAbsolutePath();
-		String fileName = f.getName();
+		String className = f.getName();
+		
 		if (f.isFile()) {
 			String service = Util.readFileToCharArray(filePath);
-			visitor = new MsDCLDependencyVisitor(fileName, service);
+			visitor = new MsDCLDependencyVisitor(className, service);
 			dependenciesAll = visitor.getAllDependenciesOfFile();
 			//imprime(dependenciesAll);
 			// dependencies = verifyAutowired(dependenciesAll);

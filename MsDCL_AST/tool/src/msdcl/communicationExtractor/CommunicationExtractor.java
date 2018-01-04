@@ -107,7 +107,7 @@ public class CommunicationExtractor {
 	}
 
 	private Set<CommunicateDefinition> extractCommunicationsFromZull(String declaration,
-			Set<CommunicateDefinition> communications, MicroserviceDefinition caller) {
+			Set<CommunicateDefinition> communications, MicroserviceDefinition caller, String classe) {
 		String declaration2 = declaration + ".java";
 		Set dependencies = new HashSet<>();
 		// DependencyExtractor.getInstance().imprime(dependenciesFromService);
@@ -129,10 +129,11 @@ public class CommunicationExtractor {
 
 			} else if (dep instanceof MethodNormalAnnotationDependency) {
 				communication = new CommunicateDefinition(caller.getName(), msName,
-						((MethodNormalAnnotationDependency) dep).getValue());
+						((MethodNormalAnnotationDependency) dep).getValue(), classe);
 			}
 
 			if (communication != null) {
+				System.out.println(dep.toString());
 				System.out.println(" ORIGEM: " + communication.getMicroserviceOrigin() 
 				+ "  DESTINO: " + communication.getMicroserviceDestin() + 
 				"  USING:  "+communication.getUsing() + 
@@ -153,13 +154,13 @@ public class CommunicationExtractor {
 	}
 
 	private boolean verifyCommunicationsByAnnotations(Set dependenciesFile, Set<CommunicateDefinition> communications,
-			MicroserviceDefinition caller) {
+			MicroserviceDefinition caller, String classe) {
 		for (Object dep : dependenciesFile) {
 			if (dep instanceof FieldAnnotationDependency) {
 				if (((AnnotationDependency) dep).getNameClass2().equals("Autowired")) {
 					if(verifyDependency(((FieldAnnotationDependency) dep).getDeclaration() +".java")) {
 						extractCommunicationsFromZull(((FieldAnnotationDependency) dep).getDeclaration(), communications,
-							caller);
+							caller, classe);
 						return true;
 					}
 					
@@ -182,9 +183,8 @@ public class CommunicationExtractor {
 			String fileName = f.getName();
 
 			dependencies = DependencyExtractor.getInstance().extractDependenciesFromFiles(f);
-
 			// DependencyExtractor.getInstance().imprime(dependenciesFromService);
-			verifyCommunicationsByAnnotations(dependencies, communications, caller);
+			verifyCommunicationsByAnnotations(dependencies, communications, caller, fileName);
 
 		}
 
