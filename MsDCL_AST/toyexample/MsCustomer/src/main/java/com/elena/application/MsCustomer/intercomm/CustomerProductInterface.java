@@ -13,6 +13,8 @@ public interface CustomerProductInterface {
 	
 	@RequestMapping( method = RequestMethod.GET,value ="/product/getProduct/{id}")
 	String getProductID(@PathVariable("id") String id);
-	 
+
+	@RequestMapping( method = RequestMethod.GET,value ="/getProducts")
+	String getAllProducts(@PathVariable("id") String id);
 
 }

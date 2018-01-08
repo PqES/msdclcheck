@@ -8,6 +8,6 @@ public class ClassifiedCommunicate {
 	
 	public ClassifiedCommunicate(boolean canCommunicate, ConstraintDefinition associatedConstraint){
 		this.canCommunicate = canCommunicate;
-		this.associatedConstraint = associatedConstraint; 
-	} 
+		this.associatedConstraint = associatedConstraint;  
+	}  
 }

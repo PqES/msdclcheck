@@ -16,10 +16,10 @@ import com.elena.application.MsSaleSpring.intercomm.ProductInterface;
 public class SaleController {
 
 	@Autowired
-	CustomerInterface customer;
+	private CustomerInterface customer;
 
 	@Autowired
-	ProductInterface product;
+	private ProductInterface product;
 
 	@Autowired
 	private RestTemplate restTemplate;

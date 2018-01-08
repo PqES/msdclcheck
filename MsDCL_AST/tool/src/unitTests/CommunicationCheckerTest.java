@@ -36,7 +36,7 @@ public class CommunicationCheckerTest {
 	}
 	
 	@Test
-	public void canCommunicate() {
+	public void canCommunicate() { 
 		MicroservicesSystem system = createMicroserviceSystem(2);
 		system.addConstraint(new ConstraintDefinition("ms1", Constraint.CAN_COMMUNICATE, "ms2"));
 		system.addCommunication(new CommunicateDefinition("ms1", "ms2"));
@@ -71,6 +71,9 @@ public class CommunicationCheckerTest {
 		system.addCommunication(new CommunicateDefinition("ms3", "ms2"));
 		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
 		assertEquals(1, drifts.size());
+		for(ArchitecturalDrift d : drifts) {
+			System.out.println(d.getMessage());
+		}
 	}
 	
 	@Test

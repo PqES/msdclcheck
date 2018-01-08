@@ -25,7 +25,7 @@ public class WarningConstraint extends ArchitecturalDrift{
 	public boolean equals(Object obj){
 		if(obj instanceof WarningConstraint){
 			WarningConstraint warning = (WarningConstraint) obj;
-			return this.communicate.equals(warning.communicate);
+			return this.communicate.equals(warning.communicate); 
 		}
 		return false;
 	}

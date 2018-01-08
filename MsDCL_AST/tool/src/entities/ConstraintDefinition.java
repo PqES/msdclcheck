@@ -17,7 +17,7 @@ public class ConstraintDefinition {
 		this.microserviceOrigin = microserviceOrigin;
 		this.microserviceDestin = microserviceDestin;
 		this.constraint = constraint;
-		this.using = using;
+		this.using = using; 
 	}
 
 	public ConstraintDefinition(String microserviceOrigin, Constraint constraint, String microserviceDestin) {
@@ -44,6 +44,9 @@ public class ConstraintDefinition {
 	}
 	
 	public boolean match(CommunicateDefinition communicate){
+	//	System.out.println(this.microserviceOrigin + " vs. " + communicate.getMicroserviceOrigin() );
+	//	System.out.println(this.microserviceDestin + " vs. " + communicate.getMicroserviceDestin() );
+		
 		if(this.microserviceOrigin.equalsIgnoreCase(communicate.getMicroserviceOrigin())
 				&& this.microserviceDestin.equalsIgnoreCase(communicate.getMicroserviceDestin())){
 			if(this.using != null && communicate.getUsing() != null){
@@ -51,8 +54,9 @@ public class ConstraintDefinition {
 				String communicateRoute[] = communicate.getUsing().split("/");
 				if(constraintRoute.length == communicateRoute.length){
 					for(int i = 0; i < constraintRoute.length; i++){
-						System.out.println("c1: " + constraintRoute[i]);
-						System.out.println("c2: " + communicateRoute[i]);
+						
+				//		System.out.println("c1: " + constraintRoute[i]);
+				//		System.out.println("c2: " + communicateRoute[i]);
 						if(!constraintRoute[i].equals("{dynamic}") && !constraintRoute[i].equals(communicateRoute[i])){
 							return false;
 						}
@@ -67,10 +71,15 @@ public class ConstraintDefinition {
 	}
 	
 	public Boolean canCommunicate(CommunicateDefinition communicate) {
+		
 		if(this.match(communicate)){
+		//	System.out.println("Entrou? ");
+		//	System.out.println("Constraint " + this.getConstraint());
 			if (this.getConstraint().getConstraintType() == ConstraintType.CANNOT_COMMUNICATE) {
+			//	System.out.println("CANNOT  " + this.getConstraint());
 				return false;
 			}else{
+				//System.out.println("TRUE!! "); 
 				return true;
 			}
 		}else if(!this.microserviceDestin.equalsIgnoreCase(communicate.getMicroserviceDestin()) &&

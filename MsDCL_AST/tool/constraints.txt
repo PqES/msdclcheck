@@ -38,9 +38,11 @@ MsAuthenticate: http://localhost:5000; ../toyexample/MsAuthentication; Cs
 	module Main: MsAuthenticate.Startup
 	Main must-depend Controller
 	only Controller can-depend DAO
-	Controller,DAO must-depend Entities
+	Controller,DAO must-depend Entities  
 MsProduct cannot-communicate MsCustomer
 only MsSale can-communicate MsProduct using /getProducts
 MsCustomer, MsProduct can-communicate-only MsNewsletter
 MsCustomer, MsProduct must-communicate MsNewsletter
+MsSale must-communicate MsProduct using /product/getProduct/{id}
 MsSale must-communicate MsAuthenticate, MsProduct, MsCustomer
+MsSale must-communicate MsCustomer using /getCustomers

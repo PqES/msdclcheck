@@ -10,7 +10,7 @@ public abstract class ArchitecturalDrift {
 	private final ConstraintDefinition violateConstraint;
 	
 	
-	protected ArchitecturalDrift(ConstraintDefinition violate){
+	protected ArchitecturalDrift(ConstraintDefinition violate){ 
 		this.violateConstraint = violate;
 	}
  

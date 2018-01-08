@@ -22,7 +22,8 @@ public class CommunicationExtractorTest {
 //	public void communicationExtractor(){
 //		MicroservicesSystem system = createMicroserviceSystem(2);
 //		String communicationLine = "call(\"http://www.ms2.com/test\");";
-//		CommunicateDefinition communication = CommunicationExtractor.getInstance()
+//		CommunicateDefinition communication = CommunicationExtractor.getInstance().
+//				
 //				.extractCommunicationFromString(communicationLine, system.getMicroserviceDefinition("ms1"), system);
 //		assertEquals(communication, new CommunicateDefinition("ms1", "ms2", "/test"));
 //	}

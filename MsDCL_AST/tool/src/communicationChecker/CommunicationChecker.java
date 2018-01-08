@@ -24,19 +24,19 @@ public class CommunicationChecker {
 	public static CommunicationChecker getInstance() {
 		return instance;
 	}
-	 
+	  
 	
 	
 	//checa localmente se um microservico pode se comunicar com outro
 	private ClassifiedCommunicate canCommunicateLocal(CommunicateDefinition communicate, MicroservicesSystem system){
-		System.out.println("Communicate LOCAL: " + communicate.toString());
+	//	System.out.println("Communicate LOCAL: " + communicate.toString());
 		MicroserviceDefinition msOrigin = system.getMicroserviceDefinition(communicate.getMicroserviceOrigin());
 		for(ConstraintDefinition constraint : system.getConstraints(msOrigin)){
 			Boolean canCommunicate = constraint.canCommunicate(communicate);
 			if(canCommunicate != null && canCommunicate == true){
 				return new ClassifiedCommunicate(true, constraint);
 			}else if(canCommunicate != null && canCommunicate == false){
-				return new ClassifiedCommunicate(false, constraint);
+				return new ClassifiedCommunicate(false, constraint); 
 			}
 		}
 		//possivel warning
@@ -45,14 +45,15 @@ public class CommunicationChecker {
 	
 	//checa globalmente se um microservico pode se comunicar com outro
 	private ArchitecturalDrift canCommunicateGlobal(CommunicateDefinition communicate, MicroservicesSystem system){
+		
 		MicroserviceDefinition msOrigin = system.getMicroserviceDefinition(communicate.getMicroserviceOrigin());
 		for(MicroserviceDefinition ms : system.getMicroservices()){
 			if(!ms.equals(msOrigin)){
-				System.out.println("MsVerify: "+ ms.getName());
+			//	System.out.println("MsVerify: "+ ms.getName());
 				for(ConstraintDefinition constraint : system.getConstraints(ms)){
-					System.out.println("Constraint: " + constraint.toString());
-					if(constraint.match(communicate) && constraint.getConstraint().getConstraintType() == ConstraintType.ONLY_CAN_COMMUNICATE){
-						
+			//		System.out.println("Constraint: " + constraint.toString());
+					if(constraint.getMicroserviceDestin().equalsIgnoreCase(communicate.getMicroserviceDestin()) && constraint.getConstraint().getConstraintType() == ConstraintType.ONLY_CAN_COMMUNICATE){
+			//			System.out.println("Divergencia: " + communicate.toString());
 						return new DivergenceDependencyConstraint(constraint, communicate);
 					}
 				}
@@ -65,7 +66,7 @@ public class CommunicationChecker {
 	public ArchitecturalDrift canCommunicate(CommunicateDefinition communicate, MicroservicesSystem system){
 		ArchitecturalDrift drift = canCommunicateGlobal(communicate, system);
 		if(drift == null){
-			System.out.println("Eh nula!! ");
+		//	System.out.println("Eh nula!! ");
 			ClassifiedCommunicate classifiedCommunicate = canCommunicateLocal(communicate, system);
 			if(classifiedCommunicate == null){
 				drift = new WarningConstraint(communicate);
@@ -103,10 +104,10 @@ public class CommunicationChecker {
 		ArchitecturalDrift drift;
 		for (MicroserviceDefinition ms : system.getMicroservices()) {
 			for (CommunicateDefinition communicate : system.getCommunications(ms)) {
-				System.out.println("Ms: " + ms.getName());
-				System.out.println("Com: " + communicate.toString());
+			//	System.out.println("Ms: " + ms.getName());
+			//	System.out.println("Com: " + communicate.toString());
 				drift = canCommunicate(communicate, system);
-				System.out.println("DRIFT: " + drift.getMessage());
+			//	System.out.println("DRIFT: " + drift.getMessage());
 				if(drift != null){
 					drifts.add(drift);
 				}

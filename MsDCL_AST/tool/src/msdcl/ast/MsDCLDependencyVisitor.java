@@ -65,7 +65,7 @@ public class MsDCLDependencyVisitor extends ASTVisitor {
 			this.fullClass.accept(this);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			e.printStackTrace(); 
 			throw new MsDCLException(e, unit);
 		}
 	}
@@ -113,6 +113,9 @@ public class MsDCLDependencyVisitor extends ASTVisitor {
 		for (MemberValuePair m : members) {
 			if (m.getName().getIdentifier().equals("value")) {
 				value = m.getValue().toString();
+				value = value.replaceAll("\"", "");
+			//	System.out.println("Value: " + value);
+				
 			}
 
 		}

@@ -25,7 +25,7 @@ public class DivergenceDependencyConstraint extends ArchitecturalDrift{
 	
 	@Override
 	public boolean equals(Object obj){ 
-		if(obj instanceof DivergenceDependencyConstraint){
+		if(obj instanceof DivergenceDependencyConstraint){ 
 			DivergenceDependencyConstraint divergence = (DivergenceDependencyConstraint) obj;
 			return this.communication.equals(divergence.communication) && this.getViolateConstraint().equals(divergence.getViolateConstraint());
 		}

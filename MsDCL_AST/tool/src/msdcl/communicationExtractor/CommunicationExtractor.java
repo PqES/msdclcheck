@@ -29,13 +29,13 @@ public class CommunicationExtractor {
 	}
 
 	public static CommunicationExtractor getInstance() {
-
+ 
 		return instance;
 	}
 
 
 
-	private Set<CommunicateDefinition> extractCommunicationsFromZull(String declaration,
+	public Set<CommunicateDefinition> extractCommunicationsFromZull(String declaration,
 			Set<CommunicateDefinition> communications, MicroserviceDefinition caller, String classe) {
 		String declaration2 = declaration + ".java";
 		ArrayList dependencies = new ArrayList<>();
@@ -43,9 +43,6 @@ public class CommunicationExtractor {
 		dependencies = dependenciesFromService.get(declaration2);
 
 		CommunicateDefinition communication = null;
-
-//		System.out.println("quem foi chamado:  " + declaration);
-
 		String msName = null;
 		String using = null;
 		for (Object dep : dependencies) { 
@@ -74,7 +71,7 @@ public class CommunicationExtractor {
 	}
 
 
-	private String getDependencyClass(Object dep) {
+	public String getDependencyClass(Object dep) {
 		String msName = null;
 		if (dep instanceof ClassSingleAnnotationDependency ) {
 			if (((ClassSingleAnnotationDependency) dep).getNameClass2().equals("FeignClient")) {
@@ -95,19 +92,16 @@ public class CommunicationExtractor {
 		
 		}
 		return null;
-		
-		
-	
 }
 
-	private boolean verifyDependency(String declaration2) {
+	public boolean verifyDependency(String declaration2) {
 		if (dependenciesFromService.get(declaration2) == null)
 			return false;
 		return true;
 
 	}
 
-	private boolean verifyCommunicationsByAnnotations(ArrayList dependenciesFile, Set<CommunicateDefinition> communications,
+	public boolean verifyCommunicationsByAnnotations(ArrayList dependenciesFile, Set<CommunicateDefinition> communications,
 			MicroserviceDefinition caller, String classe) {
 		for (Object dep : dependenciesFile) {
 			if (dep instanceof FieldAnnotationDependency) {

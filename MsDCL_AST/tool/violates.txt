@@ -1,11 +1,5 @@
 Abscence: MsCustomer MUST_COMMUNICATE MsNewsletter
 Abscence: MsProduct MUST_COMMUNICATE MsNewsletter
-Warning: no constraint for communication: MsSale communicate "MsCustomer" using "/getCustomers"
-
-Warning: no constraint for communication: MsSale communicate "MsProduct" using "/venda/{id}/{qnt}"
-
-Abscence: MsSale MUST_COMMUNICATE MsProduct
 Abscence: MsSale MUST_COMMUNICATE MsAuthenticate
-Abscence: MsSale MUST_COMMUNICATE MsCustomer
-Divergence: MsCustomer CAN_COMMUNICATE_ONLY MsNewsletter (MsCustomer communicate "MsProduct" using "/product/getProduct/{id}"
+Divergence: MsSale ONLY_CAN_COMMUNICATE MsProduct using /getProducts (MsCustomer communicate MsProduct using /product/getProduct/{id}
 )
