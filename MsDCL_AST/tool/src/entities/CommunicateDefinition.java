@@ -18,14 +18,14 @@ public class CommunicateDefinition {
 		this.using = using;
 		this.classe = classe;
 	}
-	//public CommunicateDefinition() {}
+	
 	public CommunicateDefinition(String microserviceOrigin, String microserviceDestin){
 		this(microserviceOrigin, microserviceDestin, null);
 	}
 	
 	public String getMicroserviceOrigin() {
 		return this.microserviceOrigin;
-	}
+	} 
 
 	public String getMicroserviceDestin() {
 		return this.microserviceDestin;
@@ -37,10 +37,10 @@ public class CommunicateDefinition {
 	public String classe() {
 		return this.classe;
 	}
-//	@Override
-//	public int hashCode(){
-//		return microserviceOrigin.length() + microserviceDestin.length();
-//	}
+	@Override
+	public int hashCode(){
+		return microserviceOrigin.length() + microserviceDestin.length() + using.length();
+	}
 	
 	@Override
 	public boolean equals(Object obj){
@@ -56,7 +56,8 @@ public class CommunicateDefinition {
 	public String toString(){
 		String s = microserviceOrigin + " communicate " + microserviceDestin; 
 		if(using != null){
-			s += " using " + this.using + " by class " + this.classe;
+			s += " using " + this.using +"\n";
+			
 		}
 		return s;
 	}

@@ -27,7 +27,7 @@ public class InputManager {
 				return c;
 			}
 		}
-		return null;
+		return null; 
 	}
 	
 	public Set<ConstraintDefinition> generateConstraints(String[] leftServices, String[] rightServices, String[] usings, Constraint constraint) {
@@ -103,6 +103,7 @@ public class InputManager {
 				Set<ConstraintDefinition> constraints = extractConstraints(tokens);
 				system.addConstraints(constraints);
 			}else{
+				System.out.println("Linha: " + line);
 				System.out.println("line error");
 			}
 		}

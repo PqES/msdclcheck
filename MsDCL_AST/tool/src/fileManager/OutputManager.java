@@ -15,7 +15,7 @@ public class OutputManager {
 		PrintWriter writer = new PrintWriter(fileWriter);		
 		
 		for (ArchitecturalDrift a : drifts) {
-			System.out.println(a.getMessage());
+			System.out.println(a.getMessage()); 
 			writer.println(a.getMessage());
 		}
 		

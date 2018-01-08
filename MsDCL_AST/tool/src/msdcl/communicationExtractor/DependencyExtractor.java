@@ -2,6 +2,7 @@ package msdcl.communicationExtractor;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -30,24 +31,24 @@ public class DependencyExtractor {
 
 	//HashMap<String, Set> allMicrosserviceDependencies = new HashMap<>();
 
-	public HashMap<String, Set> extractDependenciesFromService(MicroserviceDefinition caller)
+	public HashMap<String, ArrayList> extractDependenciesFromService(MicroserviceDefinition caller)
 			throws IOException, MsDCLException {
-		HashMap<String, Set> allMicrosserviceDependencies = new HashMap<>();
-		Set dependencies = new HashSet<>();
+		HashMap<String, ArrayList> allMicrosserviceDependencies = new HashMap<>();
+		ArrayList dependencies = new ArrayList<>();
 		List<File> javaFiles = Util.getAllFiles(new File(caller.getPath()));
 
 		for (File f : javaFiles) {
 			String fileName = f.getName();
 			dependencies = this.extractDependenciesFromFiles(f);
-			allMicrosserviceDependencies.put(fileName, dependencies);
+			allMicrosserviceDependencies.put(fileName, dependencies); 
 		}
 //		imprime();
 		return allMicrosserviceDependencies;
 	}
 
-	public Set extractDependenciesFromFiles(File f) throws IOException, MsDCLException {
+	public ArrayList extractDependenciesFromFiles(File f) throws IOException, MsDCLException {
 
-		Set dependenciesAll = new HashSet<>();
+		ArrayList dependenciesAll = new ArrayList<>();
 		Set dependencies = new HashSet<>();
 		MsDCLDependencyVisitor visitor = new MsDCLDependencyVisitor();
 		String filePath = f.getAbsolutePath();

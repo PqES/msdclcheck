@@ -31,20 +31,20 @@ public class Main {
 			system.setCommunications(CommunicationExtractor.getInstance().analyseAll(system)); 
 			 
 			System.out.println("==== ACCESSES ====");
-			for (MicroserviceDefinition ms : system.getMicroservices()) {
+			for (MicroserviceDefinition ms : system.getMicroservices()) { 
 				System.out.println(ms + ": " + system.getCommunications(ms));
-			}
+			} 
 
 			// verifica violações
-//			Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
-//			System.out.println("==== DRIFTS =====");
-//			for (ArchitecturalDrift a : drifts) {
-//				System.out.println(a.getMessage());
-//			}
-//			System.out.println("=================");
-//			OutputManager output = new OutputManager();
-//			output.violates(drifts);
-			//Pi_DCL.validateLocalArchitecture(mapDcl);
+			Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
+			System.out.println("==== DRIFTS =====");
+			for (ArchitecturalDrift a : drifts) {
+				System.out.println(a.getMessage());
+			}
+			System.out.println("=================");
+			OutputManager output = new OutputManager();
+			output.violates(drifts);
+		//	Pi_DCL.validateLocalArchitecture(mapDcl);
 
 //		} catch (ParseException e) {
 //			e.printStackTrace();

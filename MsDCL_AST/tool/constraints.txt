@@ -40,7 +40,7 @@ MsAuthenticate: http://localhost:5000; ../toyexample/MsAuthentication; Cs
 	only Controller can-depend DAO
 	Controller,DAO must-depend Entities
 MsProduct cannot-communicate MsCustomer
-only MsSale can-communicate MsAuthenticate using /api/authenticate
+only MsSale can-communicate MsProduct using /getProducts
 MsCustomer, MsProduct can-communicate-only MsNewsletter
 MsCustomer, MsProduct must-communicate MsNewsletter
 MsSale must-communicate MsAuthenticate, MsProduct, MsCustomer

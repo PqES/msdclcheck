@@ -1,2 +1,7 @@
-/entities/
+/main/
+/fileManager/
+/util/
 /msdcl/
+/unitTests/
+/entities/
+/communicationChecker/

@@ -53,6 +53,7 @@ public class MicroservicesSystem {
 	
 	public Set<CommunicateDefinition> getCommunications(MicroserviceDefinition ms){
 		return this.mapCommunications.get(ms);
+		
 	}
 	
 	public void addCommunication(CommunicateDefinition c){
@@ -77,7 +78,7 @@ public class MicroservicesSystem {
 	public Collection<MicroserviceDefinition> getMicroservices(){
 		return this.mapService.values();
 	}
-	public Set<String> getAllMicrosservice() {
+	public Set<String> getAllMicrosservice() { 
 		return allMicrosservice;
 	}
 

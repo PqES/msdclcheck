@@ -5,11 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-//@Service("product")
-//@RestController
 @Component
-//@Service
-@Configuration//(defaultAutowire = Autowire.BY_TYPE, defaultLazy = Lazy.FALSE)
+@Configuration
 public class CustomerProductService {
 
 	private String id = "";
@@ -19,10 +16,10 @@ public class CustomerProductService {
 	
 	public CustomerProductService(){}
 	
-	@Bean //Bean método somente em classe com anotacao COnfiguration
+	@Bean 
 	public String getProductsInCustomer(String id) {
 		try {
-			String produto = product.getProductID("1");//id);
+			String produto = product.getProductID("1");
 			return produto;
 			
 

@@ -16,6 +16,13 @@ public class ClassSingleAnnotationDependency extends ClassAnnotationDependency {
 	
 	
 	
+	public String getExpression() {
+		return expression;
+	}
+
+
+
+	
 	public String toString() {
 		return "'" + this.getNameClass1() + "   is annotated by " + this.getNameClass2()+
 				

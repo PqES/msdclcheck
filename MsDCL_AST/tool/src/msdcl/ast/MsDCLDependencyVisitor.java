@@ -1,9 +1,11 @@
 package msdcl.ast;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -39,31 +41,27 @@ import msdcl.exception.MsDCLException;
 
 public class MsDCLDependencyVisitor extends ASTVisitor {
 
-	private Set<Dependency> dependencies;
+	private ArrayList<Dependency> dependencies;
 	private Set<TypeDeclaration> declarations;
 
 	private ICompilationUnit unit;
 	private CompilationUnit fullClass;
 	private String className;
-	private Set allDependenciesOfFile;
-
+	private ArrayList allDependenciesOfFile;
 	public MsDCLDependencyVisitor() {
 	}
 
 	public MsDCLDependencyVisitor(String className2, String str) throws MsDCLException {
 		try {
-			this.dependencies = new HashSet<Dependency>();
+			this.dependencies = new ArrayList<Dependency>();
 			ASTParser parser = ASTParser.newParser(AST.JLS4);
 			parser.setSource(str.toCharArray());
 			parser.setKind(ASTParser.K_COMPILATION_UNIT);
 			this.fullClass = (CompilationUnit) parser.createAST(null);
 			List types = fullClass.types();
 			this.className = className2.substring(0, className2.length() - 5);
-
 			this.declarations = new LinkedHashSet<TypeDeclaration>();
-
-			this.allDependenciesOfFile = new HashSet<>();
-
+			this.allDependenciesOfFile = new ArrayList<>();
 			this.fullClass.accept(this);
 
 		} catch (Exception e) {
@@ -116,9 +114,6 @@ public class MsDCLDependencyVisitor extends ASTVisitor {
 			if (m.getName().getIdentifier().equals("value")) {
 				value = m.getValue().toString();
 			}
-			// memberPairs.add(new MemberPair(m.getValue().toString()));
-			// memberPairs.add(new MemberPair(m.getName().getIdentifier(),
-			// m.getValue().toString()));
 
 		}
 		if (node.getParent().getNodeType() == ASTNode.TYPE_DECLARATION) {
@@ -152,12 +147,16 @@ public class MsDCLDependencyVisitor extends ASTVisitor {
 	public boolean visit(SingleMemberAnnotation node) {
 
 		String expression = node.getValue().toString();
-
 		if (node.getParent().getNodeType() == ASTNode.TYPE_DECLARATION) {
+//			System.out.println("eh anotação de classe? ");
+//			System.out.println("expression:  " + expression);
+
 			this.dependencies.add(new ClassSingleAnnotationDependency(this.className,
 					node.getTypeName().getFullyQualifiedName(), fullClass.getLineNumber(node.getStartPosition()),
 					node.getStartPosition(), node.getLength(), expression));
-		} else if (node.getParent().getNodeType() == ASTNode.FIELD_DECLARATION) {
+		} 
+		
+		else if (node.getParent().getNodeType() == ASTNode.FIELD_DECLARATION) {
 			FieldDeclaration field = (FieldDeclaration) node.getParent();
 			Type type = field.getType();
 			String typeDependency = addNameOfTypes(type);
@@ -186,7 +185,7 @@ public class MsDCLDependencyVisitor extends ASTVisitor {
 		return "";
 	}
 
-	public Set<Dependency> getDependencies() {
+	public ArrayList<Dependency> getDependencies() {
 		return dependencies;
 	}
 
@@ -202,7 +201,7 @@ public class MsDCLDependencyVisitor extends ASTVisitor {
 		return this.fullClass;
 	}
 
-	public Set getAllDependenciesOfFile() {
+	public ArrayList getAllDependenciesOfFile() {
 		return allDependenciesOfFile;
 	}
 

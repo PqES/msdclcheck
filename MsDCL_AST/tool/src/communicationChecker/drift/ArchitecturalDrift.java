@@ -13,10 +13,10 @@ public abstract class ArchitecturalDrift {
 	protected ArchitecturalDrift(ConstraintDefinition violate){
 		this.violateConstraint = violate;
 	}
-
+ 
 	public ConstraintDefinition getViolateConstraint() {
 		return violateConstraint;
-	}
+	} 
 	
 	public abstract String getMessage();
 

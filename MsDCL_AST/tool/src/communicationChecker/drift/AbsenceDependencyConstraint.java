@@ -17,7 +17,7 @@ public class AbsenceDependencyConstraint extends ArchitecturalDrift{
 	public String getMessage() {
 		return "Abscence: "+ getViolateConstraint().toString();
 	}
-	
+	 
 	@Override
 	public boolean equals(Object obj){
 		if(obj instanceof AbsenceDependencyConstraint){

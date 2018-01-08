@@ -26,7 +26,7 @@ public class ConstraintDefinition {
 		this.constraint = constraint;
 		this.using = null;
 	}
-
+ 
 	public String getMicroserviceOrigin() {
 		return this.microserviceOrigin;
 	}
@@ -51,6 +51,8 @@ public class ConstraintDefinition {
 				String communicateRoute[] = communicate.getUsing().split("/");
 				if(constraintRoute.length == communicateRoute.length){
 					for(int i = 0; i < constraintRoute.length; i++){
+						System.out.println("c1: " + constraintRoute[i]);
+						System.out.println("c2: " + communicateRoute[i]);
 						if(!constraintRoute[i].equals("{dynamic}") && !constraintRoute[i].equals(communicateRoute[i])){
 							return false;
 						}
