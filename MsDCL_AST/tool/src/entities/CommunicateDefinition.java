@@ -52,8 +52,14 @@ public class CommunicateDefinition {
 	public boolean equals(Object obj) {
 		if (obj instanceof CommunicateDefinition) {
 			CommunicateDefinition access = (CommunicateDefinition) obj;
-			return this.microserviceOrigin.equals(access.microserviceOrigin)
-					&& this.microserviceDestin.equals(access.microserviceDestin);
+			if(this.using != null) {
+				return this.microserviceOrigin.equals(access.microserviceOrigin)
+						&& this.microserviceDestin.equals(access.microserviceDestin)
+						&& this.using.equals(access.using);	
+			}else {
+				return this.microserviceOrigin.equals(access.microserviceOrigin)
+						&& this.microserviceDestin.equals(access.microserviceDestin);
+			}
 		}
 		return false;
 	}
