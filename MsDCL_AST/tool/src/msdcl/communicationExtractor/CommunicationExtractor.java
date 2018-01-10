@@ -1,5 +1,6 @@
 package msdcl.communicationExtractor;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -137,11 +138,22 @@ public class CommunicationExtractor {
 
 		return communications;
 	}
-
+//	public HashMap<MicroserviceDefinition, ByteArrayInputStream> getDependenciesDCL(MicroservicesSystem system) throws IOException{
+//	
+//		HashMap<MicroserviceDefinition, ByteArrayInputStream> mapDCLMicroservices = new HashMap<>();		
+//		for (MicroserviceDefinition microservice : system.getMicroservices()) {
+//			mapDCLMicroservices.put(microservice, JavaDepExtractor.getInstance().extractDependencyFromEachMicroservice(microservice));
+//		}
+//			
+//		return mapDCLMicroservices;
+//		
+//	}
+//	
 	public HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> analyseAll(MicroservicesSystem system)
 			throws IOException, MsDCLException {
 
 		HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> map = new HashMap<>();
+		
 		for (MicroserviceDefinition caller : system.getMicroservices()) {
 			Set<CommunicateDefinition> accesses = new HashSet<>();
 			dependenciesFromService = DependencyExtractor.getInstance().extractDependenciesFromService(caller);

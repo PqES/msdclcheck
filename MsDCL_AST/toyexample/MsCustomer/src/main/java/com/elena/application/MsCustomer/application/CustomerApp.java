@@ -12,11 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EntityScan("com.elena.application.MsCustomer.entities")
 @ComponentScan({"com.elena.application.MsCustomer.controller"})
-//@ComponentScan({"com.elena.application.MsCustomer.intercomm"})
-@EnableJpaRepositories("com.elena.application.MsCustomer.DAO")
-
-
-
+@EnableJpaRepositories("com.elena.application.MsCustomer.dao")
 @EnableEurekaClient
 @EnableDiscoveryClient
 @EnableAutoConfiguration

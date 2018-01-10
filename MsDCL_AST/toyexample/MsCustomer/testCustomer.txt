@@ -1,0 +1,8 @@
+module Controller: msCustomer.controller.*
+module DAO: msCustomer.dao.*
+module SpringBoot: org.springframework.boot.**
+module Main: msProduct.CustomerApp
+Main must-depend SpringBoot
+only Controller can-depend DAO
+Controller must-useannotation org.springframework.stereotype.Controller
+only DAO can-useannotation JPA

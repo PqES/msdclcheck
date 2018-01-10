@@ -1,5 +1,7 @@
 Abscence: MsCustomer MUST_COMMUNICATE MsNewsletter
 Abscence: MsProduct MUST_COMMUNICATE MsNewsletter
 Abscence: MsSale MUST_COMMUNICATE MsAuthenticate
-Divergence: MsSale ONLY_CAN_COMMUNICATE MsProduct using /getProducts (MsCustomer communicate MsProduct using /product/getProduct/{id}
+Divergence: MsCustomer CAN_COMMUNICATE_ONLY MsNewsletter (MsCustomer communicate MsProduct using /product/getProduct/{id}
+)
+Divergence: MsCustomer CAN_COMMUNICATE_ONLY MsNewsletter (MsCustomer communicate MsProduct using /getProducts
 )

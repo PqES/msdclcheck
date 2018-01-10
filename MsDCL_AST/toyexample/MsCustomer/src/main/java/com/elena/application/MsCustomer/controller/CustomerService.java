@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.elena.application.MsCustomer.DAO.CustomerDAO;
+import com.elena.application.MsCustomer.dao.CustomerDAO;
 import com.elena.application.MsCustomer.entities.Customer;
 
 @Service

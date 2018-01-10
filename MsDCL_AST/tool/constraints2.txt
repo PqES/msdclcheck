@@ -1,8 +1,8 @@
 account-service: http://localhost:2222; ../sample-spring-microservices/account-service; Java
-	module Model: account.model.*
+	module Model: pl.piomin.microservices.account.model.**
 	module SpringBoot: org.springframework.boot.**
-	module Main: Application
-	module API: account.api.*
+	module Main: pl.piomin.microservices.account.Application.*
+	module API: pl.piomin.microservices.account.api.*
 	Main must-depend SpringBoot
 	Model cannot-depend Main
 	API must-useannotation org.springframework.web.bind.annotation.RestController

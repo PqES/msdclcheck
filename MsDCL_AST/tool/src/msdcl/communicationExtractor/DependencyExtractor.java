@@ -157,8 +157,6 @@ public class DependencyExtractor {
 			System.out.println();
 		}
 	}
-
-
 	public void imprime(Set allFiles) {
 
 		for (Object d : allFiles) {

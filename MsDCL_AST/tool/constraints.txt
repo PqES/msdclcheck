@@ -1,48 +1,47 @@
 MsProduct: http://localhost:8080; ../toyexample/MsProduct; Java
-	module Controller: msCustomer.controller.*
-	module DAO: msProduct.dao.*
+	module DAO: com.elena.application.MsCustomer.dao.*
+	module Controller : com.elena.application.MsCustomer.controller.**
+	module Service : com.elena.application.MsCustomer.services.**
 	module SpringBoot: org.springframework.boot.**
-	module Main: msProduct.ProductApp
+	module Main: com.elena.application.MsCustomer.main.ProductApp.*
 	Main must-depend SpringBoot
-	only Controller can-depend DAO
-	Controller must-useannotation org.springframework.stereotype.Controller
-	only DAO can-useannotation JPA
+	only Service can-depend DAO
+	Controller must-useannotation org.springframework.web.bind.annotation.RestController
+	Service must-useannotation org.springframework.stereotype.Service
+	only DAO can-useannotation JPA 	
 MsCustomer: http://localhost:9000; ../toyexample/MsCustomer; Java
-	module Controller: msCustomer.controller.*
-	module DAO: msCustomer.dao.*
+	module Controller: com.elena.application.MsCustomer.controller.**
+	module DAO: com.elena.application.MsCustomer.dao.*
 	module SpringBoot: org.springframework.boot.**
-	module Main: msProduct.CustomerApp
+	module Main: com.elena.application.MsCustomer.application.CustomerApp.*
 	Main must-depend SpringBoot
 	only Controller can-depend DAO
-	Controller must-useannotation org.springframework.stereotype.Controller
-	only DAO can-useannotation JPA
+	Controller must-useannotation org.springframework.web.bind.annotation.RestController
 MsSale: http://localhost:8086; ../toyexample/TesteSale; Java
 	module Controller: java.controller.*
 	module Services: java.services.*
 	Controller must-depend Service
 	Services must-depend java.net.HttpURLConnection,java.net.URL
 MsNewsletter: http://localhost:5001; ../toyexample/MsNewsletter; Cs
-	module Email: MsNewsletter.Email.*
-	module Entities: MsNewsletter.Entities.*
-	module Controller: MsNewsletter.Controllers.*
-	module DAO: MsNewsletter.DAO.*
-	module Main: MsNewsletter.Startup
+	module Email: email.*
+	module Entities: entities.*
+	module Controller: controllers.*
+	module DAO: newsletterDB.*
+	module Main: Startup.*
 	Main must-depend Controller
 	only Controller can-depend DAO, Email
 	only Email can-depend MailKit.Net.Smtp.SmtpClient
 	Controller,DAO must-depend Entities
 MsAuthenticate: http://localhost:5000; ../toyexample/MsAuthentication; Cs
-	module Entities: MsAuthenticate.Entities.*
-	module Controller: MsAuthenticate.Controllers.*
-	module DAO: MsAuthenticate.DAO.*
-	module Main: MsAuthenticate.Startup
+	module Entities: entities.**
+	module Controller: controllers.**
+	module DAO: authenticationDB.**
+	module Main: Startup.**
 	Main must-depend Controller
 	only Controller can-depend DAO
-	Controller,DAO must-depend Entities  
+	Controller, DAO must-depend Entities
 MsProduct cannot-communicate MsCustomer
-only MsSale can-communicate MsProduct using /getProducts
+only MsSale can-communicate MsAuthenticate using /api/authenticate
 MsCustomer, MsProduct can-communicate-only MsNewsletter
 MsCustomer, MsProduct must-communicate MsNewsletter
-MsSale must-communicate MsProduct using /product/getProduct/{id}
 MsSale must-communicate MsAuthenticate, MsProduct, MsCustomer
-MsSale must-communicate MsCustomer using /getCustomers

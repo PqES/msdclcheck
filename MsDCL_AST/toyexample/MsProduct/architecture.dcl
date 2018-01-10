@@ -1,14 +1,10 @@
-%Automatic Created File
-only $system can-depend $java
-Controller.ProductController cannot-useannotation org.springframework.stereotype.Entity
-Controller.ProductController must-useannotation org.springframework.stereotype.Controller
-Controller.ProductController can-declare DAO.ProductDAO
-
-Model.Product cannot-useannotation org.springframework.stereotype.Controller
-Model.Product must-useannotation javax.persistence.Entity
-
-DAO.ProductDAO must-useannotation javax.transaction.Transactional
-DAO.ProductDAO must-extend org.springframework.data.repository.CrudRepository
-
-MsProduct.ServletInicializer must-extend org.springframework.boot.builder.SpringApplicationBuilder
-MsProduct.ProductApp must-useannotation org.springframework.boot.autoconfigure.SpringBootApplication
+module DAO: com.elena.application.MsCustomer.dao.*
+module Controller : com.elena.application.MsCustomer.controller.**
+module Service : com.elena.application.MsCustomer.services.**
+module SpringBoot: org.springframework.boot.**
+module Main: com.elena.application.MsCustomer.main.ProductApp.*
+Main must-depend SpringBoot
+only Service can-depend DAO
+Controller must-useannotation org.springframework.web.bind.annotation.RestController
+Service must-useannotation org.springframework.stereotype.Service
+only DAO can-useannotation JPA 
