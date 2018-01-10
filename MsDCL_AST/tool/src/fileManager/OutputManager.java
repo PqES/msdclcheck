@@ -7,10 +7,11 @@ import java.util.Set;
 
 import communicationChecker.CommunicationChecker;
 import communicationChecker.drift.ArchitecturalDrift;
+import entities.MicroserviceDefinition;
 
 public class OutputManager {
 
-	public static void violates(Set<ArchitecturalDrift> drifts) throws IOException{
+	public static void violates(MicroserviceDefinition ms,Set<ArchitecturalDrift> driftsC, Set<ArchitecturalDrift> drifts) throws IOException{
 		FileWriter fileWriter = new FileWriter("violates.txt");
 		PrintWriter writer = new PrintWriter(fileWriter);		
 		

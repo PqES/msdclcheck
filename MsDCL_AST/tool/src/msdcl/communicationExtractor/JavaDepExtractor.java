@@ -1,12 +1,10 @@
 package msdcl.communicationExtractor;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
+
 import entities.MicroserviceDefinition;
 
 public class JavaDepExtractor {
@@ -21,7 +19,8 @@ public class JavaDepExtractor {
 		return instance;
 	}
 	public void extractDependenciesFromEachMicroservice(MicroserviceDefinition path) {
-		Main.main(path);
+		
+		
 	}
 	public String getDependenciesExtracted(MicroserviceDefinition microservice) throws IOException {
 		File file = new File(microservice.getPath() + "/dependencies.txt");
@@ -36,7 +35,7 @@ public class JavaDepExtractor {
 		}
 		br.close();
 		fr.close();
-		System.out.println("Microservice: " + microservice.getName());
+		//System.out.println("Microservice: " + microservice.getName());
 		return content.toString();
 	}
 

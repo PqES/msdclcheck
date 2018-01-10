@@ -1,6 +1,7 @@
 package communicationChecker.drift;
 
 import entities.ConstraintDefinition;
+import entities.MicroserviceDefinition;
 
 public abstract class ArchitecturalDrift {
 	
@@ -8,7 +9,6 @@ public abstract class ArchitecturalDrift {
 	public static final String ABSENCE = "ABSENCE";
 	public static final String WARNING = "WARNING";	
 	private final ConstraintDefinition violateConstraint;
-	
 	
 	protected ArchitecturalDrift(ConstraintDefinition violate){ 
 		this.violateConstraint = violate;
