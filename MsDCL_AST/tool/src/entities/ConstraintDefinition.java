@@ -54,6 +54,8 @@ public class ConstraintDefinition {
 					}
 				}
 				return true;
+			}else {
+				return false;
 			}
 		}
 		return this.using == null;
