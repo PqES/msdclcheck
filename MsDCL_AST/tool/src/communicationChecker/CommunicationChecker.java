@@ -50,6 +50,7 @@ public class CommunicationChecker {
 			if (!ms.equals(msOrigin)) {
 				for (ConstraintDefinition constraint : system.getConstraints(ms)) {
 					if (constraint.getMicroserviceDestin().equalsIgnoreCase(communicate.getMicroserviceDestin())
+							&& constraint.usingMatch(communicate)
 							&& constraint.getConstraint().getConstraintType() == ConstraintType.ONLY_CAN_COMMUNICATE) {
 						drifts.add(new DivergenceDependencyConstraint(constraint, communicate));
 					}
