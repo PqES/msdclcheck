@@ -36,13 +36,14 @@ public class CommunicationCheckerTest {
 	}
 	
 	@Test
-	public void canCommunicate() { 
+	public void canCommunicate() {
 		MicroservicesSystem system = createMicroserviceSystem(2);
 		system.addConstraint(new ConstraintDefinition("ms1", Constraint.CAN_COMMUNICATE, "ms2"));
 		system.addCommunication(new CommunicateDefinition("ms1", "ms2"));
 		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
 		assertEquals(0, drifts.size());
 	}
+	
 	
 	@Test
 	public void cannotCommunicate() {
@@ -70,6 +71,9 @@ public class CommunicationCheckerTest {
 		system.addCommunication(new CommunicateDefinition("ms1", "ms2"));
 		system.addCommunication(new CommunicateDefinition("ms3", "ms2"));
 		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
+		for(ArchitecturalDrift d : drifts) {
+			System.out.println(d.getMessage());
+		}
 		assertEquals(1, drifts.size());
 		for(ArchitecturalDrift d : drifts) {
 			System.out.println(d.getMessage());
@@ -98,7 +102,7 @@ public class CommunicationCheckerTest {
 	public void usingOnly(){
 		MicroservicesSystem system = createMicroserviceSystem(2);
 		system.addConstraint(new ConstraintDefinition("ms1", Constraint.CAN_COMMUNICATE_ONLY, "ms2", "/rest1"));
-		system.addCommunication(new CommunicateDefinition("ms1", "ms2", "/rest1/rest2"));
+		system.addCommunication(new CommunicateDefinition("ms1", "ms2", "/rest2"));
 		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
 		assertEquals(1, drifts.size());
 	}
@@ -106,8 +110,8 @@ public class CommunicationCheckerTest {
 	@Test
 	public void dynamicUsing(){
 		MicroservicesSystem system = createMicroserviceSystem(2);
-		system.addConstraint(new ConstraintDefinition("ms1", Constraint.CAN_COMMUNICATE, "ms2", "/rest1/{dynamic}"));
-		system.addConstraint(new ConstraintDefinition("ms1", Constraint.MUST_COMMUNICATE, "ms2", "/rest1/{dynamic}/rest3"));
+		system.addConstraint(new ConstraintDefinition("ms1", Constraint.CAN_COMMUNICATE, "ms2", "/rest1/*"));
+		system.addConstraint(new ConstraintDefinition("ms1", Constraint.MUST_COMMUNICATE, "ms2", "/rest1/*/rest3"));
 		system.addCommunication(new CommunicateDefinition("ms1", "ms2", "/rest1/2"));
 		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
 		assertEquals(1, drifts.size());
@@ -136,10 +140,9 @@ public class CommunicationCheckerTest {
 		system.addCommunication(new CommunicateDefinition("MsSale", "MsAuthentication", "api/authenticate")); //ok
 		system.addCommunication(new CommunicateDefinition("MsSale", "MsProduct")); //ok
 		system.addCommunication(new CommunicateDefinition("MsProduct", "MsPostCode")); //violation
-		/*
-		 * absence: MsCustomer must-communicate MsNewsletter
-		 */
+		//absence: MsCustomer must-communicate MsNewsletter
 		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
 		assertEquals(3, drifts.size());
 	}
+	
 }
