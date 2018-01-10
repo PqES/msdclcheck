@@ -43,46 +43,42 @@ public class ConstraintDefinition {
 		return this.using;
 	}
 	
-	public boolean match(CommunicateDefinition communicate){
-	//	System.out.println(this.microserviceOrigin + " vs. " + communicate.getMicroserviceOrigin() );
-	//	System.out.println(this.microserviceDestin + " vs. " + communicate.getMicroserviceDestin() );
-		
-		if(this.microserviceOrigin.equalsIgnoreCase(communicate.getMicroserviceOrigin())
-				&& this.microserviceDestin.equalsIgnoreCase(communicate.getMicroserviceDestin())){
-			if(this.using != null && communicate.getUsing() != null){
-				String constraintRoute[] = this.using.split("/");
-				String communicateRoute[] = communicate.getUsing().split("/");
-				if(constraintRoute.length == communicateRoute.length){
-					for(int i = 0; i < constraintRoute.length; i++){
-						
-				//		System.out.println("c1: " + constraintRoute[i]);
-				//		System.out.println("c2: " + communicateRoute[i]);
-						if(!constraintRoute[i].equals("{dynamic}") && !constraintRoute[i].equals(communicateRoute[i])){
-							return false;
-						}
+	public boolean usingMatch(CommunicateDefinition communicate) {
+		if(this.using != null && communicate.getUsing() != null) {
+			String constraintRoute[] = this.using.split("/");
+			String communicateRoute[] = communicate.getUsing().split("/");
+			if(communicateRoute.length >= constraintRoute.length){
+				for(int i = 0; i < constraintRoute.length; i++){
+					if(!constraintRoute[i].equals("*") && !constraintRoute[i].equals(communicateRoute[i])){
+						return false;
 					}
-					return true;
 				}
-			}else if(this.using == null){
 				return true;
+			}else {
+				return false;
 			}
 		}
-		return false;
+		return this.using == null;
 	}
 	
-	public Boolean canCommunicate(CommunicateDefinition communicate) {
-		
+	public boolean servicesMatch(CommunicateDefinition communicate) {
+		return this.microserviceOrigin.equalsIgnoreCase(communicate.getMicroserviceOrigin())
+				&& this.microserviceDestin.equalsIgnoreCase(communicate.getMicroserviceDestin());
+	}
+	
+	public boolean match(CommunicateDefinition communicate){
+		return servicesMatch(communicate) && usingMatch(communicate);
+	}
+	
+	public Boolean canCommunicate(CommunicateDefinition communicate) {	
 		if(this.match(communicate)){
-		//	System.out.println("Entrou? ");
-		//	System.out.println("Constraint " + this.getConstraint());
 			if (this.getConstraint().getConstraintType() == ConstraintType.CANNOT_COMMUNICATE) {
-			//	System.out.println("CANNOT  " + this.getConstraint());
 				return false;
 			}else{
-				//System.out.println("TRUE!! "); 
 				return true;
 			}
-		}else if(!this.microserviceDestin.equalsIgnoreCase(communicate.getMicroserviceDestin()) &&
+		}else if(this.microserviceOrigin.equalsIgnoreCase(communicate.getMicroserviceOrigin()) &&
+				!this.microserviceDestin.equalsIgnoreCase(communicate.getMicroserviceDestin()) &&
 				this.getConstraint().getConstraintType() == ConstraintType.CAN_COMMUNICATE_ONLY){
 			return false;
 		}
