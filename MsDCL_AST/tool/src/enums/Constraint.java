@@ -1,6 +1,6 @@
 package enums;
 
-import entities.ConstraintDefinition;
+import msdcl.core.ConstraintDefinition;
 
 public enum Constraint {
 	

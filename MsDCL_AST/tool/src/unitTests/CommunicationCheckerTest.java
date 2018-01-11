@@ -8,14 +8,14 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import communicationChecker.CommunicationChecker;
-import communicationChecker.drift.ArchitecturalDrift;
-import entities.CommunicateDefinition;
-import entities.ConstraintDefinition;
-import entities.MicroserviceDefinition;
-import entities.MicroservicesSystem;
 import enums.Constraint;
 import enums.ConstraintType;
+import msdcl.communicationChecker.ArchitecturalDrift;
+import msdcl.communicationChecker.CommunicationChecker;
+import msdcl.core.CommunicateDefinition;
+import msdcl.core.ConstraintDefinition;
+import msdcl.core.MicroserviceDefinition;
+import msdcl.core.MicroservicesSystem;
 
 public class CommunicationCheckerTest {
 

@@ -1,4 +1,4 @@
-MsProduct: http://localhost:8080; ../toyexample/MsProduct; Java
+MsProduct: http://localhost:8080; /home/elena/Documentos/Projeto/msdclcheck/MsDCL_AST/toyexample/MsProduct; Java
 	module DAO: com.elena.application.MsCustomer.dao.*
 	module Controller : com.elena.application.MsCustomer.controller.**
 	module Service : com.elena.application.MsCustomer.services.**
@@ -9,7 +9,7 @@ MsProduct: http://localhost:8080; ../toyexample/MsProduct; Java
 	Controller must-useannotation org.springframework.web.bind.annotation.RestController
 	Service must-useannotation org.springframework.stereotype.Service
 	only DAO can-useannotation JPA 	
-MsCustomer: http://localhost:9000; ../toyexample/MsCustomer; Java
+MsCustomer: http://localhost:9000; /home/elena/Documentos/Projeto/msdclcheck/MsDCL_AST/toyexample/MsCustomer; Java
 	module Controller: com.elena.application.MsCustomer.controller.**
 	module DAO: com.elena.application.MsCustomer.dao.*
 	module SpringBoot: org.springframework.boot.**
@@ -17,12 +17,12 @@ MsCustomer: http://localhost:9000; ../toyexample/MsCustomer; Java
 	Main must-depend SpringBoot
 	only Controller can-depend DAO
 	Controller must-useannotation org.springframework.web.bind.annotation.RestController
-MsSale: http://localhost:8086; ../toyexample/TesteSale; Java
+MsSale: http://localhost:8086; /home/elena/Documentos/Projeto/msdclcheck/MsDCL_AST/toyexample/TesteSale; Java
 	module Controller: java.controller.*
 	module Services: java.services.*
 	Controller must-depend Service
 	Services must-depend java.net.HttpURLConnection,java.net.URL
-MsNewsletter: http://localhost:5001; ../toyexample/MsNewsletter; Cs
+MsNewsletter: http://localhost:5001; /home/elena/Documentos/Projeto/msdclcheck/MsDCL_AST/toyexample/MsNewsletter; Cs
 	module Email: email.*
 	module Entities: entities.*
 	module Controller: controllers.*
@@ -32,7 +32,7 @@ MsNewsletter: http://localhost:5001; ../toyexample/MsNewsletter; Cs
 	only Controller can-depend DAO, Email
 	only Email can-depend MailKit.Net.Smtp.SmtpClient
 	Controller,DAO must-depend Entities
-MsAuthenticate: http://localhost:5000; ../toyexample/MsAuthentication; Cs
+MsAuthenticate: http://localhost:5000; /home/elena/Documentos/Projeto/msdclcheck/MsDCL_AST/toyexample/MsAuthentication; Cs
 	module Entities: entities.**
 	module Controller: controllers.**
 	module DAO: authenticationDB.**

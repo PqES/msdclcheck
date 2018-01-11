@@ -9,9 +9,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import entities.CommunicateDefinition;
-import entities.MicroserviceDefinition;
-import entities.MicroservicesSystem;
+import msdcl.core.CommunicateDefinition;
+import msdcl.core.MicroserviceDefinition;
+import msdcl.core.MicroservicesSystem;
 import msdcl.dependencies.AnnotationDependency;
 import msdcl.dependencies.ClassNormalAnnotationDependency;
 import msdcl.dependencies.ClassSingleAnnotationDependency;
@@ -138,23 +138,14 @@ public class CommunicationExtractor {
 
 		return communications;
 	}
-//	public HashMap<MicroserviceDefinition, ByteArrayInputStream> getDependenciesDCL(MicroservicesSystem system) throws IOException{
-//	
-//		HashMap<MicroserviceDefinition, ByteArrayInputStream> mapDCLMicroservices = new HashMap<>();		
-//		for (MicroserviceDefinition microservice : system.getMicroservices()) {
-//			mapDCLMicroservices.put(microservice, JavaDepExtractor.getInstance().extractDependencyFromEachMicroservice(microservice));
-//		}
-//			
-//		return mapDCLMicroservices;
-//		
-//	}
-//	
+	
 	public HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> analyseAll(MicroservicesSystem system)
 			throws IOException, MsDCLException {
 
 		HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> map = new HashMap<>();
 		
 		for (MicroserviceDefinition caller : system.getMicroservices()) {
+			JavaDepExtractor.getInstance().extractDependenciesFromEachMicroservice(caller);
 			Set<CommunicateDefinition> accesses = new HashSet<>();
 			dependenciesFromService = DependencyExtractor.getInstance().extractDependenciesFromService(caller);
 			accesses.addAll(this.extractCommunicationsFromService(caller, system));

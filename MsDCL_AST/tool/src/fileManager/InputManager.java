@@ -8,10 +8,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import entities.ConstraintDefinition;
-import entities.MicroserviceDefinition;
-import entities.MicroservicesSystem;
+
 import enums.Constraint;
+import msdcl.core.ConstraintDefinition;
+import msdcl.core.MicroserviceDefinition;
+import msdcl.core.MicroservicesSystem;
 import util.RulesRegex;
 
 public class InputManager {

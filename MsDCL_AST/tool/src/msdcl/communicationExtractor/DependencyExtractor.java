@@ -8,8 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import entities.MicroserviceDefinition;
 import msdcl.ast.MsDCLDependencyVisitor;
+import msdcl.core.MicroserviceDefinition;
 import msdcl.dependencies.ClassAnnotationDependency;
 import msdcl.dependencies.ClassNormalAnnotationDependency;
 import msdcl.dependencies.FieldAnnotationDependency;

@@ -25,8 +25,6 @@ import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
-//import com.sun.org.apache.xpath.internal.Expression;
-
 import msdcl.dependencies.ClassAnnotationDependency;
 import msdcl.dependencies.ClassNormalAnnotationDependency;
 import msdcl.dependencies.ClassSingleAnnotationDependency;
