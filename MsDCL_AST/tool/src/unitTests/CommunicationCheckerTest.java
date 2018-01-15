@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.Test;
@@ -40,7 +41,7 @@ public class CommunicationCheckerTest {
 		MicroservicesSystem system = createMicroserviceSystem(2);
 		system.addConstraint(new ConstraintDefinition("ms1", Constraint.CAN_COMMUNICATE, "ms2"));
 		system.addCommunication(new CommunicateDefinition("ms1", "ms2"));
-		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
+		Map<MicroserviceDefinition, Set<ArchitecturalDrift>>  drifts = CommunicationChecker.getInstance().check(system);
 		assertEquals(0, drifts.size());
 	}
 	
@@ -50,7 +51,7 @@ public class CommunicationCheckerTest {
 		MicroservicesSystem system = createMicroserviceSystem(2);
 		system.addConstraint(new ConstraintDefinition("ms1", Constraint.CANNOT_COMMUNICATE, "ms2"));
 		system.addCommunication(new CommunicateDefinition("ms1", "ms2"));
-		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
+		Map<MicroserviceDefinition, Set<ArchitecturalDrift>>  drifts = CommunicationChecker.getInstance().check(system);
 		assertEquals(1, drifts.size());
 	}
 	
@@ -60,7 +61,7 @@ public class CommunicationCheckerTest {
 		system.addConstraint(new ConstraintDefinition("ms1", Constraint.CAN_COMMUNICATE_ONLY, "ms2"));
 		system.addCommunication(new CommunicateDefinition("ms1", "ms2"));
 		system.addCommunication(new CommunicateDefinition("ms1", "ms3"));
-		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
+		Map<MicroserviceDefinition, Set<ArchitecturalDrift>>  drifts = CommunicationChecker.getInstance().check(system);
 		assertEquals(1, drifts.size());
 	}
 	
@@ -70,13 +71,17 @@ public class CommunicationCheckerTest {
 		system.addConstraint(new ConstraintDefinition("ms1", Constraint.ONLY_CAN_COMMUNICATE, "ms2"));
 		system.addCommunication(new CommunicateDefinition("ms1", "ms2"));
 		system.addCommunication(new CommunicateDefinition("ms3", "ms2"));
-		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
-		for(ArchitecturalDrift d : drifts) {
-			System.out.println(d.getMessage());
+		Map<MicroserviceDefinition, Set<ArchitecturalDrift>> drifts = CommunicationChecker.getInstance().check(system);
+		for(MicroserviceDefinition ms : drifts.keySet()) {
+			for(ArchitecturalDrift d : drifts.get(ms)) {
+				System.out.println(d.getMessage());
+			}
 		}
 		assertEquals(1, drifts.size());
-		for(ArchitecturalDrift d : drifts) {
-			System.out.println(d.getMessage());
+		for(MicroserviceDefinition ms : drifts.keySet()) {
+			for(ArchitecturalDrift d : drifts.get(ms)) {
+				System.out.println(d.getMessage());
+			}
 		}
 	}
 	
@@ -86,7 +91,7 @@ public class CommunicationCheckerTest {
 		system.addConstraint(new ConstraintDefinition("ms1", Constraint.CAN_COMMUNICATE, "ms2"));
 		system.addConstraint(new ConstraintDefinition("ms1", Constraint.MUST_COMMUNICATE, "ms3"));
 		system.addCommunication(new CommunicateDefinition("ms1", "ms2"));
-		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
+		Map<MicroserviceDefinition, Set<ArchitecturalDrift>> drifts = CommunicationChecker.getInstance().check(system);
 		assertEquals(1, drifts.size());
 	}
 	
@@ -94,7 +99,7 @@ public class CommunicationCheckerTest {
 	public void warning() {
 		MicroservicesSystem system = createMicroserviceSystem(2);
 		system.addCommunication(new CommunicateDefinition("ms1", "ms2"));
-		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
+		Map<MicroserviceDefinition, Set<ArchitecturalDrift>> drifts = CommunicationChecker.getInstance().check(system);
 		assertEquals(1, drifts.size());
 	}
 	
@@ -103,7 +108,7 @@ public class CommunicationCheckerTest {
 		MicroservicesSystem system = createMicroserviceSystem(2);
 		system.addConstraint(new ConstraintDefinition("ms1", Constraint.CAN_COMMUNICATE_ONLY, "ms2", "/rest1"));
 		system.addCommunication(new CommunicateDefinition("ms1", "ms2", "/rest2"));
-		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
+		Map<MicroserviceDefinition, Set<ArchitecturalDrift>> drifts = CommunicationChecker.getInstance().check(system);
 		assertEquals(1, drifts.size());
 	}
 	
@@ -113,7 +118,7 @@ public class CommunicationCheckerTest {
 		system.addConstraint(new ConstraintDefinition("ms1", Constraint.CAN_COMMUNICATE, "ms2", "/rest1/*"));
 		system.addConstraint(new ConstraintDefinition("ms1", Constraint.MUST_COMMUNICATE, "ms2", "/rest1/*/rest3"));
 		system.addCommunication(new CommunicateDefinition("ms1", "ms2", "/rest1/2"));
-		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
+		Map<MicroserviceDefinition, Set<ArchitecturalDrift>> drifts = CommunicationChecker.getInstance().check(system);
 		assertEquals(1, drifts.size());
 	}
 	
@@ -141,7 +146,7 @@ public class CommunicationCheckerTest {
 		system.addCommunication(new CommunicateDefinition("MsSale", "MsProduct")); //ok
 		system.addCommunication(new CommunicateDefinition("MsProduct", "MsPostCode")); //violation
 		//absence: MsCustomer must-communicate MsNewsletter
-		Set<ArchitecturalDrift> drifts = CommunicationChecker.getInstance().check(system);
+		Map<MicroserviceDefinition, Set<ArchitecturalDrift>> drifts = CommunicationChecker.getInstance().check(system);
 		assertEquals(3, drifts.size());
 	}
 	

@@ -68,8 +68,9 @@ public class CommunicateDefinition {
 	public String toString() {
 		String s = microserviceOrigin + " communicate " + microserviceDestin;
 		if (using != null) {
-			s += " using " + this.using + "\n";
+			s += " using " + this.using;
 		}
+		
 		return s;
 	}
 }

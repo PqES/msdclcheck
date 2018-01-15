@@ -31,8 +31,14 @@
 	<classpathentry exported="true" kind="lib" path="lib/javadepextractor.jar"/>
 	<classpathentry exported="true" kind="lib" path="pi-dclcheck.jar"/>
 	<classpathentry kind="lib" path="lib/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/aopalliance-repackaged-2.4.0-b06-sources.jar"/>
+	<classpathentry kind="lib" path="lib/aopalliance-1.0-sources.jar"/>
+	<classpathentry kind="lib" path="lib/aspectj-1.8.13.jar"/>
+	<classpathentry kind="lib" path="lib/byte-buddy-1.7.9.jar"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry exported="true" kind="lib" path="/opt/eclipse/plugins/org.eclipse.jdt.core_3.13.100.v20171123-1049.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.core.runtime-3.10.0.v20140318-2214.jar"/>
+	<classpathentry kind="lib" path="/home/elena/Documentos/Projeto/msdclcheck/MsDCL_AST/tool/lib/aopalliance-1.0-sources.jar"/>
+	<classpathentry kind="lib" path="/home/elena/Documentos/Projeto/msdclcheck/MsDCL_AST/tool/lib/jgraphx.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

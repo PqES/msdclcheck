@@ -14,9 +14,12 @@ public class MicroserviceDefinition {
 		this.language = language;
 	}
 	
+	public MicroserviceDefinition () {}
 	public String getName() {
 		return name;
 	}
+	
+	
 
 	public String getLink() {
 		return link;
@@ -48,5 +51,6 @@ public class MicroserviceDefinition {
 	public String toString(){
 		return this.name;
 	}
+	
 	
 }

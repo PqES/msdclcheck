@@ -1,7 +1,7 @@
 com.elena.application.MsSaleSpring.intercomm.NewsLetterInterface,useannotation,RequestMapping
 com.elena.application.MsSaleSpring.controller.SaleController,access,com.elena.application.MsSaleSpring.controller.RestTemplate
+com.example.saleApp.TesteSaleApplicationTests,useannotation,org.junit.runner.RunWith
 com.example.saleApp.TesteSaleApplication,useannotation,EnableEurekaClient
-com.example.saleApp.TesteSaleApplicationTests,useannotation,Test
 com.elena.application.MsSaleSpring.intercomm.ProductInterface,declare,java.lang.String
 com.example.saleApp.TesteSaleApplication,useannotation,EnableDiscoveryClient
 com.elena.application.MsSaleSpring.controller.SaleController,create,ModelAndView
@@ -44,9 +44,9 @@ com.elena.application.MsSaleSpring.intercomm.CustomerInterface,useannotation,Fei
 com.example.saleApp.ServletInitializer,declare,SpringApplicationBuilder
 com.example.saleApp.ServletInitializer,declare,com.example.saleApp.SpringApplicationBuilder
 com.elena.application.MsSaleSpring.controller.SaleController,access,java.lang.String
+com.example.saleApp.TesteSaleApplicationTests,useannotation,org.junit.Test
 com.elena.application.MsSaleSpring.controller.SaleController,useannotation,RequestMapping
 com.elena.application.MsSaleSpring.controller.Services,declare,java.lang.StringBuilder
-com.example.saleApp.TesteSaleApplicationTests,useannotation,RunWith
 com.elena.application.MsSaleSpring.controller.SaleController,declare,java.lang.String
 com.elena.application.MsSaleSpring.controller.SaleController,declare,com.elena.application.MsSaleSpring.controller.CustomerInterface
 com.elena.application.MsSaleSpring.controller.Services,create,java.lang.StringBuilder

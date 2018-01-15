@@ -60,7 +60,6 @@ public class MicroservicesSystem {
 		MicroserviceDefinition ms = this.getMicroserviceDefinition(c.getMicroserviceOrigin());
 		if(ms != null){
 			this.mapCommunications.get(ms).add(c);
-			System.out.println("Ms: " + ms.toString()); 
 		}
 	}
 	

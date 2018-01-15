@@ -59,8 +59,6 @@ public class DependencyExtractor {
 			String service = Util.readFileToCharArray(filePath);
 			visitor = new MsDCLDependencyVisitor(className, service);
 			dependenciesAll = visitor.getAllDependenciesOfFile();
-			//imprime(dependenciesAll);
-			// dependencies = verifyAutowired(dependenciesAll);
 		} else {
 			System.out.println("This is not a file!");
 		}
@@ -68,124 +66,10 @@ public class DependencyExtractor {
 		return dependenciesAll;
 	}
 
-	public Set verifyAutowired(Set dependenciesAll) {
-		Set dependencies = new HashSet<>();
-		for (Object dep : dependenciesAll) { 
-			if ((dep instanceof FieldAnnotationDependency)) {
+	
 
-				if (((FieldAnnotationDependency) dep).getNameClass2().equals("Autowired")) {
-					if (!dependencies.contains(((FieldAnnotationDependency) dep).getNameClass1())) {
-						dependencies.add(dep);
-					}
-				}
-			}
-
-		}
-
-		for (Object d : dependencies) {
-			System.out.println(d.toString());
-		}
-		return dependencies;
-
-	}
-
-	public void imprime(HashMap<String, Set> allMicrosserviceDependencies) {
-
-		for (String s : allMicrosserviceDependencies.keySet()) {
-			System.out.println("A classe:  " + s);
-			for (Object d : allMicrosserviceDependencies.get(s)) {
-
-				if (d instanceof FieldAnnotationDependency) {
-					// if (((FieldNormalAnnotationDependency)
-					// d).getNameClass2().equals("Autowired")) {
-					// extractCommunicationsFromZull(((FieldAnnotationDependency)
-					// d).getDeclaration(),
-					// dependencies);
-					System.out.print("[ " + ((FieldAnnotationDependency) d).getNameClass2() + "] ->>");
-					// System.out.println();
-					// }
-
-				} else if (d instanceof ClassAnnotationDependency) {
-					// if (((ClassNormalAnnotationDependency)
-					// d).getNameClass2().equals("FeignClient")) {
-
-					//System.out.print("[ " + ((ClassAnnotationDependency) d).getNameClass2() + "] ->>");
-					// System.out.println();
-					// }
-
-				} else if (d instanceof MethodAnnotationDependency) {
-					// System.out.println("eh metoodo? ");
-					//System.out.print("[ " + ((MethodAnnotationDependency) d).getNameClass2() + "] ->>");
-
-				}
-
-			}
-			System.out.println();
-		}
-	}
-	public void imprime3(HashMap<String, Set> allMicrosserviceDependencies) {
-
-		for (String s : allMicrosserviceDependencies.keySet()) {
-			System.out.println("A classe:  " + s);
-			for (Object d : allMicrosserviceDependencies.get(s)) {
-
-				if (d instanceof FieldAnnotationDependency) {
-					// if (((FieldNormalAnnotationDependency)
-					// d).getNameClass2().equals("Autowired")) {
-					// extractCommunicationsFromZull(((FieldAnnotationDependency)
-					// d).getDeclaration(),
-					// dependencies);
-					System.out.print("[ " + ((FieldAnnotationDependency) d).getNameClass2() + "] ->>");
-					// System.out.println();
-					// }
-
-				} else if (d instanceof ClassAnnotationDependency) {
-					// if (((ClassNormalAnnotationDependency)
-					// d).getNameClass2().equals("FeignClient")) {
-
-					System.out.print("[ " + ((ClassAnnotationDependency) d).getNameClass2() + "] ->>");
-					// System.out.println();
-					// }
-
-				} else if (d instanceof MethodAnnotationDependency) {
-					// System.out.println("eh metoodo? ");
-					System.out.print("[ " + ((MethodAnnotationDependency) d).getNameClass2() + "] ->>");
-
-				}
-
-			}
-			System.out.println();
-		}
-	}
-	public void imprime(Set allFiles) {
-
-		for (Object d : allFiles) {
-
-			if (d instanceof FieldAnnotationDependency) {
-				// if (((AnnotationDependency) d).getNameClass2().equals("Autowired")) {
-				// extractCommunicationsFromZull(((FieldAnnotationDependency)
-				// d).getDeclaration(),
-				// dependencies);
-				// System.out.println(((FieldAnnotationDependency) d).getNameClass1() + "");
-				System.out.println(((FieldAnnotationDependency) d).toString());
-				System.out.println();
-				// }
-
-			} else if (d instanceof ClassNormalAnnotationDependency) {
-				// if (((ClassNormalAnnotationDependency)
-				// d).getNameClass2().equals("FeignClient")) {
-			//	System.out.println(((ClassNormalAnnotationDependency) d).toString());
-				System.out.println();
-				// }
-
-			} else if (d instanceof MethodNormalAnnotationDependency) {
-
-			//	System.out.println(((MethodNormalAnnotationDependency) d).toString());
-				System.out.println();
-			}
-
-		}
-
-	}
+	
+	
+	
 
 }

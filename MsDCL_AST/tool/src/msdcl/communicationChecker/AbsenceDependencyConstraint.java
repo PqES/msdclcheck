@@ -1,7 +1,7 @@
 package msdcl.communicationChecker;
 
-import enums.ViolationType;
 import msdcl.core.ConstraintDefinition;
+import msdcl.core.MicroserviceDefinition;
 
 public class AbsenceDependencyConstraint extends ArchitecturalDrift{
 	
@@ -9,7 +9,10 @@ public class AbsenceDependencyConstraint extends ArchitecturalDrift{
 		super(violate);
 		
 	}
-
+	public AbsenceDependencyConstraint(ConstraintDefinition violate,  MicroserviceDefinition microservice) {
+		super(violate, microservice);
+		
+	}
 	@Override
 	public String getViolationType() {
 		return ArchitecturalDrift.ABSENCE;

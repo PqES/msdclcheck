@@ -1,9 +1,9 @@
 package msdcl.communicationChecker;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
-
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 import enums.ConstraintType;
 import msdcl.core.CommunicateDefinition;
@@ -50,7 +50,7 @@ public class CommunicationChecker {
 					if (constraint.getMicroserviceDestin().equalsIgnoreCase(communicate.getMicroserviceDestin())
 							&& constraint.usingMatch(communicate)
 							&& constraint.getConstraint().getConstraintType() == ConstraintType.ONLY_CAN_COMMUNICATE) {
-						drifts.add(new DivergenceDependencyConstraint(constraint, communicate));
+						drifts.add(new DivergenceDependencyConstraint(constraint, ms, communicate));
 					}
 				}
 			}
@@ -86,24 +86,27 @@ public class CommunicationChecker {
 					}
 				}
 				if (absence) {
-					absences.add(new AbsenceDependencyConstraint(constraint));
+					absences.add(new AbsenceDependencyConstraint(constraint,service));
 				}
 			}
 		}
 		return absences;
 	}
 
-	public Set<ArchitecturalDrift> check(MicroservicesSystem system) {
+	public Map<MicroserviceDefinition, Set<ArchitecturalDrift>> check(MicroservicesSystem system) {
 		Set<ArchitecturalDrift> drifts = new HashSet<>();
+		Map<MicroserviceDefinition, Set<ArchitecturalDrift>> driftsCommunications = new HashMap<>();
 		ArchitecturalDrift drift;
 		for (MicroserviceDefinition ms : system.getMicroservices()) {
 			for (CommunicateDefinition communicate : system.getCommunications(ms)) {
 				drifts.addAll(canCommunicate(communicate, system));
+				driftsCommunications.put(ms, drifts);
 			}
 			Set<ArchitecturalDrift> absences = getAbsences(ms, system);
 			drifts.addAll(absences);
+			driftsCommunications.put(ms, drifts);
 		}
-		return drifts;
+		return driftsCommunications;
 	}
 
 }

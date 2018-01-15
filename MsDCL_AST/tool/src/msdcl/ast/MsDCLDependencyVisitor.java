@@ -24,6 +24,7 @@ import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 import msdcl.dependencies.ClassAnnotationDependency;
 import msdcl.dependencies.ClassNormalAnnotationDependency;
@@ -173,7 +174,9 @@ public class MsDCLDependencyVisitor extends ASTVisitor {
 		return true;
 
 	}
-
+	
+	
+	
 	public String addNameOfTypes(Type type) {
 
 		if (type instanceof SimpleType) {

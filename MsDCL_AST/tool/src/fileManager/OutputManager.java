@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import msdcl.communicationChecker.ArchitecturalDrift;
+import msdcl.core.ConstraintDefinition;
 import msdcl.core.MicroserviceDefinition;
 import msdcl.core.MicroservicesSystem;
 
@@ -26,21 +27,28 @@ public class OutputManager {
 
 	}
 
-	public static void violate(String path, Set<ArchitecturalDrift> driftsCommunications,
+	public static void violate(Map<MicroserviceDefinition, Set<ArchitecturalDrift>> driftsCommunications,
 			Map<MicroserviceDefinition, Collection<pidclcheck.core.DependencyConstraint.ArchitecturalDrift>> driftsStructurals)
 			throws IOException {
-		FileWriter fileWriter = new FileWriter(path + "violates.txt");
+		FileWriter fileWriter = new FileWriter("violates.txt");
 		PrintWriter writer = new PrintWriter(fileWriter);
 
 		for (MicroserviceDefinition m : driftsStructurals.keySet()) {
 			System.out.println(m.getName());
 			writer.println(m.getName());
+
 			System.out.println("\tCommunication Violates: ");
 			writer.println("\tCommunication Violates: ");
-			for (ArchitecturalDrift a : driftsCommunications) {
-				System.out.println("\t\t" + a.getMessage());
-				writer.println("\t\t" + a.getMessage());
+			for (ArchitecturalDrift a : driftsCommunications.get(m)) {
+
+				ConstraintDefinition c = a.getViolateConstraint();
+				if (c.getMicroserviceOrigin().equals(m.getName())) {
+					System.out.println("\t\t" + a.getMessage());
+					writer.println("\t\t" + a.getMessage());
+				}
+				
 			}
+
 			if (driftsStructurals.get(m).isEmpty()) {
 				System.out.println("\tNot exists Structurals Design Violations! ");
 				writer.println("\tNot exists Structurals Design Violations! ");

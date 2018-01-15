@@ -47,20 +47,14 @@ public class CommunicationExtractor {
 		String msName = null;
 		String using = null;
 		for (Object dep : dependencies) { 
-//			System.out.println("Dep: " + dep.toString());
 			if(dep instanceof ClassSingleAnnotationDependency || dep instanceof ClassNormalAnnotationDependency ) {
 				msName = getDependencyClass(dep);
 			}
 			else if (dep instanceof MethodNormalAnnotationDependency) {
 				using = ((MethodNormalAnnotationDependency) dep).getValue(); 
-//				System.out.println("using: " + using);
 				communication = new CommunicateDefinition(caller.getName(), msName, using);
 				if (communication != null) {
 					
-//					System.out.println(" ORIGEM: " + communication.getMicroserviceOrigin() 
-//					+ "  DESTINO: " + communication.getMicroserviceDestin() + 
-//					"  USING:  "+communication.getUsing() + 
-//					" QUEM DECLAROU: " + declaration);
 					
 					communications.add(communication);
 				}
@@ -76,7 +70,6 @@ public class CommunicationExtractor {
 		String msName = null;
 		if (dep instanceof ClassSingleAnnotationDependency ) {
 			if (((ClassSingleAnnotationDependency) dep).getNameClass2().equals("FeignClient")) {
-//				System.out.println("eh SingleClass???" );
 				msName = ((ClassSingleAnnotationDependency) dep).getExpression();
 //				System.out.println("MsName: " + msName);
 			}
@@ -85,9 +78,7 @@ public class CommunicationExtractor {
 		}
 		else if(dep instanceof ClassNormalAnnotationDependency ) {
 			if (((ClassNormalAnnotationDependency) dep).getNameClass2().equals("FeignClient")) {
-//				System.out.println("eh SingleClass???" );
 				msName = ((ClassNormalAnnotationDependency) dep).getValue();
-//				System.out.println("MsName: " + msName);
 			}
 			return msName;
 		

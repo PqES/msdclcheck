@@ -4,6 +4,7 @@ import com.sun.accessibility.internal.resources.accessibility;
 
 import msdcl.core.CommunicateDefinition;
 import msdcl.core.ConstraintDefinition;
+import msdcl.core.MicroserviceDefinition;
 
 public class DivergenceDependencyConstraint extends ArchitecturalDrift{
 	
@@ -13,7 +14,10 @@ public class DivergenceDependencyConstraint extends ArchitecturalDrift{
 		super(violate);
 		this.communication = access;
 	}
-	
+	public DivergenceDependencyConstraint(ConstraintDefinition violate, MicroserviceDefinition microservice,CommunicateDefinition access) {
+		super(violate, microservice);
+		this.communication = access;
+	}
 	public String getViolationType(){
 		return ArchitecturalDrift.DIVERGENCE;
 	}
