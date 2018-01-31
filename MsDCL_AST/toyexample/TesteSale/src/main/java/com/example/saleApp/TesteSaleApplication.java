@@ -14,15 +14,12 @@ import org.springframework.web.client.RestTemplate;
 
 @ComponentScan({"com.elena.application.MsSaleSpring.controller"})
 
-//@EnableJpaRepositories("com.elena.application.MsCustomer.DAO")
 
 
-//@Configuration
 @EnableEurekaClient
 @EnableDiscoveryClient
 @EnableAutoConfiguration
 
-//@SpringBootApplication
 @EnableFeignClients(basePackages = {"com.elena.application.MsSaleSpring.intercomm", "com.elena.application.MsSaleSpring.controller"})
 
 

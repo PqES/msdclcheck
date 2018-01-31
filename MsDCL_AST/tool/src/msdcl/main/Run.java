@@ -2,6 +2,7 @@ package msdcl.main;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -9,6 +10,7 @@ import fileManager.InputManager;
 import msdcl.communicationChecker.ArchitecturalDrift;
 import msdcl.communicationChecker.CommunicationChecker;
 import msdcl.communicationExtractor.CommunicationExtractor;
+import msdcl.core.CommunicateDefinition;
 import msdcl.core.MicroserviceDefinition;
 import msdcl.core.MicroservicesSystem;
 import msdcl.exception.MsDCLException;
@@ -36,6 +38,15 @@ public class Run {
 			system.setCommunications(CommunicationExtractor.getInstance().analyseAll(system));
 //			
 			
+			HashMap<MicroserviceDefinition, Set<CommunicateDefinition>> communications = CommunicationExtractor.getInstance().analyseAll(system);
+			
+			for(MicroserviceDefinition m : communications.keySet()) {
+				for (CommunicateDefinition c : communications.get(m)) {
+					System.out.println(c.getMicroserviceOrigin() + 
+							" communicate " + c.getMicroserviceDestin() + 
+							" using " + c.getUsing());
+				}
+			}
 			
 			
 			
