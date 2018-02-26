@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: TesteSale
+    server: localhost
+    	port: 9091
