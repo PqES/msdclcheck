@@ -1,0 +1,10 @@
+MsCliente communicate MsProduto using /product/getProduct/{id}
+MsVenda communicate MsProduto using /venda/{id}/{qnt}
+MsVenda communicate MsProduto using /product/getProduct/{id}
+MsVenda communicate MsCliente using /customer/getCustomerCpf/{cpf}
+MsCliente communicate MsProduto using /getAllProducts/
+MsVenda communicate MsProduto using /getProducts/
+MsCliente communicate viacep using ws/37200000/json/
+MsCliente communicate MsNewsLetter using /publish/{cpf}/{email}
+MsProduto communicate MsNewsLetter using /publish
+MsVenda communicate MsAutenticacao using /api/authenticate

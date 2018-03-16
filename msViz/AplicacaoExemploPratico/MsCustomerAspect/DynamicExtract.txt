@@ -1,0 +1,3 @@
+viacep using ws/37200000/json/
+MsProduto using /getAllProducts/
+MsNewsLetter using /publish/{cpf}/{email}

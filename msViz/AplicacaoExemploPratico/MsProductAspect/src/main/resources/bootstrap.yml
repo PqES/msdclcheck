@@ -1,0 +1,5 @@
+spring:
+    application:
+        name: MsProduto
+    server.port: 9092
+    server: localhost

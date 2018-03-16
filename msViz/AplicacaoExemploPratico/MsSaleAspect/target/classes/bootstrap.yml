@@ -1,0 +1,5 @@
+spring:
+    application:
+        name: MsSale
+    server.port: 9097
+    server: localhost
