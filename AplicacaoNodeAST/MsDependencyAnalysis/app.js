@@ -44,7 +44,7 @@ function writeCode(code, filename) {
 //a.authenticate({ params });
 
 //const file = '/home/carlos/workspaces/microservices/toyExample/MsDependencyAnalysis/requestUse_01.js';
-const file = '/home/carlos/workspaces/microservices/toyExample/MsVenda/controllers/authenticationController.js';
+const file = '/home/elena/Documents/Projeto/msdclcheck/AplicacaoNodeAST/MsVenda/controllers/authenticationController.js';
 //const file = '/home/carlos/workspaces/microservices/toyExample/MsVenda/controllers/productController.js';
 //const file = '/home/carlos/workspaces/microservices/toyExample/MsVenda/controllers/customerController.js';
 //const file = '/home/carlos/workspaces/microservices/toyExample/MsVenda/controllers/saleController.js';

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="jsdeodorant-eclipse-plugin.jsdeodorant-category"
+            class="ca.concordia.jsdeodorant.eclipseplugin.views.ModulesView.JSDeodorantModulesView"
+            icon="icons/icon.png"
+            id="jsdeodorant-eclipse-plugin.JSDeodorantModulesView"
+            name="JSDeodorant Modules View"
+            restorable="true">
+      </view>
+       <view
+             category="jsdeodorant-eclipse-plugin.jsdeodorant-category"
+             class="ca.concordia.jsdeodorant.eclipseplugin.views.VisualizationView.JSDeodorantVisualizationView"
+             icon="icons/icon.png"
+             id="jsdeodorant-eclipse-plugin.JSDeodorantVisualizationView"
+             name="JSDeodorant Visualization"
+             restorable="true">
+      </view>
+      <view
+            category="jsdeodorant-eclipse-plugin.jsdeodorant-category"
+            class="ca.concordia.jsdeodorant.eclipseplugin.views.InstantiationsView.JSDeodorantClassInstantiationsView"
+            icon="icons/icon.png"
+            id="jsdeodorant-eclipse-plugin.JSDeodorantInstantiationsView"
+            name="JSDeodorant Instantiations View"
+            restorable="true">
+      </view>
+      <category
+            id="jsdeodorant-eclipse-plugin.jsdeodorant-category"
+            name="JSDeodorant">
+      </category>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors.markerAnnotationSpecification">
+      <specification
+            annotationType="ca.concordia.cssanalyser.plugin.annotations.Annotation"
+            colorPreferenceKey="javascript_annotation_color"
+            colorPreferenceValue="169,229,249"
+            contributesToHeader="false"
+            highlightPreferenceKey="javascript_annotation_highlight"
+            highlightPreferenceValue="true"
+            includeOnPreferencePage="true"
+            isGoToNextNavigationTarget="true"
+            isGoToNextNavigationTargetKey="javascript_annotation_nextNavigationTarget"
+            isGoToPreviousNavigationTarget="true"
+            isGoToPreviousNavigationTargetKey="javascript_annotation_previousNavigationTarget"
+            label="JavaScript Construct"
+            overviewRulerPreferenceKey="javascript_annotation_overviewRuler"
+            overviewRulerPreferenceValue="true"
+            presentationLayer="0"
+            showInNextPrevDropdownToolbarAction="true"
+            showInNextPrevDropdownToolbarActionKey="javascript_annotation_nextPrevDropdownToolbar"
+            textPreferenceKey="javascript_annotation_text"
+            textPreferenceValue="true"
+            textStylePreferenceKey="javascript_annotation_stylePreferences"
+            textStylePreferenceValue="BOX"
+            verticalRulerPreferenceKey="javascript_annotation_verticalRuler"
+            verticalRulerPreferenceValue="false">
+      </specification>
+   </extension>
+   <extension
+	  point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
+	  <hyperlinkDetector
+		id="ca.concordia.jsdeodorant.eclipseplugin.hyperlinksupport.declarationHyperlinkDetector"
+		targetId="org.eclipse.wst.jsdt.ui.javaCode"
+		class="ca.concordia.jsdeodorant.eclipseplugin.hyperlinksupport.OpenDeclarationHyperlinkDetector"
+		name="Test">
+	  </hyperlinkDetector>
+	</extension>
+   <extension
+      point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectorTargets">
+      <target
+         id="ca.concordia.jsdeodorant.eclipseplugin.hyperlinksupport.Editor"
+         name="JS Editor">
+         <context type="org.eclipse.ui.texteditor.ITextEditor"/>
+      </target>
+   </extension>
+	<extension point="org.eclipse.core.expressions.definitions">
+	  <!--definition id="ca.concordia.jsdeodorant.eclipseplugin.defenitions.JSFileDefinitiion">
+	     <iterate ifEmpty="false">
+ 			<adapt type="org.eclipse.core.resources.IFile">
+               <test property="org.eclipse.core.resources.name" 
+                     value="*.js"/>
+            </adapt>
+	     </iterate>
+	  </definition-->
+	  <definition id="ca.concordia.jsdeodorant.eclipseplugin.defenitions.JSProjectNature">
+	     <iterate ifEmpty="false">
+ 			<adapt type="org.eclipse.core.resources.IProject">
+	           <test property="org.eclipse.core.resources.projectNature"
+	                 value="org.eclipse.wst.jsdt.core.jsNature"/>
+	        </adapt>
+	     </iterate>
+	  </definition>	  
+	 </extension>
+	<extension point="org.eclipse.ui.menus">
+      <menuContribution locationURI="popup:org.eclipse.ui.popup.any">
+         <menu
+               label="JSDeodorant"
+               icon="icons/icon.png">
+            <command
+                  commandId="ca.concordia.jsdeodorant.eclipseplugin.popupmenuhandlers.JSProjectPopupMenuCommand"
+                  id="OpenModulesView"
+                  label="View JS modules"
+                  icon="icons/icon.png"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <or>
+                     <with
+                           variable="activeMenuSelection">
+                        <reference
+                              definitionId="ca.concordia.jsdeodorant.eclipseplugin.defenitions.JSProjectNature">
+                        </reference>
+                     </with>
+                     <!--with
+                           variable="activeMenuEditorInput">
+                        <reference
+                              definitionId="ca.concordia.jsdeodorant.eclipseplugin.defenitions.JSFileDefinitiion">
+                        </reference>
+                     </with-->
+                  </or>
+               </visibleWhen>
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="ca.concordia.jsdeodorant.eclipseplugin.popupmenuhandlers.JSProjectPopupMenuHandler"
+            id="ca.concordia.jsdeodorant.eclipseplugin.popupmenuhandlers.JSProjectPopupMenuCommand"
+            name="JSProjectPopupMenuCommandName">
+      </command>
+   </extension>
+</plugin>
