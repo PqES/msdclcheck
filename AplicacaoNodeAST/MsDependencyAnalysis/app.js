@@ -5,27 +5,27 @@ const escodegen = require('escodegen');
 const fs = require('fs');
 
 /**
- * 
- * @param {*} element 
+ *
+ * @param {*} element
  */
 Array.prototype.contains = function(element) {
     return this.indexOf(element) > -1;
 };
 
 /**
- * 
- * @param {*} find 
- * @param {*} replace 
+ *
+ * @param {*} find
+ * @param {*} replace
  */
 String.prototype.replaceAll = function(find, replace) {
     return this.replace(new RegExp(find, 'g'), replace);
 }
 
 /**
- * 
- * @param {*} code 
- * @param {*} filename 
- * 
+ *
+ * @param {*} code
+ * @param {*} filename
+ *
  */
 function writeCode(code, filename) {
     fs.writeFileSync(filename, '', err => {
@@ -44,13 +44,13 @@ function writeCode(code, filename) {
 //a.authenticate({ params });
 
 //const file = '/home/carlos/workspaces/microservices/toyExample/MsDependencyAnalysis/requestUse_01.js';
-const file = '/home/elena/Documents/Projeto/msdclcheck/AplicacaoNodeAST/MsVenda/controllers/authenticationController.js';
+const file = '/home/alvaromaresp/MsDCLcheck/msdclcheck/AplicacaoNodeAST/MsVenda/controllers/authenticationController.js';
 //const file = '/home/carlos/workspaces/microservices/toyExample/MsVenda/controllers/productController.js';
 //const file = '/home/carlos/workspaces/microservices/toyExample/MsVenda/controllers/customerController.js';
 //const file = '/home/carlos/workspaces/microservices/toyExample/MsVenda/controllers/saleController.js';
 
 const code = fs.readFileSync(file, 'utf-8').replaceAll('let\\s', 'var ');
-console.log(code);
+// console.log(code);
 const ast = espree.parse(code);
 
 //console.log(require('/home/carlos/workspaces/microservices/toyExample/MsVenda/config/microservices.json'));
@@ -73,7 +73,7 @@ var requestMsFromExportsInv = {};
 // console.log(esquery.query(ast, '[name="configFile"],[type="Identifier"]'));
 
 /**
- * @returns índice inicial da função 
+ * @returns índice inicial da função
  */
 function getStartFunction() {
     let functions = [];
@@ -98,12 +98,157 @@ function getFunctionExportName() {
     return requestMsFromExportsInv['f' + getStartFunction()];
 }
 
+function getStringMemberExpression (member_Node){
+     let members = [];
+
+     let aux_Node = member_Node;
+
+
+     while(aux_Node.type === 'MemberExpression'){
+          members.unshift(aux_Node.property.name);
+          aux_Node = aux_Node.object;
+
+          if(aux_Node.type !== 'MemberExpression')
+               members.unshift(aux_Node.name);
+     }
+
+     console.log(members);
+
+     root_member = true;
+
+     let finalValue = '';
+
+     for(_member in members){
+          if(root_member){
+               finalValue += ' ' + members[_member];
+               root_member = false;
+          }else
+               finalValue += '.' + members[_member];
+
+     }
+     if (finalValue.indexOf("function") > -1){
+          finalValue = finalValue.slice(0, finalValue.indexOf("function") - 1);
+     }
+
+
+     console.log(finalValue);
+
+     return finalValue;
+}
+
+function getValueStringBinaryExpression (ast, start, end, parentStart){
+    let startFunction = getStartFunction();
+    var finalValue = '';
+
+    const calcAST = estraverse.replace(ast, {
+        enter: function(node, parent){
+            retNode = node;
+
+            if (node.start >= startFunction){
+                let actualNode = node;
+                while (actualNode.type === 'CallExpression' &&
+                    actualNode.callee.type === 'MemberExpression') {
+                    actualNode = actualNode.callee;
+                }
+                if (actualNode.type === 'MemberExpression') {
+                    while (actualNode.type === 'MemberExpression') {
+                        actualNode = actualNode.object;
+                    }
+                    if (identifierIsParam(actualNode.name)) {
+                        retNode = espree.parse("''");
+                    }
+                }
+
+                // Condicional que delimita a posição exata da expressão binária a ser calculada
+
+                if (node.type === 'BinaryExpression' && node.start == start && node.end == end){
+                    // console.log('Found it! Start: ' + node.start + ' ' + node.end);
+                    finalValue = 'module.exports.SECRET_VAR_STRING_VALUE ='; // Variável no escopo da função nal qual vai ser calculada o valor finla
+
+                    var nodes = [];
+
+                    // Organização linear da árvore de expressões binárias
+
+                    while(actualNode.type === 'BinaryExpression'){
+                         nodes.unshift(actualNode.right);
+                         actualNode = actualNode.left;
+
+                         if(actualNode.type !== 'BinaryExpression')
+                              nodes.unshift(actualNode);
+                    }
+
+
+                    first_iteration = true; // Não printar sinal de + no começo
+
+                    for(_node in nodes){
+
+                         if(first_iteration === true){
+                              if(nodes[_node].type === 'Literal')
+                                   finalValue += ' ' +  nodes[_node].value;
+
+                              else if(nodes[_node].type === 'Identifier')
+                                   finalValue += ' ' + nodes[_node].name;
+
+                              else if(nodes[_node].type === 'MemberExpression'){
+                                   finalValue += ' ' + getStringMemberExpression (nodes[_node]);
+                              }
+
+                              first_iteration = false;
+
+                         }else{
+
+                              if(nodes[_node].type === 'Literal')
+                                   finalValue +=  ' + ' + nodes[_node].value;
+
+                              else if(nodes[_node].type === 'Identifier')
+                                   finalValue +=  ' + ' +nodes[_node].name;
+
+                              else if(nodes[_node].type === 'MemberExpression'){
+                                   finalValue += ' + ' + getStringMemberExpression (nodes[_node]);
+                              }
+                         }
+                    }
+                    //console.log('Here is the final value = ' + finalValue);
+               }
+            }
+
+            return retNode;
+
+        },
+        leave: function(node, parent) {}
+    })
+
+    finalValue += ';';
+    const newAST = estraverse.replace(calcAST, {
+        enter: function(node, parent){
+            retNode = node;
+
+            if(node.start == parentStart){
+              retNode = espree.parse(finalValue);
+            }
+
+            return retNode;
+        },
+
+        leave: function(node, parent) {}
+    });
+
+    let codeResult = escodegen.generate(newAST);
+    codeResult += '\nmodule.exports.' + getFunctionExportName() + '();\n';
+    console.log(codeResult);
+    let fileTemp = file.substring(0, file.length - 3) + '_temp.js';
+    writeCode(codeResult, fileTemp);
+
+    return require(fileTemp).SECRET_VAR_STRING_VALUE;
+
+}
+
 /**
- * 
+ *
  * @param {*} ast ast onde variável foi declarada
  * @param {*} identifierName identificador da variável
  * @param {*} start índice onde deseja analisar o valor da string
- * 
+ *
  * @returns valor de uma string contido em uma variável em determinado ponto do código
  */
 function getValueStringIdentifier(ast, identifierName, start, parentStart) {
@@ -111,7 +256,7 @@ function getValueStringIdentifier(ast, identifierName, start, parentStart) {
         return '';
     }
     let startFunction = getStartFunction();
-    let nextNode
+    // let nextNode
     const newAST = estraverse.replace(ast, {
         enter: function(node, parent) {
             let retNode = node;
@@ -129,10 +274,14 @@ function getValueStringIdentifier(ast, identifierName, start, parentStart) {
                         retNode = espree.parse("''");
                     }
                 }
+
+
+
             }
             if (node.start === parentStart) {
                 retNode = espree.parse('module.exports.SECRET_VAR_STRING_VALUE = ' + identifierName + ';');
             }
+
             return retNode;
         },
         leave: function(node, parent) {}
@@ -141,34 +290,15 @@ function getValueStringIdentifier(ast, identifierName, start, parentStart) {
     codeResult += '\nmodule.exports.' + getFunctionExportName() + '();\n';
     let fileTemp = file.substring(0, file.length - 3) + '_temp.js';
     writeCode(codeResult, fileTemp);
-    // console.log('AGORA');
-    // console.log(require(fileTemp).SECRET_VAR_STRING_VALUE);
+    console.log(codeResult);
+
     return require(fileTemp).SECRET_VAR_STRING_VALUE;
-    // value = '';
-    // const astString = estraverse.traverse(ast, {
-    //     enter: function(node, parent) {
-    //         if (node.type === 'Identifier' &&
-    //             node.name === identifierName) {
-    //             if (node.start >= start) {
-    //                 // nothing to do
-    //             } else if (parent.type === 'VariableDeclarator') {
-    //                 if (parent.init.type === 'Literal') {
-    //                     value = parent.init.value;
-    //                 } else if (parent.init.type === 'BinaryExpression') {
-    //                     value = getValueStringBinaryExpression(ast, parent);
-    //                 }
-    //             }
-    //         }
-    //     },
-    //     leave: function(node, parent) {}
-    // });
-    // return value;
 }
 
 /**
- * 
+ *
  * @param {*} identifierName identificador da variável
- * 
+ *
  * @returns true, se a variável é um parâmetro da função, caso contrário, false
  */
 function identifierIsParam(identifierName) {
@@ -191,55 +321,6 @@ function identifierIsParam(identifierName) {
     }
     return isParam;
 }
-
-/**
- * 
- * @param {*} ast ast do código
- * @param {*} node nó com expressão binária
- * 
- * @returns valor de uma string resultante de uma expressão binária
- */
-function getValueStringBinaryExpression(ast, node) {
-    value = '';
-    nodes = [node.left, node.right];
-    if (node.operator === '+') {
-        for (_node in nodes) {
-            if (_node.type === 'Literal') {
-                value += _node.value;
-            } else if (_node.type === 'BinaryExpression') {
-                value += getValueStringBinaryExpression(ast, _node);
-            } else if (_node.type === 'CallExpression') {
-                if (_node.calle.type === 'MemberExpression') {
-
-                }
-            } else if (_node.type === 'MemberExpression') {
-                value += '';
-            }
-        }
-    }
-    return value;
-}
-
-function getVar() {
-
-}
-
-/**
- * 
- * @param {*} ast ast do código
- * @param {*} node nó com chamada de função
- * 
- * @returns valor de uma string resultante de uma chamada de função
- */
-function getValueStringCallExpression(ast, node) {
-    if (node.calle.type === 'MemberExpression') {
-
-    }
-    value = '';
-
-    return value;
-}
-
 
 
 
@@ -306,7 +387,8 @@ estraverse.traverse(ast, {
             } else if (node.arguments[0].type === 'ObjectExpression') {
 
             } else if (node.arguments[0].type === 'BinaryExpression') {
-                requestURL = getValueStringBinaryExpression(ast, node.arguments[0]);
+                requestURL = getValueStringBinaryExpression (ast, node.arguments[0].start, node.arguments[0].end, node.start);
+                // requestURL = getValueStringBinaryExpression(ast, node.arguments[0]);
             }
             requestMs.push(requestURL);
             let lastFunction = actualFunction.pop();
