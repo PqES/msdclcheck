@@ -48,6 +48,10 @@ public class Module {
 		this.types = new ArrayList<>();
 		this.libraryType = LibraryType.NONE;
 	}
+	public Module( SourceFile sourceFile) {
+		this.sourceFile = sourceFile;
+	}
+
 
 	public Module(ModuleType moduleType, Program program, SourceFile sourceFile, List<String> messages) {
 		this.moduleType = moduleType;

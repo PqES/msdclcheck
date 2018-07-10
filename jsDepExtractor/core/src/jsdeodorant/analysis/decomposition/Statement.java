@@ -1,8 +1,10 @@
 package jsdeodorant.analysis.decomposition;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.javascript.jscomp.SourceFile;
 import com.google.javascript.jscomp.parsing.parser.trees.ParseTree;
 
 import jsdeodorant.analysis.abstraction.SourceContainer;
@@ -10,14 +12,15 @@ import jsdeodorant.analysis.util.DebugHelper;
 import jsdeodorant.analysis.util.ExpressionExtractor;
 
 public class Statement extends AbstractStatement {
-	public Statement(ParseTree statement, StatementType type, SourceContainer parent) {
+	public Statement(ParseTree statement, StatementType type, SourceContainer parent, SourceFile sourceFile) throws IOException {
 		super(statement, type, parent);
 		ExpressionExtractor expressionExtractor = new ExpressionExtractor();
-		processFunctionInvocations(expressionExtractor.getCallExpressions(statement));
+		processFunctionInvocations(expressionExtractor.getCallExpressions(statement),sourceFile);
 		processVariableDeclarations(expressionExtractor.getVariableDeclarationExpressions(statement));
-		processNewExpressions(expressionExtractor.getNewExpressions(statement));
 		processArrayLiteralExpressions(expressionExtractor.getArrayLiteralExpressions(statement));
 		processAssignmentExpressions(expressionExtractor.getBinaryOperators(statement));
+		processNewExpressions(expressionExtractor.getNewExpressions(statement),sourceFile);
+
 	}
 
 	@Override

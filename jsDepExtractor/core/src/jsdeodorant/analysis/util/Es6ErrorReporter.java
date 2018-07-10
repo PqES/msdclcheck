@@ -14,12 +14,12 @@ public class Es6ErrorReporter extends com.google.javascript.jscomp.parsing.parse
 
 	@Override
 	protected void reportError(SourcePosition location, String message) {
-		this.reporter.error(message, location.source.name, location.line + 1, location.column);
+		//this.reporter.error(message, location.source.name, location.line + 1, location.column);
 	}
 
 	@Override
 	protected void reportWarning(SourcePosition location, String message) {
-		this.reporter.warning(message, location.source.name, location.line + 1, location.column);
+	//	this.reporter.warning(message, location.source.name, location.line + 1, location.column);
 
 	}
 }

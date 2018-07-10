@@ -36,5 +36,7 @@ public interface FunctionDeclaration {
 	public AbstractIdentifier getRawIdentifier();
 	
 	public boolean hasReturnStatement();
+	public boolean getExportedModuleFunction();
+	public String getModuleDeclarationLocation() ;
 	public void setHasReturnStatement(boolean flag);
 }

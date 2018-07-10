@@ -26,7 +26,6 @@ public class ClosureLibraryImportHelper implements PackageImporter {
 	@Override
 	public void extract(ParseTree expression) {
 		if (expression instanceof ExpressionStatementTree) {
-			System.out.println("eh expression!!");
 			ExpressionStatementTree expressionStatement = expression.asExpressionStatement();
 			if (expressionStatement.expression instanceof CallExpressionTree) {
 				CallExpressionTree callExpression = expressionStatement.expression.asCallExpression();

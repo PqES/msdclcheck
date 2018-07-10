@@ -1,11 +1,15 @@
 package jsdeodorant.analysis.decomposition;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //import org.apache.log4j.Logger;
 
 import com.google.common.base.Strings;
+import com.google.javascript.jscomp.SourceFile;
 import com.google.javascript.jscomp.parsing.parser.Token;
 import com.google.javascript.jscomp.parsing.parser.trees.BinaryOperatorTree;
 import com.google.javascript.jscomp.parsing.parser.trees.ExpressionStatementTree;
@@ -23,8 +27,10 @@ import jsdeodorant.analysis.abstraction.SourceElement;
 import jsdeodorant.analysis.abstraction.StatementProcessor;
 import jsdeodorant.analysis.util.IdentifierHelper;
 
-public class FunctionDeclarationExpression extends AbstractExpression implements SourceContainer, FunctionDeclaration, IdentifiableExpression {
-//	private static final Logger log = Logger.getLogger(FunctionDeclarationExpression.class.getName());
+public class FunctionDeclarationExpression extends AbstractExpression
+		implements SourceContainer, FunctionDeclaration, IdentifiableExpression {
+	// private static final Logger log =
+	// Logger.getLogger(FunctionDeclarationExpression.class.getName());
 	private AbstractIdentifier identifier;
 	private AbstractIdentifier publicIdentifier;
 	private FunctionKind kind;
@@ -34,33 +40,42 @@ public class FunctionDeclarationExpression extends AbstractExpression implements
 	private Token leftValueToken;
 	private FunctionDeclarationExpressionNature functionDeclarationExpressionNature;
 	private boolean isTypeDeclaration = false;
-	
-	// for codes transpiled from typeScript and coffeeScript we have class and constructor
+
+	// for codes transpiled from typeScript and coffeeScript we have class and
+	// constructor
 	private boolean isConstructor = false;
 
 	private List<AbstractExpression> parameters;
 	private List<AbstractStatement> statementList;
 	private boolean hasReturn;
-	private String middleName=null; // when we have A=B=function(){..}
-	private String IIFE_param=null;
+	private String middleName = null; // when we have A=B=function(){..}
+	private String IIFE_param = null;
+	public boolean isExportedModuleFunction = false;
+	public String moduleDeclarationLocation;
 
-	public FunctionDeclarationExpression(FunctionDeclarationTree functionDeclarationTree, FunctionDeclarationExpressionNature functionDeclarationExpressionNature, SourceContainer parent) {
-		super(functionDeclarationTree, parent);
+
+	public FunctionDeclarationExpression(FunctionDeclarationTree functionDeclarationTree,
+			FunctionDeclarationExpressionNature functionDeclarationExpressionNature, SourceContainer parent, SourceFile sourceFile) throws IOException {
+		super(functionDeclarationTree, parent, sourceFile);
 		this.statementList = new ArrayList<>();
 		this.functionDeclarationExpressionNature = functionDeclarationExpressionNature;
 		this.parameters = new ArrayList<>();
 		this.kind = FunctionKind.valueOf(functionDeclarationTree.kind.toString());
-		this.hasReturn=false;
+		this.hasReturn = false;
 		if (functionDeclarationTree.formalParameterList != null) {
-			FormalParameterListTree formalParametersList = functionDeclarationTree.formalParameterList.asFormalParameterList();
+			FormalParameterListTree formalParametersList = functionDeclarationTree.formalParameterList
+					.asFormalParameterList();
 			for (ParseTree parameter : formalParametersList.parameters)
 				this.addParameter(new AbstractExpression(parameter));
 		}
-		StatementProcessor.processStatement(functionDeclarationTree.functionBody, this);
+		ParseTree f = functionDeclarationTree.functionBody;
+		StatementProcessor.processStatement(functionDeclarationTree.functionBody, this,sourceFile);
 	}
 
-	public FunctionDeclarationExpression(FunctionDeclarationTree functionDeclarationTree, FunctionDeclarationExpressionNature functionDeclarationExpressionNature, ParseTree leftValueExpression, SourceContainer parent) {
-		this(functionDeclarationTree, functionDeclarationExpressionNature, parent);
+	public FunctionDeclarationExpression(FunctionDeclarationTree functionDeclarationTree,
+			FunctionDeclarationExpressionNature functionDeclarationExpressionNature, ParseTree leftValueExpression,
+			SourceContainer parent,SourceFile sourceFile ) throws IOException {
+		this(functionDeclarationTree, functionDeclarationExpressionNature, parent,sourceFile);
 		this.leftValueExpression = leftValueExpression;
 	}
 
@@ -71,6 +86,22 @@ public class FunctionDeclarationExpression extends AbstractExpression implements
 	}
 
 	public void addStatement(AbstractStatement statement) {
+
+		String functionBody = statement.toString();
+		String regex = "\\/\\*\\@ModuleLocation=[\\'\\\"].+\\.js[\\'\\\"]\\*\\/";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(functionBody);
+		if(matcher.find()) {
+			String regexName = "[\\'\\\"].+\\.js[\\'\\\"]";
+			Pattern patternName = Pattern.compile(regexName);
+			Matcher matcherName = patternName.matcher(matcher.group(0));
+			if(matcherName.find()) {
+				this.isExportedModuleFunction=true;
+				this.moduleDeclarationLocation = matcherName.group(0).replaceAll("\"","");
+			}
+
+		}
+
 		statementList.add(statement);
 	}
 
@@ -81,42 +112,50 @@ public class FunctionDeclarationExpression extends AbstractExpression implements
 	public AbstractIdentifier getIdentifier() {
 		if (identifier == null)
 			identifier = buildInternalIdentifier();
-		AbstractIdentifier middelId=null;
-		//wants to check if we have this case: //A.B=C=function(){..} or A.B=C=(function (){});
-		if (middleName==null && leftValueExpression == null && getParent() instanceof CompositeStatement) {
+		AbstractIdentifier middelId = null;
+		// wants to check if we have this case: //A.B=C=function(){..} or
+		// A.B=C=(function (){});
+		if (middleName == null && leftValueExpression == null && getParent() instanceof CompositeStatement) {
 			CompositeStatement parent = (CompositeStatement) getParent();
 			for (AbstractStatement statement : parent.getStatements()) {
-				boolean found =false;
-				for (FunctionDeclarationExpression functionDeclarationExpression : statement.getFunctionDeclarationExpressionList()){
+				boolean found = false;
+				for (FunctionDeclarationExpression functionDeclarationExpression : statement
+						.getFunctionDeclarationExpressionList()) {
 					if (functionDeclarationExpression.equals(this)) {
-						middelId=getideIdentifierInMiddle(statement); // the statement is //A.B=C=function(){..} or A.B=C=(function (){});
-						found =true;
+						middelId = getideIdentifierInMiddle(statement); // the statement is //A.B=C=function(){..} or
+																		// A.B=C=(function (){});
+						found = true;
 						break;
 					}
 				}
-				if(found){
+				if (found) {
 					break;
 				}
 			}
 		}
-		if(middelId !=null){
+		if (middelId != null) {
 			return middelId;
 		}
 		return identifier;
-		
+
 	}
-	
-	public AbstractIdentifier getideIdentifierInMiddle(AbstractStatement statement){
-		AbstractIdentifier leftId2=null;
+
+	public AbstractIdentifier getideIdentifierInMiddle(AbstractStatement statement) {
+		AbstractIdentifier leftId2 = null;
 		if (statement.getStatement() instanceof ExpressionStatementTree) {
 			ExpressionStatementTree epxressionStatement = statement.getStatement().asExpressionStatement();
-			if (epxressionStatement.expression instanceof BinaryOperatorTree){
-				AbstractIdentifier leftId=IdentifierHelper.getIdentifier(epxressionStatement.expression.asBinaryOperator().left);
-				if(epxressionStatement.expression.asBinaryOperator().right instanceof BinaryOperatorTree){ //A.B=C=function(){..} or A.B=C=(function (){});
-					BinaryOperatorTree right=epxressionStatement.expression.asBinaryOperator().right.asBinaryOperator(); // we have now C=function(){..} or A.B=C=(function (){});
-					if(right.left instanceof IdentifierExpressionTree){
-						IdentifierExpressionTree id=right.left.asIdentifierExpression();
-						leftId2=IdentifierHelper.getIdentifier(id);
+			if (epxressionStatement.expression instanceof BinaryOperatorTree) {
+				AbstractIdentifier leftId = IdentifierHelper
+						.getIdentifier(epxressionStatement.expression.asBinaryOperator().left);
+				if (epxressionStatement.expression.asBinaryOperator().right instanceof BinaryOperatorTree) { // A.B=C=function(){..}
+																												// or
+																												// A.B=C=(function
+																												// (){});
+					BinaryOperatorTree right = epxressionStatement.expression.asBinaryOperator().right
+							.asBinaryOperator(); // we have now C=function(){..} or A.B=C=(function (){});
+					if (right.left instanceof IdentifierExpressionTree) {
+						IdentifierExpressionTree id = right.left.asIdentifierExpression();
+						leftId2 = IdentifierHelper.getIdentifier(id);
 					}
 				}
 			}
@@ -154,12 +193,14 @@ public class FunctionDeclarationExpression extends AbstractExpression implements
 	}
 
 	private void refineModuleInformation() {
-		this.asIdentifiableExpression().setPublicIdentifier(publicIdentifier.asCompositeIdentifier().getMostRightPart());
+		this.asIdentifiableExpression()
+				.setPublicIdentifier(publicIdentifier.asCompositeIdentifier().getMostRightPart());
 	}
 
 	private boolean hasModuleInformation() {
 		if (publicIdentifier instanceof CompositeIdentifier)
-			if (publicIdentifier.asCompositeIdentifier().getMostLeftPart().equals("exports") || publicIdentifier.toString().contains("module.exports"))
+			if (publicIdentifier.asCompositeIdentifier().getMostLeftPart().equals("exports")
+					|| publicIdentifier.toString().contains("module.exports"))
 				return true;
 		return false;
 	}
@@ -178,16 +219,17 @@ public class FunctionDeclarationExpression extends AbstractExpression implements
 	 * This method tries to retrieve the name of the Function Declaration
 	 * Expression. leftValueToken will be assigned when we have
 	 * ObjectLiteralExpression which the operand would be the key of key/value
-	 * leftValueExpression also would be assigned when we have
-	 * VariableStatement, NewExpression, Call Expression and
-	 * BinaryOperationExpression If leftValue{token|expression} is null, the
-	 * method tries to find the parent function and find the lValue from there,
-	 * it would be ParenExpression or something like that which at the creation
-	 * time it's not possible to access the lValue
+	 * leftValueExpression also would be assigned when we have VariableStatement,
+	 * NewExpression, Call Expression and BinaryOperationExpression If
+	 * leftValue{token|expression} is null, the method tries to find the parent
+	 * function and find the lValue from there, it would be ParenExpression or
+	 * something like that which at the creation time it's not possible to access
+	 * the lValue
 	 */
 	private AbstractIdentifier buildInternalIdentifier() {
 		if (leftValueExpression != null) {
-			AbstractIdentifier normalizedIdentifier = normalizePrototype(IdentifierHelper.getIdentifier(leftValueExpression));
+			AbstractIdentifier normalizedIdentifier = normalizePrototype(
+					IdentifierHelper.getIdentifier(leftValueExpression));
 			return inspectParentNamespacing(normalizedIdentifier);
 		} else if (getParent() instanceof ObjectLiteralExpression) {
 			ObjectLiteralExpression objectLiteralExpression = (ObjectLiteralExpression) getParent();
@@ -197,7 +239,8 @@ public class FunctionDeclarationExpression extends AbstractExpression implements
 		} else if (getParent() instanceof CompositeStatement) {
 			CompositeStatement parent = (CompositeStatement) getParent();
 			for (AbstractStatement statement : parent.getStatements()) {
-				for (FunctionDeclarationExpression functionDeclarationExpression : statement.getFunctionDeclarationExpressionList())
+				for (FunctionDeclarationExpression functionDeclarationExpression : statement
+						.getFunctionDeclarationExpressionList())
 					if (functionDeclarationExpression.equals(this)) {
 						return IdentifierHelper.findLValue(statement, functionDeclarationExpression.getExpression());
 					}
@@ -206,7 +249,8 @@ public class FunctionDeclarationExpression extends AbstractExpression implements
 			Program parent = ((Program) getParent());
 			for (FunctionDeclaration functionDeclaration : parent.getFunctionDeclarationList())
 				if (functionDeclaration.equals(this))
-					//					//return IdentifierHelper.findLValue((AbstractStatement) functionDeclaration, functionDeclaration.getFunctionDeclarationTree());
+					// //return IdentifierHelper.findLValue((AbstractStatement) functionDeclaration,
+					// functionDeclaration.getFunctionDeclarationTree());
 					return new PlainIdentifier(functionDeclaration.getFunctionDeclarationTree());
 		} else if (leftValueToken != null)
 			return new PlainIdentifier(leftValueToken);
@@ -286,7 +330,8 @@ public class FunctionDeclarationExpression extends AbstractExpression implements
 		return functionDeclarationExpressionNature;
 	}
 
-	public void setFunctionDeclarationExpressionNature(FunctionDeclarationExpressionNature functionDeclarationExpressionNature) {
+	public void setFunctionDeclarationExpressionNature(
+			FunctionDeclarationExpressionNature functionDeclarationExpressionNature) {
 		this.functionDeclarationExpressionNature = functionDeclarationExpressionNature;
 	}
 
@@ -314,7 +359,7 @@ public class FunctionDeclarationExpression extends AbstractExpression implements
 
 	@Override
 	public AbstractIdentifier getRawIdentifier() {
-		if (leftValueExpression == null){
+		if (leftValueExpression == null) {
 			return null;
 		}
 		return IdentifierHelper.getIdentifier(leftValueExpression);
@@ -322,13 +367,12 @@ public class FunctionDeclarationExpression extends AbstractExpression implements
 
 	@Override
 	public boolean isConstructor() {
-		// TODO Auto-generated method stub
 		return isConstructor;
 	}
 
 	@Override
 	public void SetIsConstructor(boolean isConstructor) {
-		this.isConstructor=isConstructor;	
+		this.isConstructor = isConstructor;
 	}
 
 	@Override
@@ -338,17 +382,33 @@ public class FunctionDeclarationExpression extends AbstractExpression implements
 
 	@Override
 	public void setHasReturnStatement(boolean flag) {
-		this.hasReturn=flag;
-		
+		this.hasReturn = flag;
+
 	}
 
 	public void setIIFEParam(String param) {
-		this.IIFE_param=param;
+		this.IIFE_param = param;
 	}
-	
-	public String  getIIFEParam() {
+
+	public String getIIFEParam() {
 		return this.IIFE_param;
 	}
+
+	public boolean getExportedModuleFunction() {
+		return isExportedModuleFunction;
+	}
+
+	public void setExportedModuleFunction(boolean isExportedModuleFunction) {
+		this.isExportedModuleFunction = isExportedModuleFunction;
+	}
+
+	public String getModuleDeclarationLocation() {
+		return moduleDeclarationLocation;
+	}
+
+	public void setModuleDeclarationLocation(String moduleDeclarationLocation) {
+		this.moduleDeclarationLocation = moduleDeclarationLocation;
+	}
 	
-	
+
 }

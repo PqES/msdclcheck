@@ -7,9 +7,13 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import jsDepExtractor.Util;
+import jsdeodorant.experiment.FunctionInvocations;
+import jsdeodorant.language.PredefinedNode_modules;
 
 public class AnalyseAccessDependency {
 	private static AnalyseAccessDependency instance;
@@ -24,30 +28,39 @@ public class AnalyseAccessDependency {
 		return instance;
 	}
 
-	private void getObjectAccess(File f, String path) throws IOException {
-		System.out.println("Name File: " + f.getName());
+	public void analyseAccessFromFiles(String fileProject, String fileOrigin, Set<String> functionsInvocationsModule,
+			Map<String, String> varsLocalDeclarationFileDestin) throws IOException {
+		// Não há dependência de require para o arquivo analisado!
+		if (varsLocalDeclarationFileDestin.size() == 0)
+			return;
 
-		FileReader file = new FileReader(f);
-		BufferedReader buffer = new BufferedReader(file);
-		String line;
-		line = buffer.readLine();
-		while (buffer.ready()) {
-			line = buffer.readLine();
-			String[] contents = line.split(",");
-		//	System.out.println("Contents[0]: " + contents[0]);
-			//System.err.println("Linha atual: " + line);
-			String name = contents[1].replace("\"", "");			
-			System.out.println("Name: " + name);
-			if (name.equalsIgnoreCase("require")) {
-				String module1 = contents[0];
-				String nameAux = contents[4];
-			//	System.out.println("Module1: "+ module1);
-			//	System.out.println("nameAux: "+ nameAux);
-				String module2 = analyseName(nameAux);
-			//	System.err.println("Module2: " + module2);
-				AccessDependency dep = new AccessDependency(module1, module2);
-			//	System.err.println("Dependencia: " + dep.toString());
-				Util.writeFile(path, dep.toString());
+		for (String var : varsLocalDeclarationFileDestin.keySet()) {
+			for (String function : functionsInvocationsModule) {
+				String varNameFunction = function.split("\\.")[0];
+
+				if (varNameFunction.equals(var)) {
+					// System.out.println("Função : " + function);
+					// System.out.println("Variavel: " + var);
+					// System.out.println("declaration: " +
+					// varsLocalDeclarationFileDestin.get(var));
+					String declaration = varsLocalDeclarationFileDestin.get(var);
+					String nameFileOrigin = Util.getNameFilewhioutRoot(fileProject, fileOrigin);
+					// se for um módulo do node_modules
+					if (PredefinedNode_modules.isItPredefinedNode_module(declaration)) {
+						String node = Util.getNodeModulesDependency(function, varsLocalDeclarationFileDestin.get(var));
+						System.out.println(nameFileOrigin + ",access," + node);
+						String line = nameFileOrigin + ",access," + node;
+						Util.writeFileAccess(fileProject, line);
+					} else {
+						String fileDestinName = Util.processFileNameAccess(fileProject,
+								varsLocalDeclarationFileDestin.get(var), function, var);
+
+						System.out.println(nameFileOrigin + ",access," + fileDestinName);
+						String line = nameFileOrigin + ",access," + fileDestinName;
+						Util.writeFileAccess(fileProject, line);
+					}
+
+				}
 			}
 
 		}
@@ -55,40 +68,22 @@ public class AnalyseAccessDependency {
 	}
 
 	private String analyseName(String nameAux) {
-		nameAux = nameAux.replaceAll("\"","");
+		nameAux = nameAux.replaceAll("\"", "");
 		String regex_nameModules = "^['].+[']$";
 		String regex_localModules = "^['./].*[']$";
-		System.out.println("NameAux que chegou: " + nameAux);
+		// System.out.println("NameAux que chegou: " + nameAux);
 
 		if (nameAux.matches(regex_nameModules)) {
 			if (!(nameAux.contains("./"))) {
-				String a =  nameAux.replaceAll("\'", "");
+				String a = nameAux.replaceAll("\'", "");
 				String b = "nodule_modules/";
-				System.out.println("A string eh: " + b.concat(a));
+				// System.out.println("A string eh: " + b.concat(a));
 				return b.concat(a);
-			}
-			else {
+			} else {
 				return nameAux.replaceAll("\'", "").replaceAll("\\/", "#");
 			}
 		}
 		return null;
 	}
 
-	public void analyseFiles(String pathProject) throws IOException {
-		// String projectName = project.getName();
-		Path path = Paths.get("log/functions/");
-		File file = path.toFile();
-	//	System.out.println("File do log: " + file.getAbsolutePath());
-		List<File> projectFiles = Util.getAllFiles(path.toString(), pathProject);
-
-		for (File f : projectFiles) {
-		//	System.out.println("Cada file: " + f.getAbsolutePath());
-			if (f.getName().contains("invocations")) {
-		//		System.err.println("Eh invocations!!!!");
-				getObjectAccess(f, pathProject);
-			}
-
-		}
-
-	}
 }

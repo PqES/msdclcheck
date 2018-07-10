@@ -1,9 +1,11 @@
 package jsdeodorant.analysis.decomposition;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Strings;
+import com.google.javascript.jscomp.SourceFile;
 import com.google.javascript.jscomp.parsing.parser.trees.FormalParameterListTree;
 import com.google.javascript.jscomp.parsing.parser.trees.FunctionDeclarationTree;
 import com.google.javascript.jscomp.parsing.parser.trees.ParseTree;
@@ -23,8 +25,8 @@ public class FunctionDeclarationStatement extends CompositeStatement implements 
 	private boolean isConstructor = false;
 	private boolean hasReturn;
 
-	public FunctionDeclarationStatement(FunctionDeclarationTree functionDeclarationTree, SourceContainer parent) {
-		super(functionDeclarationTree, StatementType.FUNCTION_DECLARATION, parent);
+	public FunctionDeclarationStatement(FunctionDeclarationTree functionDeclarationTree, SourceContainer parent, SourceFile sourceFile) throws IOException {
+		super(functionDeclarationTree, StatementType.FUNCTION_DECLARATION, parent,sourceFile);
 		this.functionDeclarationTree = functionDeclarationTree;
 		this.parameters = new ArrayList<>();
 		this.identifier = getIdentifier();
@@ -35,7 +37,7 @@ public class FunctionDeclarationStatement extends CompositeStatement implements 
 			for (ParseTree parameter : formalParametersList.parameters)
 				this.addParameter(new AbstractExpression(parameter));
 		}
-		StatementProcessor.processStatement(functionDeclarationTree.functionBody, this);
+		StatementProcessor.processStatement(functionDeclarationTree.functionBody, this,sourceFile);
 	}
 
 	public String getName() {
@@ -112,6 +114,18 @@ public class FunctionDeclarationStatement extends CompositeStatement implements 
 	public void setHasReturnStatement(boolean flag) {
 		this.hasReturn=flag;
 		
+	}
+
+	@Override
+	public boolean getExportedModuleFunction() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String getModuleDeclarationLocation() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

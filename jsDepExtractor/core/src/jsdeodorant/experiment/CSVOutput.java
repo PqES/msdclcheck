@@ -9,6 +9,8 @@ import jsdeodorant.analysis.AnalysisResult;
 import jsdeodorant.analysis.abstraction.FunctionInvocation;
 import jsdeodorant.analysis.abstraction.Module;
 import jsdeodorant.analysis.abstraction.ObjectCreation;
+import jsdeodorant.analysis.abstraction.VariableDeclaration;
+import jsdeodorant.analysis.decomposition.AbstractFunctionFragment;
 import jsdeodorant.analysis.decomposition.FunctionDeclaration;
 import jsdeodorant.analysis.module.LibraryType;
 import jsdeodorant.analysis.util.FileUtil;
@@ -29,8 +31,8 @@ public class CSVOutput {
 	public void functionSignatures() {
 		if (currentModule.getProgram().getFunctionDeclarationList().size() == 0)
 			return;
-		System.out.println("MEU FILE NAME JHOW");
-		System.out.println(getFileName());
+		// System.out.println("MEU FILE NAME JHOW");
+		// System.out.println(getFileName());
 		String new_file_name = getFileName();// .replace("TP12.", "TP12/");
 		new_file_name = new_file_name.replace(".js.", "") + "-declarations.csv";
 		csvWriter = new CSVFileWriter("log/functions/" + new_file_name);
@@ -51,80 +53,118 @@ public class CSVOutput {
 			csvWriter.writeToFile(lineToWrite.toString().split(","));
 		}
 	}
-
+	public void getAllObjectCreateFromModule() {
+		Set<FunctionDeclaration> classes = new HashSet<>();
+		boolean classExists = false;
+	//	 System.out.println("List Size Creation: " +currentModule.getProgram().getObjectCreationList());
+		// currentModule.getProgram().getObjectCreationList().size());
+		
+		for (ObjectCreation creation : currentModule.getProgram().getObjectCreationList()) {
+			
+		//	System.out.println(creation);
+				System.out.println("Create pre-definido:  " +creation.getOperandOfNewName()+ "  " + creation.getModuleDeclarationLocation()+
+				"  "+creation.isClassDeclarationPredefined()+
+				"  "+creation.getClassDeclarationKind()+
+				"  "+creation.getArguments().size()+ 
+				"  "+currentModule.getCanonicalPath());
+			// if (creation.getClassDeclaration().getName().equals("")) {
+			// System.out.println("eh vazia");
+			// }
+		}
+	}
 	public void uniqueClassDeclaration() {
+		// System.err.println("Nem chegou aqui!! ");
 		String new_file_name = getFileName().replace(".", ".").replace(".js", "") + ".csv";
+
 		String currentFilePath = "log/legacy/classes/" + new_file_name;
+		// System.out.println("File Name: " + new_file_name);
 		csvWriter = new CSVFileWriter(currentFilePath);
-		String fileHeader = "Object Creation Name, Class FQN, Is Declaration Predefined?, DeclarationType, Number of Arguments, Number of Parameters, Parameter Names, Invocation Location, Declaration Location, Is invocation in a library?, Is definition in a library?";
+		String fileHeader = "Object Creation Name, Class FQN, Is Declaration Predefined?, "
+				+ "DeclarationType, Number of Arguments, Number of Parameters, " + "Parameter Names, "
+				+ "Invocation Location, Declaration Location," + " Is invocation in a library?, "
+				+ "Is definition in a library?";
+
 		csvWriter.writeToFile(fileHeader.split(","));
 		Set<FunctionDeclaration> classes = new HashSet<>();
 		boolean classExists = false;
+		// System.out.println("List Size: " +
+		// currentModule.getProgram().getObjectCreationList().size());
 		for (ObjectCreation creation : currentModule.getProgram().getObjectCreationList()) {
+			// System.out.println("Nãaaaaaaaaaaaaaaaao entra aqui");
+			// System.out.println("Create: " + creation.getOperandOfNewName());
+			// System.out.println("Declaration class: " +
+			// creation.getClassDeclarationLocation());
 			if (creation.isClassDeclarationPredefined()) {
+				// System.out.println("isClassDeclarationPredefined");
 				writeClassDeclarationToFile(creation);
 				// log.info(creation.getOperandOfNewName() + " " +
 				// creation.getClassDeclarationLocation() + " And the invocation is at: " +
 				// creation.getObjectCreationLocation());
 				classExists = true;
 			}
-			if (creation.getClassDeclaration() != null) {
-				if (!classes.contains(creation.getClassDeclaration())) {
-					classes.add(creation.getClassDeclaration().getFunctionDeclaration());
-					writeClassDeclarationToFile(creation);
-					// log.info(creation.getOperandOfNewName() + " " +
-					// creation.getClassDeclaration().getFunctionDeclarationTree().location + " And
-					// the invocation is at: " + creation.getNewExpressionTree().location);
-				}
-				classExists = true;
+			if (creation.getModuleDeclarationLocation() != null) {
+				// System.out.println("Eh diferente de nullaaaaaa");
+//				if (!classes.contains(creation.getClassDeclaration())) {
+////					classes.add(creation.getModuleDeclarationLocation());
+//					writeClassDeclarationToFile(creation);
+//					// log.info(creation.getOperandOfNewName() + " " +
+//					// creation.getClassDeclaration().getFunctionDeclarationTree().location + " And
+//					// the invocation is at: " + creation.getNewExpressionTree().location);
+//				}
+//				classExists = true;
 			}
+			// if (creation.getClassDeclaration().getName().equals("")) {
+			// System.out.println("eh vazia");
+			// }
 		}
-		for (FunctionDeclaration functionDeclaration : currentModule.getProgram().getFunctionDeclarationList()) {
-			if (functionDeclaration.isTypeDeclaration()) {
-				// log.info("Classname is:" + functionDeclaration.getIdentifier().toString() + "
-				// " + functionDeclaration.getFunctionDeclarationTree().location);
-				classes.add(functionDeclaration);
-				classExists = true;
-			}
-		}
-		if (!classExists) {
-			new File(currentFilePath).delete();
-			return;
-		} else
-			AnalysisResult.increaseTotalNumberOfFiles();
-
-		if (classes.size() > 0) {
-			// log.info("Number of unique classes in this file:" + classes.size());
-			AnalysisResult.increaseTotalNumberOfClasses(classes.size());
-		}
+//		for (FunctionDeclaration functionDeclaration : currentModule.getProgram().getFunctionDeclarationList()) {
+//			if (functionDeclaration.isTypeDeclaration()) {
+//				// log.info("Classname is:" + functionDeclaration.getIdentifier().toString() + "
+//				// " + functionDeclaration.getFunctionDeclarationTree().location);
+//				classes.add(functionDeclaration);
+//				classExists = true;
+//			}
+//		}
+//		if (!classExists) {
+//			new File(currentFilePath).delete();
+//			return;
+//		} else
+//			AnalysisResult.increaseTotalNumberOfFiles();
+//
+//		if (classes.size() > 0) {
+//			// log.info("Number of unique classes in this file:" + classes.size());
+//			AnalysisResult.increaseTotalNumberOfClasses(classes.size());
+//		}
 	}
 
-	public void aggregateReportForModule(Set<Module> modules) {
-		String currentFilePath = "log/aggregate/modules.csv";
-		csvWriter = new CSVFileWriter(currentFilePath);
-		String fileHeader = "Module name, Library Type, Number of dependencies, Number of exports";
-		csvWriter.writeToFile(fileHeader.split(","));
-		for (Module module : modules) {
-			StringBuilder lineToWrite = new StringBuilder();
-			lineToWrite.append(module.getSourceFile().getName()).
-			append(",").
-			append(module.getLibraryType()).
-			append(",").
-			append(module.getDependencies().size()).
-			append(",").
-			append(module.getExports().size());
-			csvWriter.writeToFile(lineToWrite.toString().split(","));
-		}
-	}
+	// public void aggregateReportForModule(Set<Module> modules) {
+	// String currentFilePath = "log/aggregate/modules.csv";
+	// csvWriter = new CSVFileWriter(currentFilePath);
+	// String fileHeader = "Module name, Library Type, Number of dependencies,
+	// Number of exports";
+	// csvWriter.writeToFile(fileHeader.split(","));
+	// for (Module module : modules) {
+	// StringBuilder lineToWrite = new StringBuilder();
+	// lineToWrite.append(module.getSourceFile().getName()).
+	// append(",").
+	// append(module.getLibraryType()).
+	// append(",").
+	// append(module.getDependencies().size()).
+	// append(",").
+	// append(module.getExports().size());
+	// csvWriter.writeToFile(lineToWrite.toString().split(","));
+	// }
+	// }
 
 	public void functionInvocations() {
 		if (currentModule.getProgram().getFunctionInvocationList().size() == 0)
 			return;
 		String new_file_name = getFileName().replace(".", ".").replace(".js", "") + "-invocations.csv";
 		csvWriter = new CSVFileWriter("log/functions/" + new_file_name);
-		System.out.println("Escrita função ");
+		// System.out.println("Escrita função ");
 		String fileHeader = "File path, function name, Library Type, Number of Params,Parameter Names, Invocation Location, Declaration Location, isItPredefined";
 		csvWriter.writeToFile(fileHeader.split(","));
+
 		for (FunctionInvocation functionInvocation : currentModule.getProgram().getFunctionInvocationList()) {
 			StringBuilder lineToWrite = new StringBuilder();
 			int parameterSize = functionInvocation.getArguments().size();
@@ -163,6 +203,9 @@ public class CSVOutput {
 					.getParametersName(objectCreation.getClassDeclaration().getFunctionDeclaration().getParameters());
 			isDefinitionInLibrary = objectCreation.getClassDeclarationModule().getLibraryType() != LibraryType.NONE;
 		}
+		System.err.println("Nome do objeto: " + objectCreation.getOperandOfNewName().replace(",", "-")
+				+ "   Local de declaração do objeto: " + currentModule.getCanonicalPath() + "/"
+				+ objectCreation.getObjectCreationLocation().replace(",", "-"));
 		lineToWrite.append(objectCreation.getOperandOfNewName().replace(",", "-")).append(",")
 				.append(objectCreation.getClassDeclarationQualifiedName()).append(",")
 				.append(objectCreation.isClassDeclarationPredefined() ? "TRUE" : "FALSE").append(",")
@@ -171,9 +214,46 @@ public class CSVOutput {
 				.append(parametersName).append(",").append(currentModule.getCanonicalPath()).
 				// append(currentModule.getCanonicalPath() + "/" +
 				// objectCreation.getObjectCreationLocation().replace(",", "-")).
+
 				append(",").append(objectCreation.getClassDeclarationLocation().replace(",", "-")).append(",")
 				.append(currentModule.getLibraryType()).append(",").append(isDefinitionInLibrary);
+
 		csvWriter.writeToFile(lineToWrite.toString().split(","));
+
+	}
+
+	private void writeClassDeclarationToFileModule(ObjectCreation objectCreation, Module module) {
+		StringBuilder lineToWrite = new StringBuilder();
+		int parameterSize;
+		String parametersName;
+		boolean isDefinitionInLibrary = false;
+		if (objectCreation.isClassDeclarationPredefined()) {
+			parameterSize = objectCreation.getArguments().size();
+			parametersName = "";
+			isDefinitionInLibrary = false;
+		} else {
+			parameterSize = objectCreation.getClassDeclaration().getFunctionDeclaration().getParameters().size();
+			parametersName = LogUtil
+					.getParametersName(objectCreation.getClassDeclaration().getFunctionDeclaration().getParameters());
+			isDefinitionInLibrary = objectCreation.getClassDeclarationModule().getLibraryType() != LibraryType.NONE;
+		}
+		System.err.println("Nome do objeto: " + objectCreation.getOperandOfNewName().replace(",", "-")
+				+ "   Local de declaração do objeto: " + module.getCanonicalPath() + "/"
+				+ objectCreation.getObjectCreationLocation().replace(",", "-"));
+		lineToWrite.append(objectCreation.getOperandOfNewName().replace(",", "-")).append(",")
+				.append(objectCreation.getClassDeclarationQualifiedName()).append(",")
+				.append(objectCreation.isClassDeclarationPredefined() ? "TRUE" : "FALSE").append(",")
+				.append(objectCreation.getClassDeclarationKind()).append(",")
+				.append(objectCreation.getArguments().size()).append(",").append(parameterSize).append(",")
+				.append(parametersName).append(",").append(module.getCanonicalPath()).
+				// append(currentModule.getCanonicalPath() + "/" +
+				// objectCreation.getObjectCreationLocation().replace(",", "-")).
+
+				append(",").append(objectCreation.getClassDeclarationLocation().replace(",", "-")).append(",")
+				.append(module.getLibraryType()).append(",").append(isDefinitionInLibrary);
+
+		csvWriter.writeToFile(lineToWrite.toString().split(","));
+
 	}
 
 	public static boolean createAndClearFolder(String folderName) {
@@ -196,21 +276,34 @@ public class CSVOutput {
 		return fileName;
 	}
 
+	private String getFileNameModule(Module module) {
+		String[] filePart = module.getSourceFile().getOriginalPath().split("/");
+		String fileName = FileUtil.getElementsOf(filePart, filePart.length - 2, filePart.length - 1).replace("/", ".");
+		if (fileName.lastIndexOf('|') == fileName.length() - 1)
+			fileName = fileName.substring(0, fileName.length() - 1);
+		return fileName;
+	}
+
 	public void moduleReport(Set<Module> modules) {
-//		String currentFilePath = "log/classes/" + getFileName() + ".csv";
-//		csvWriter = new CSVFileWriter(currentFilePath);
-//		String fileHeader = "Class name, File, Is Declaration Predefined?, Location, Has Infered? , Constructor Lines of Code, Class Lines of Codes, Number of methods, Number of attributes, Number of Parameters, Is definition in a library?, Number of instantiation, Is aliased?, Has Namespace?";
-//		csvWriter.writeToFile(fileHeader.split(","));
-//		Set<FunctionDeclaration> classes = new HashSet<>();
-//		boolean classExists = false;
-//		for (ObjectCreation creation : currentModule.getProgram().getObjectCreationList()) {
-//			if (creation.isClassDeclarationPredefined()) {
-//				writeClassDeclarationToFile(creation);
-//				// log.info(creation.getOperandOfNewName() + " " +
-//				// creation.getClassDeclarationLocation() + " And the invocation is at: " +
-//				// creation.getObjectCreationLocation());
-//				classExists = true;
-//			}
+		System.out.println("O que ta pegando??");
+		String new_file_name = "";
+		for (Module m : modules) {
+			new_file_name = getFileNameModule(m).replace(".", ".").replace(".js", "") + ".csv";
+			String currentFilePath = "log/classes/" + new_file_name;
+			// System.out.println("File Name: " + new_file_name);
+			csvWriter = new CSVFileWriter(currentFilePath);
+
+			String fileHeader = "Class name, File, Is Declaration Predefined?, Location, Has Infered? , Constructor Lines of Code, Class Lines of Codes, Number of methods, Number of attributes, Number of Parameters, Is definition in a library?, Number of instantiation, Is aliased?, Has Namespace?";
+			csvWriter.writeToFile(fileHeader.split(","));
+			Set<FunctionDeclaration> classes = new HashSet<>();
+			boolean classExists = false;
+			for (ObjectCreation creation : m.getProgram().getObjectCreationList()) {
+				if (creation.isClassDeclarationPredefined()) {
+					writeClassDeclarationToFileModule(creation,m);
+					classExists = true;
+				}
+			}
 		}
-//	}
+
+	}
 }

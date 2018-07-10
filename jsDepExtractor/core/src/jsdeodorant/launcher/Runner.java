@@ -18,6 +18,7 @@ import com.google.javascript.jscomp.Compiler;
 import com.google.javascript.jscomp.CompilerOptions;
 import com.google.javascript.jscomp.SourceFile;
 
+import jsDepExtractor.Util;
 import jsdeodorant.analysis.AnalysisEngine;
 import jsdeodorant.analysis.AnalysisOptions;
 import jsdeodorant.analysis.ExtendedCompiler;
@@ -66,7 +67,7 @@ public abstract class Runner extends CommandLineRunner {
 		return new ExtendedCompiler(getErrorPrintStream());
 	}
 
-	public Set<Module> performActions() throws IOException {
+	public Set<Module> performActions(String path) throws IOException {
 		System.out.println("entrou performance!!");
 		inputs = ImmutableList.builder();
 		externs = ImmutableList.builder();
@@ -76,25 +77,26 @@ public abstract class Runner extends CommandLineRunner {
 		System.out.println("Tamanho do JsFiles: " + jsFiles.size());
 		if (jsFiles != null ) {
 			for(String s: jsFiles) {
-				if(!s.contains("node_modules"))
+				if(!s.contains("node_modules")) {
 					addInputsFromFile(jsFiles);
+					System.out.println("Name>> " +s);
+					ArrayList<String> code = Util.processFiles(s);
+					Util.writeFileCode(s,code);
+				}
 			}
 		}
 		addInputsFromFile(extractFilesFromLibraries(analysisOptions.getBuiltInLibraries()));
 		List<String> optionsExterns = analysisOptions.getExterns();
 		if (optionsExterns != null) {
-			System.out.println("Arquivos externos!");
+		//	System.out.println("Arquivos externos!");
 			addExternsFromFile(optionsExterns);
 			
 		}
 		AnalysisEngine analysisEngine = new AnalysisEngine(createExtendedCompiler(), createOptions(), inputs.build(), externs.build());
 //		log.debug("analysis starts");
-		Set<Module> results = analysisEngine.run(analysisOptions);
+		Set<Module> results = analysisEngine.run(analysisOptions, path);
 		System.out.println("Results: ");
 
-		for (Module m : results) {
-			System.out.println(m.getDependencies());
-		}
 //		log.debug("analysis ends");
 		return results;
 	}

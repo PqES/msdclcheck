@@ -1,11 +1,14 @@
 package jsdeodorant.analysis.decomposition;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 //import org.apache.log4j.Logger;
 
 import com.google.common.collect.ImmutableList;
+import com.google.javascript.jscomp.SourceFile;
 import com.google.javascript.jscomp.parsing.parser.trees.ArgumentListTree;
 import com.google.javascript.jscomp.parsing.parser.trees.ArrayLiteralExpressionTree;
 import com.google.javascript.jscomp.parsing.parser.trees.BinaryOperatorTree;
@@ -20,6 +23,7 @@ import com.google.javascript.jscomp.parsing.parser.trees.ParseTree;
 import com.google.javascript.jscomp.parsing.parser.trees.ThisExpressionTree;
 import com.google.javascript.jscomp.parsing.parser.trees.VariableDeclarationTree;
 
+import jsDepExtractor.Util;
 import jsdeodorant.analysis.abstraction.AbstractIdentifier;
 import jsdeodorant.analysis.abstraction.ArrayLiteralCreation;
 import jsdeodorant.analysis.abstraction.Creation;
@@ -28,9 +32,11 @@ import jsdeodorant.analysis.abstraction.ObjectCreation;
 import jsdeodorant.analysis.abstraction.SourceContainer;
 import jsdeodorant.analysis.abstraction.VariableDeclaration;
 import jsdeodorant.analysis.util.IdentifierHelper;
+import jsdeodorant.language.PredefinedNode_modules;
 
 public abstract class AbstractFunctionFragment {
-//	private static final Logger log = Logger.getLogger(AbstractFunctionFragment.class.getName());
+	// private static final Logger log =
+	// Logger.getLogger(AbstractFunctionFragment.class.getName());
 	private SourceContainer parent;
 	private List<Creation> creationList;
 	private List<FunctionInvocation> functionInvocationList;
@@ -39,7 +45,7 @@ public abstract class AbstractFunctionFragment {
 	private List<AbstractExpression> assignmentExpressionList;
 	private List<VariableDeclaration> variableDeclarationList;
 
-	protected AbstractFunctionFragment(SourceContainer parent) {
+	public AbstractFunctionFragment(SourceContainer parent) {
 		this.parent = parent;
 		creationList = new ArrayList<>();
 		functionInvocationList = new ArrayList<>();
@@ -49,7 +55,11 @@ public abstract class AbstractFunctionFragment {
 		assignmentExpressionList = new ArrayList<>();
 	}
 
-	protected void processFunctionInvocations(List<ParseTree> functionInvocations) {
+	public AbstractFunctionFragment() {
+	}
+
+	protected void processFunctionInvocations(List<ParseTree> functionInvocations, SourceFile sourceFile)
+			throws IOException {
 		for (ParseTree functionInvocation : functionInvocations) {
 			CallExpressionTree callExpression = functionInvocation.asCallExpression();
 			List<AbstractExpression> arguments = new ArrayList<>();
@@ -60,7 +70,8 @@ public abstract class AbstractFunctionFragment {
 			}
 			AbstractIdentifier identifier = IdentifierHelper.getIdentifier(callExpression.operand);
 
-			FunctionInvocation functionInvocationObject = new FunctionInvocation(callExpression, identifier, new AbstractExpression(callExpression.operand, parent, false), arguments);
+			FunctionInvocation functionInvocationObject = new FunctionInvocation(callExpression, identifier,
+					new AbstractExpression(callExpression.operand, parent, false, sourceFile), arguments);
 			addFunctionInvocation(functionInvocationObject);
 		}
 	}
@@ -74,7 +85,8 @@ public abstract class AbstractFunctionFragment {
 		}
 	}
 
-	private boolean compositeContainsFunctionInvocation(FunctionInvocation functionInvocation, CompositeStatement composite) {
+	private boolean compositeContainsFunctionInvocation(FunctionInvocation functionInvocation,
+			CompositeStatement composite) {
 		for (FunctionInvocation invocation : composite.getFunctionInvocationList())
 			if (functionInvocation.equals(invocation))
 				return true;
@@ -89,7 +101,8 @@ public abstract class AbstractFunctionFragment {
 
 			AbstractExpression initializer = new AbstractExpression(variableDeclaration.initializer);
 
-			VariableDeclaration variableDeclarationObject = new VariableDeclaration(variableDeclaration, identifier, initializer);
+			VariableDeclaration variableDeclarationObject = new VariableDeclaration(variableDeclaration, identifier,
+					initializer);
 			addVariableDeclaration(variableDeclarationObject);
 		}
 	}
@@ -103,7 +116,8 @@ public abstract class AbstractFunctionFragment {
 		}
 	}
 
-	private boolean compositeContainsVariableDeclaration(VariableDeclaration variableDeclarationObject, CompositeStatement composite) {
+	private boolean compositeContainsVariableDeclaration(VariableDeclaration variableDeclarationObject,
+			CompositeStatement composite) {
 		for (VariableDeclaration variableDeclaration : composite.getVariableDeclarationList())
 			if (variableDeclarationObject.equals(variableDeclaration))
 				return true;
@@ -122,17 +136,23 @@ public abstract class AbstractFunctionFragment {
 		assignmentExpressionList.add(assignment);
 	}
 
-	protected void processNewExpressions(List<ParseTree> newExpressions) {
+	protected void processNewExpressions(List<ParseTree> newExpressions, SourceFile sourceFile) throws IOException {
+
 		for (ParseTree expression : newExpressions) {
 			NewExpressionTree newExpression = expression.asNewExpression();
 			ObjectCreation objectCreation = new ObjectCreation(newExpression, this);
 			AbstractExpression operandOfNew = null;
 			// TODO Redundant checks, it can be just assigned as ParseTree node
-			if (newExpression.operand instanceof IdentifierExpressionTree)
+			if (newExpression.operand instanceof IdentifierExpressionTree) {
 				operandOfNew = new AbstractExpression(newExpression.operand.asIdentifierExpression());
-			else if (newExpression.operand instanceof MemberExpressionTree)
+				// Se a expressão new veio de um require
+
+			} else if (newExpression.operand instanceof MemberExpressionTree) {
 				operandOfNew = new AbstractExpression(newExpression.operand.asMemberExpression());
-			else if (newExpression.operand instanceof ParenExpressionTree)
+				// System.err.println("MemberExpressionTree: " +
+				// operandOfNew.getExpression().location);
+
+			} else if (newExpression.operand instanceof ParenExpressionTree)
 				operandOfNew = new AbstractExpression(newExpression.operand.asParenExpression());
 			else if (newExpression.operand instanceof MemberLookupExpressionTree)
 				operandOfNew = new AbstractExpression(newExpression.operand.asMemberLookupExpression());
@@ -140,19 +160,61 @@ public abstract class AbstractFunctionFragment {
 				operandOfNew = new AbstractExpression(newExpression.operand.asThisExpression());
 			} else if (newExpression.operand instanceof FunctionDeclarationTree) {
 				operandOfNew = new AbstractExpression(newExpression.operand.asFunctionDeclaration());
-			} //else
-			//	log.warn("The missing type that we should handle for the operand of New expression is:" + newExpression.operand.getClass() + " " + newExpression.location);
+				// System.err.println("FunctionDeclarationTree: " +
+				// newExpression.operand.asFunctionDeclaration());
+
+			} // else
+				// log.warn("The missing type that we should handle for the operand of New
+				// expression is:" + newExpression.operand.getClass() + " " +
+				// newExpression.location);
 			ArgumentListTree argumentList = newExpression.arguments;
 			List<AbstractExpression> arguments = new ArrayList<>();
-			if (newExpression.arguments != null)
+			if (newExpression.arguments != null) {
 				for (ParseTree argument : argumentList.arguments) {
 					arguments.add(new AbstractExpression(argument));
 				}
+			}
 			objectCreation.setNewExpressionTree(newExpression);
+
+			if (Util.verifyDeclarationLocationObjectExternModule(operandOfNew.toString(), sourceFile.getName())) {
+				// Module module = new Module(sourceFile);
+				objectCreation.setModuleDeclarationLocation(
+						getDeclarationLocationObject(operandOfNew.toString(), sourceFile.getName()));
+				objectCreation.setIsExportedModuleFunctionModule(true);
+
+			} else {
+				if (PredefinedNode_modules.isItPredefinedNode_module(operandOfNew.toString())) {
+					objectCreation.setModuleDeclarationLocation(operandOfNew.toString());
+				}
+
+				else {
+					objectCreation.setModuleDeclarationLocation(sourceFile.getName());
+
+
+				}
+			}
+
+			getDeclarationLocationObject(operandOfNew.toString(), sourceFile.getName());
 			objectCreation.setOperandOfNew(operandOfNew);
 			objectCreation.setArguments(arguments);
+
+			// objectCreation.setClassDeclarationModule(classDeclarationModule);
 			addCreation(objectCreation);
 		}
+	}
+
+	
+
+	protected String getDeclarationLocationObject(String operandOfNew, String sourceFile) throws IOException {
+		Map<String, String> varsLocalDeclaration = Util.proccesVarDependencyRequire(sourceFile);
+
+		for (String var : varsLocalDeclaration.keySet()) {
+			if (operandOfNew.contains(var)) {
+				// System.out.println("Location: " + varsLocalDeclaration.get(var));
+				return varsLocalDeclaration.get(var);
+			}
+		}
+		return null;
 	}
 
 	protected void processArrayLiteralExpressions(List<ParseTree> arrayLiteralExpressions) {

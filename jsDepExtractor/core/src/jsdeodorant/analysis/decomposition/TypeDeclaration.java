@@ -239,7 +239,7 @@ public class TypeDeclaration {
 	private void identifyAttributes(List<AbstractStatement> statements){
 
 		for(AbstractStatement abstractStatement: statements){	
-			System.out.println("Statement: " + abstractStatement.toString());
+//			System.out.println("Statement: " + abstractStatement.toString());
 			ParseTree parseTree=abstractStatement.getStatement();
 			if(abstractStatement instanceof Statement){
 				if(parseTree instanceof ExpressionStatementTree){
