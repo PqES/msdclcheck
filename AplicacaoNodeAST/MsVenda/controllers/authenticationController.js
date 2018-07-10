@@ -8,7 +8,7 @@ console.log(request);
 
 /**
  * Recupera a página de login.
- * 
+ *
  * @param {*} req requisição
  * @param {*} res resposta - página de login
  */
@@ -19,7 +19,7 @@ module.exports.login = function(req, res) {
 module.exports.config = config;
 /**
  * Realiza a autenticação de um usuário.
- * 
+ *
  * @param {*} req requisição - com os parâmetros username e password
  * @param {*} res resposta - true se o usuário foi autenticado, caso contrário, false
  */
@@ -28,7 +28,7 @@ module.exports.authenticate = function(req, res) {
             config.getMicroservices().autenticacao) + '/authenticate/' + req.params.username +
         "/" + req.params.password;
     console.log(authenticateMicroserviceURL);
-    request.get(authenticateMicroserviceURL,
+    request.get(authenticateMicroserviceURL + '/teste/' + '/teste2/' + teste1.teste2,
         function(error, response, body) {
             if (!error && response.statusCode == 200) {
                 res.json(JSON.parse(response.body));
