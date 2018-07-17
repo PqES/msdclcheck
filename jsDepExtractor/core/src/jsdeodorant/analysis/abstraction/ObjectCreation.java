@@ -3,10 +3,13 @@ package jsdeodorant.analysis.abstraction;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //import org.apache.log4j.Logger;
 
 import com.google.common.base.Strings;
+import com.google.javascript.jscomp.parsing.parser.trees.ClassDeclarationTree;
 import com.google.javascript.jscomp.parsing.parser.trees.NewExpressionTree;
 
 import jsdeodorant.analysis.decomposition.AbstractExpression;
@@ -28,15 +31,28 @@ public class ObjectCreation extends Creation {
 	private List<AbstractExpression> arguments;
 	private boolean isClassDeclarationPredefined = false;
 	private boolean isFunctionObject = false;
+	private boolean isExportedModuleFunctionModule = false;
 	private AbstractIdentifier identifier;
 	private AbstractIdentifier aliasedIdentifier;
 	private Module classDeclarationModule;
+	private String moduleDeclarationLocation;
 
 	public ObjectCreation(NewExpressionTree newExpressionTree, AbstractFunctionFragment statement) {
 		this.newExpressionTree = newExpressionTree;
 		this.statement = statement;
+		String regex = "\\(\\v*[\\'\\\"].+\\.js[\\'\\\"]\\)function";
+		Pattern pattern = Pattern.compile(regex);
+		//Matcher matcher = pattern.matcher(line);
+		//System.out.println("Name: " + IdentifierHelper.getIdentifier(newExpressionTree.operand).identifierName);
 		if (IdentifierHelper.getIdentifier(newExpressionTree.operand).identifierName.equals("function"))
 			setFunctionObject(true);
+		else if(pattern.matcher(IdentifierHelper.getIdentifier(newExpressionTree.operand).identifierName).find()) {
+			String regexName = "[\\'\\\"].+\\.js[\\'\\\"]";
+			Pattern patternName = Pattern.compile(regexName);
+			Matcher matcherName = patternName.matcher(IdentifierHelper.getIdentifier(newExpressionTree.operand).identifierName);
+			this.moduleDeclarationLocation = matcherName.group(0);
+			setExportedModuleFunctionModule(true);
+		}
 	}
 
 	/**
@@ -51,8 +67,18 @@ public class ObjectCreation extends Creation {
 		this.newExpressionTree = newExpressionTree;
 		this.operandOfNew = operandOfNew;
 		this.arguments = arguments;
+		String regex = "\\@\\(\\v*[\\'\\\"].+\\.js[\\'\\\"]\\)function";
+		Pattern pattern = Pattern.compile(regex);
+		
 		if (this.operandOfNew.asIdentifiableExpression().getIdentifier().equals("function"))
 			setFunctionObject(true);
+		else if(pattern.matcher(IdentifierHelper.getIdentifier(newExpressionTree.operand).identifierName).find()) {
+			String regexName = "[\\'\\\"].+\\.js[\\'\\\"]";
+			Pattern patternName = Pattern.compile(regexName);
+			Matcher matcherName = patternName.matcher(IdentifierHelper.getIdentifier(newExpressionTree.operand).identifierName);
+			this.moduleDeclarationLocation = matcherName.group(0);
+			setExportedModuleFunctionModule(true);
+		}
 	}
 
 	public TypeDeclaration getClassDeclaration() {
@@ -148,6 +174,10 @@ public class ObjectCreation extends Creation {
 	public void setFunctionObject(boolean isFunctionObject) {
 		this.isFunctionObject = isFunctionObject;
 	}
+	
+	public void setExportedModuleFunctionModule(boolean isExportedModuleFunctionModule) {
+		this.isExportedModuleFunctionModule = isExportedModuleFunctionModule;
+	}
 
 	public String getClassDeclarationQualifiedName() {
 		if (this.isClassDeclarationPredefined)
@@ -164,6 +194,10 @@ public class ObjectCreation extends Creation {
 	}
 
 	public String getObjectCreationLocation() {
+//		if(this.getClassDeclaration().getFunctionDeclaration().getExportedModuleFunction()) {
+//			return this.getClassDeclaration().getFunctionDeclaration().getModuleDeclarationLocation();
+//		}
+		System.err.println("Local da criação do objeto: " + this.newExpressionTree.location.toString());
 		return this.newExpressionTree.location.toString();
 				//this.newExpressionTree.location.toString();
 	//	return SourceLocationHelper.getLocation(this.newExpressionTree.location);
@@ -171,13 +205,25 @@ public class ObjectCreation extends Creation {
 
 	public String getClassDeclarationLocation() {
 		if (this.getClassDeclaration() != null) {
-			return classDeclarationModule.getCanonicalPath() + "." + this.getClassDeclaration().getFunctionDeclaration().getName();
-					//+ this.getClassDeclaration().getFunctionDeclaration().getFunctionDeclarationTree().location.toString();
+			if (this.getClassDeclaration().getFunctionDeclaration().getExportedModuleFunction()){
+				return this.getClassDeclaration().getFunctionDeclaration().getModuleDeclarationLocation();
+			}
+			if(this.isExportedModuleFunctionModule) {
+				return this.moduleDeclarationLocation;
+			}
+			//return classDeclarationModule.getCanonicalPath() + "." + this.getClassDeclaration().getFunctionDeclaration().getName();
+			return classDeclarationModule.getCanonicalPath() + "."+ this.getClassDeclaration().getFunctionDeclaration().getFunctionDeclarationTree().location.toString();
 			//return SourceLocationHelper.getLocation();
 		}
 
-		else
+		else {
+			if (this.isClassDeclarationPredefined) {
+	//			System.out.println("Local declaration predefined:  " +"js."+this.getOperandOfNewName() );
+				return "js."+this.getOperandOfNewName();
+			}
 			return "";
+		}
+			
 	}
 
 	public Module getClassDeclarationModule() {
@@ -186,5 +232,20 @@ public class ObjectCreation extends Creation {
 
 	public void setClassDeclarationModule(Module classDeclarationModule) {
 		this.classDeclarationModule = classDeclarationModule;
+	}
+
+	public String getModuleDeclarationLocation() {
+		return moduleDeclarationLocation;
+	}
+
+	public void setModuleDeclarationLocation(String moduleDeclarationLocation) {
+		this.moduleDeclarationLocation = moduleDeclarationLocation;
+	}
+
+	public boolean isExportedModuleFunctionModule() {
+		return isExportedModuleFunctionModule;
+	}
+	public boolean setIsExportedModuleFunctionModule(Boolean isExportedModuleFunctionModule) {
+		return isExportedModuleFunctionModule = isExportedModuleFunctionModule;
 	}
 }

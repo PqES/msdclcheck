@@ -1,8 +1,10 @@
 package jsdeodorant.analysis.decomposition;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.javascript.jscomp.SourceFile;
 import com.google.javascript.jscomp.parsing.parser.trees.ParseTree;
 
 import jsdeodorant.analysis.abstraction.SourceContainer;
@@ -14,17 +16,18 @@ public class CompositeStatement extends AbstractStatement implements SourceConta
 	private List<AbstractStatement> statementList;
 	private List<AbstractExpression> expressionList;
 
-	public CompositeStatement(ParseTree statement, StatementType type, SourceContainer parent) {
+	public CompositeStatement(ParseTree statement, StatementType type, SourceContainer parent, SourceFile sourceFile) throws IOException {
 		super(statement, type, parent);
 		statementList = new ArrayList<>();
 		expressionList = new ArrayList<>();
+		
 		// Following lines are experimental, should be double checked!
 		ExpressionExtractor expressionExtractor = new ExpressionExtractor();
-		processFunctionInvocations(expressionExtractor.getCallExpressions(statement));
-		processVariableDeclarations(expressionExtractor.getVariableDeclarationExpressions(statement));
-		processNewExpressions(expressionExtractor.getNewExpressions(statement));
+		processFunctionInvocations(expressionExtractor.getCallExpressions(statement),sourceFile);
 		processArrayLiteralExpressions(expressionExtractor.getArrayLiteralExpressions(statement));
 		processAssignmentExpressions(expressionExtractor.getBinaryOperators(statement));
+		processVariableDeclarations(expressionExtractor.getVariableDeclarationExpressions(statement));
+		processNewExpressions(expressionExtractor.getNewExpressions(statement), sourceFile);
 	}
 
 	@Override

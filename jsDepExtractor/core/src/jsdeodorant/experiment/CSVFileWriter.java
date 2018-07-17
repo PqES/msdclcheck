@@ -13,12 +13,12 @@ public class CSVFileWriter {
 	private Path path;
 
 	public CSVFileWriter(String filePath) {
-		System.out.println("Original file path: " +  filePath);
+	//	System.out.println("Original file path: " +  filePath);
 		filePath.replace(".-", "-");
 		filePath.replace("..", ".");
-		System.out.println("Modified file path: " + filePath);
+		//System.out.println("Modified file path: " + filePath);
 		try {
-			System.out.println("path para cirar o arquivo: " + filePath);
+		//	System.out.println("path para cirar o arquivo: " + filePath);
 			path = Paths.get(filePath);
 			if (Files.exists(path))
 				Files.delete(path);

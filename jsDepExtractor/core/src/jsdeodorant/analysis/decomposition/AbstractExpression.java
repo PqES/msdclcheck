@@ -1,8 +1,11 @@
 package jsdeodorant.analysis.decomposition;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import com.google.javascript.jscomp.SourceFile;
 
 //import org.apache.log4j.Logger;
 
@@ -35,27 +38,29 @@ public class AbstractExpression extends AbstractFunctionFragment {
 		this.expression = expression;
 	}
 
-	public AbstractExpression(ParseTree expression, SourceContainer parent) {
+	public AbstractExpression(ParseTree expression, SourceContainer parent, SourceFile sourceFile ) throws IOException {
 		super(parent);
 		this.expression = expression;
 		ExpressionExtractor expressionExtractor = new ExpressionExtractor();
-		processFunctionInvocations(expressionExtractor.getCallExpressions(expression));
+		processFunctionInvocations(expressionExtractor.getCallExpressions(expression),sourceFile);
 		processVariableDeclarations(expressionExtractor.getVariableDeclarationExpressions(expression));
-		processNewExpressions(expressionExtractor.getNewExpressions(expression));
 		processArrayLiteralExpressions(expressionExtractor.getArrayLiteralExpressions(expression));
 		processAssignmentExpressions(expressionExtractor.getBinaryOperators(expression));
+		processNewExpressions(expressionExtractor.getNewExpressions(expression),sourceFile);
+
 	}
 
-	public AbstractExpression(ParseTree expression, SourceContainer parent, boolean processInside) {
+	public AbstractExpression(ParseTree expression, SourceContainer parent, boolean processInside, SourceFile sourceFile) throws IOException {
 		super(parent);
 		this.expression = expression;
 		if (processInside) {
 			ExpressionExtractor expressionExtractor = new ExpressionExtractor();
-			processFunctionInvocations(expressionExtractor.getCallExpressions(expression));
+			processFunctionInvocations(expressionExtractor.getCallExpressions(expression),sourceFile);
 			processVariableDeclarations(expressionExtractor.getVariableDeclarationExpressions(expression));
-			processNewExpressions(expressionExtractor.getNewExpressions(expression));
 			processArrayLiteralExpressions(expressionExtractor.getArrayLiteralExpressions(expression));
 			processAssignmentExpressions(expressionExtractor.getBinaryOperators(expression));
+			processNewExpressions(expressionExtractor.getNewExpressions(expression),sourceFile);
+
 		}
 	}
 

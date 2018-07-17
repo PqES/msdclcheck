@@ -33,7 +33,7 @@ public class AnalysisOptions {
 	private ClassAnalysisMode classAnalysisMode;
 	private List<AnalysisObserver> analysisObservers = new ArrayList<>();
 
-	public boolean hasClassAnlysis() {
+	public boolean hasClassAnalysis() {
 		return classAnalysis;
 	}
 
@@ -41,7 +41,7 @@ public class AnalysisOptions {
 		this.classAnalysis = classAnlysis;
 	}
 
-	public boolean hasFunctionAnlysis() {
+	public boolean hasFunctionAnalysis() {
 		return functionAnalysis;
 	}
 

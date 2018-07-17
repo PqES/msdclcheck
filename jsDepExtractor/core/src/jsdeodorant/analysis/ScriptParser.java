@@ -62,10 +62,10 @@ public class ScriptParser {
 			return com.google.javascript.jscomp.parsing.parser.Parser.Config.Mode.ES5;
 		case ECMASCRIPT5_STRICT:
 			return com.google.javascript.jscomp.parsing.parser.Parser.Config.Mode.ES5_STRICT;
+//		case ECMASCRIPT6:
+//			return com.google.javascript.jscomp.parsing.parser.Parser.Config.Mode.ES6;
 		case ECMASCRIPT6:
 			return com.google.javascript.jscomp.parsing.parser.Parser.Config.Mode.ES6;
-		case ECMASCRIPT6_STRICT:
-			return com.google.javascript.jscomp.parsing.parser.Parser.Config.Mode.ES6_STRICT;
 		default:
 			throw new IllegalStateException("unexpected");
 		}

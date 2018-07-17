@@ -2,6 +2,7 @@ package jsdeodorant.analysis.abstraction;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import com.google.javascript.jscomp.parsing.parser.trees.CallExpressionTree;
 
@@ -28,6 +29,10 @@ public class FunctionInvocation {
 		this.member = member;
 		this.operand = operand;
 		this.arguments = arguments;
+		
+		String regex = "\\(\\v*[\\'\\\"].+\\.js[\\'\\\"]\\)function";
+		Pattern pattern = Pattern.compile(regex);
+		//Matcher matcher = pattern.matcher(line);
 	}
 
 	public String getMemberName() {
@@ -132,8 +137,13 @@ public class FunctionInvocation {
 	}
 
 	public String getFunctionDeclarationLocation() {
-		if (this.functionDeclaration != null)
+		if (this.functionDeclaration != null) {
+			if(this.functionDeclaration.getExportedModuleFunction()){
+				return functionDeclaration.getModuleDeclarationLocation();
+			}
 			return SourceLocationHelper.getLocation(this.functionDeclaration.getFunctionDeclarationTree().location);
+		}
+		
 		else
 			return "";
 	}

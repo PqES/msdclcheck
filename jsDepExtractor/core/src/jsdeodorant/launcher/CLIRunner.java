@@ -50,8 +50,8 @@ public class CLIRunner extends Runner {
 			args2[1] = "-class-analysis";
 			args2[2] = "-module-analysis";
 			args2[3] = "-package-system";
-			//args2[4] = "CommonJS";
-			args2[4] = "ClosureLibrary";
+			args2[4] = "CommonJS";
+		//	args2[4] = "ClosureLibrary";
 			args2[5] = "-analyze-lbClasses";
 			args2[6] ="-builtin-libraries";
 			args2[7] = "-externs";
@@ -67,7 +67,7 @@ public class CLIRunner extends Runner {
 		//	reader.nextLine();
 			CLIRunner.initializeCommandLine(args2);
 			System.out.println("FLAGS?");
-		//	reader.nextLine();
+		//	reader.nextLine();null
 			if (flags.getHelp()) {
 				parser.printUsage(System.err);
 				return;
@@ -77,7 +77,7 @@ public class CLIRunner extends Runner {
 		//	reader.nextLine();
 			runner.configureOptions();
 			System.out.println("PERFORM ACTIONS?");
-			runner.performActions();
+			runner.performActions(path);
 			//runToolForInnerModules(runner, flags.directoryPath() + "/node_modules");
 		} catch (CmdLineException | IOException e) {
 			parser.printUsage(System.err);
@@ -85,7 +85,7 @@ public class CLIRunner extends Runner {
 		}
 	}
 
-	private static void runToolForInnerModules(CLIRunner runner, String nodeModuleFolder) throws IOException {
+	private static void runToolForInnerModules(CLIRunner runner, String nodeModuleFolder, String path) throws IOException {
 		//runner.inputs
 		List<String> modules = FileUtil.getDirectoriesInDirectory(nodeModuleFolder);
 		if (modules == null)
@@ -103,8 +103,8 @@ public class CLIRunner extends Runner {
 				}
 			});
 			runner.configureOptions();
-			runner.performActions();
-			runToolForInnerModules(runner, innerModulePath + File.separator + "node_modules");
+			runner.performActions(path);
+			runToolForInnerModules(runner, innerModulePath + File.separator + "node_modules", path);
 		}
 
 	}

@@ -24,7 +24,7 @@ import jsdeodorant.analysis.util.JSONReader;
 import jsdeodorant.analysis.util.StringUtil;
 
 public class CommonJSRequireHelper implements PackageImporter {
-//	static Logger log = Logger.getLogger(CommonJSRequireHelper.class.getName());
+	// static Logger log = Logger.getLogger(CommonJSRequireHelper.class.getName());
 	private AbstractIdentifier requireIdentifier;
 	private File moduleFile;
 	private Module currentModule;
@@ -69,10 +69,12 @@ public class CommonJSRequireHelper implements PackageImporter {
 		}
 	}
 
-	private void matchWithCanonicalPath(String moduleCanonicalPath, AbstractExpression abstractExpression) throws IOException {
+	private void matchWithCanonicalPath(String moduleCanonicalPath, AbstractExpression abstractExpression)
+			throws IOException {
 		for (Module module : modules) {
 			if (new File(module.getSourceFile().getOriginalPath()).getCanonicalPath().equals(moduleCanonicalPath)) {
 				currentModule.addDependency(requireIdentifier.toString(), module, abstractExpression);
+	//			System.err.println("Modules: " + module.toString());
 				return;
 			}
 		}
@@ -102,9 +104,17 @@ public class CommonJSRequireHelper implements PackageImporter {
 	private boolean checkIfCallExpressionIsRequireStatement(ParseTree node) {
 		if (node instanceof CallExpressionTree) {
 			CallExpressionTree callExpression = node.asCallExpression();
+	//		System.out.println("CallExpression:  "+IdentifierHelper.getIdentifier(callExpression.operand).toString());
 			if (IdentifierHelper.getIdentifier(callExpression.operand).toString().equals("require")) {
-				if (callExpression.arguments.arguments.size() > 0)
-					moduleFile = normalizeModuleName(IdentifierHelper.getIdentifier(callExpression.arguments.arguments.get(0)).getIdentifierName());
+				if (callExpression.arguments.arguments.size() > 0) {
+					for(ParseTree a : callExpression.arguments.arguments) {
+	//						System.out.println("Função: "+IdentifierHelper.getIdentifier(a).getIdentifierName());
+
+					}
+					moduleFile = normalizeModuleName(IdentifierHelper
+							.getIdentifier(callExpression.arguments.arguments.get(0)).getIdentifierName());
+
+				}
 				if (moduleFile == null)
 					return false;
 				return true;
@@ -114,6 +124,7 @@ public class CommonJSRequireHelper implements PackageImporter {
 	}
 
 	private File normalizeModuleName(String moduleName) {
+	//	System.out.println("Nome a ser normalizado: " + moduleName);
 		String moduleNameWithExtension = moduleName.replace("\'", "");
 		moduleName = moduleName.replace("\'", "");
 
@@ -158,11 +169,11 @@ public class CommonJSRequireHelper implements PackageImporter {
 			try {
 				String mainFilePath = reader.getElementFromObject(packageConfigFile.getCanonicalPath(), "main");
 				if (!StringUtil.isNullOrEmpty(mainFilePath))
-				//	moduleFile = new File(path + "/node_modules/" + moduleName + "/" + mainFilePath);
-				if (moduleFile.exists())
-					return moduleFile;
+					// moduleFile = new File(path + "/node_modules/" + moduleName + "/" +
+					// mainFilePath);
+					if (moduleFile.exists())
+						return moduleFile;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 

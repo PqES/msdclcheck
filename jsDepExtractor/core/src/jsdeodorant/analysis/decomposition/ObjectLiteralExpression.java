@@ -1,5 +1,6 @@
 package jsdeodorant.analysis.decomposition;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.Map;
 
 
 import com.google.common.collect.ImmutableList;
+import com.google.javascript.jscomp.SourceFile;
 import com.google.javascript.jscomp.parsing.parser.Token;
 import com.google.javascript.jscomp.parsing.parser.trees.FunctionDeclarationTree;
 import com.google.javascript.jscomp.parsing.parser.trees.ObjectLiteralExpressionTree;
@@ -29,8 +31,8 @@ public class ObjectLiteralExpression extends AbstractExpression implements Sourc
 	private Map<Token, AbstractExpression> propertyMap;
 	private ObjectLiteralExpressionTree objectLiteralTree;
 
-	public ObjectLiteralExpression(ObjectLiteralExpressionTree objectLiteralTree, SourceContainer parent) {
-		super(objectLiteralTree, parent);
+	public ObjectLiteralExpression(ObjectLiteralExpressionTree objectLiteralTree, SourceContainer parent, SourceFile sourceFile) throws IOException {
+		super(objectLiteralTree, parent,sourceFile);
 		this.objectLiteralTree = objectLiteralTree;
 		ImmutableList<ParseTree> nameAndValues = objectLiteralTree.propertyNameAndValues;
 		this.propertyMap = new LinkedHashMap<>();
@@ -43,11 +45,11 @@ public class ObjectLiteralExpression extends AbstractExpression implements Sourc
 				AbstractExpression valueExpression = null;
 				if (value instanceof FunctionDeclarationTree) {
 					FunctionDeclarationTree functionDeclarationTree = (FunctionDeclarationTree) value;
-					valueExpression = new FunctionDeclarationExpression(functionDeclarationTree, FunctionDeclarationExpressionNature.OBJECT_LITERAL, this);
+					valueExpression = new FunctionDeclarationExpression(functionDeclarationTree, FunctionDeclarationExpressionNature.OBJECT_LITERAL, this,sourceFile);
 					((FunctionDeclarationExpression) valueExpression).setLeftValueToken(token);
 				} else if (value instanceof ObjectLiteralExpressionTree) {
 					ObjectLiteralExpressionTree objectLiteralExpressionTree = (ObjectLiteralExpressionTree) value;
-					valueExpression = new ObjectLiteralExpression(objectLiteralExpressionTree, this);
+					valueExpression = new ObjectLiteralExpression(objectLiteralExpressionTree, this,sourceFile);
 				} else {
 					valueExpression = new AbstractExpression(value);
 				}

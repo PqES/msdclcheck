@@ -1,5 +1,6 @@
 package jsdeodorant.analysis;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -20,6 +21,7 @@ public class CompositePostProcessor {
 //	static Logger log = Logger.getLogger(CompositePostProcessor.class.getName());
 
 	public static void processFunctionDeclarationsToFindClasses(Module module, ClassAnalysisMode classInferenceMode) {
+		Set<String>predefinedClassJs = new HashSet<>();
 		Program program = module.getProgram();
 //		log.debug("Analysing ObjectCreation in: " + module.getSourceFile().getName());
 		for (ObjectCreation objectCreation : program.getObjectCreationList()) {
@@ -27,7 +29,11 @@ public class CompositePostProcessor {
 				continue;
 
 			if (!findFunctionDeclaration(objectCreation, module)) {
-				findPredefinedClasses(program, objectCreation, module);
+				if(findPredefinedClasses(program, objectCreation, module)) {
+					predefinedClassJs.add(objectCreation.getOperandOfNewName());
+					
+				}
+					
 			}
 		}
 //		log.debug("Performing  ClassInference analysis in: " + module.getSourceFile().getName());
@@ -40,35 +46,6 @@ public class CompositePostProcessor {
 			System.err.println("class Inference mode need to be set");
 	}
 
-	// MOVED TO JSPRoject
-//	public static void processModules(Module module, List<Module> modules, PackageSystem packageSystem, boolean onlyExports) {
-//		PackageImporter packageImporter = null;
-//		PackageExporter packageExporter = null;
-//		switch (packageSystem) {
-//		case CommonJS:
-//			if (!onlyExports)
-//				packageImporter = new CommonJSRequireHelper(module, modules);
-//			packageExporter = new CommonJSExportHelper(module, modules);
-//			break;
-//		case ClosureLibrary:
-//			if (!onlyExports)
-//				packageImporter = new ClosureLibraryImportHelper(module, modules);
-//			packageExporter = new ClosureLibraryExportHelper(module, modules);
-//			break;
-//		default:
-//			break;
-//		}
-//
-//		Program program = module.getProgram();
-//		for (SourceElement element : program.getSourceElements()) {
-//			if (element instanceof Statement) {
-//				Statement statement = (Statement) element;
-//				if (!onlyExports)
-//					packageImporter.extract(statement.getStatement());
-//				packageExporter.extract(statement.getStatement());
-//			}
-//		}
-//	}
 
 	public static void processFunctionInvocations(Module module) {
 		Program program = module.getProgram();
@@ -162,7 +139,7 @@ public class CompositePostProcessor {
 
 	private static boolean matchFunctionDeclarationAndObjectCreation(ObjectCreation objectCreation, AbstractIdentifier aliasedObjectCreation, FunctionDeclaration functionDeclaration, Module module) {
 		String functionQualifiedName = functionDeclaration.getQualifiedName();
-
+		
 		if (functionQualifiedName.equals(aliasedObjectCreation.toString())) {
 			TypeDeclaration classDeclaration=module.createTypeDeclaration(functionDeclaration.getRawIdentifier(), functionDeclaration, false, !objectCreation.getAliasedIdentifier().equals(objectCreation.getIdentifier()));
 			objectCreation.setClassDeclaration(classDeclaration, module);

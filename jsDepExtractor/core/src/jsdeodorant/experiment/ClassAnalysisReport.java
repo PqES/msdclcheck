@@ -356,6 +356,7 @@ public class ClassAnalysisReport {
 	}
 
 	public static void writeToCSV() {
+		// file para criar as declarações de classes
 		CSVFileWriter csvWriter = new CSVFileWriter("log/classes/class-declarations.csv");
 		System.out.println("função de criar o CSV");
 		String fileHeader = "Class name, kind,file, Is Predefined, Class offset, has new expression, has inferred, Constructor Lines of codes, Total class Lines of codes, Has Namespace, Number of Methods, Number of attributes, Is Declaration in library?, is Aliased?, Number of instantiation, InferenceType, hasConstructor, numAbstractMethods, numOverridenMethods, numOverridingMethods";

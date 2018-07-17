@@ -3,15 +3,19 @@ package jsdeodorant.analysis.abstraction;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.javascript.jscomp.parsing.parser.trees.CallExpressionTree;
+import com.google.javascript.jscomp.parsing.parser.trees.ParseTree;
+
 import jsdeodorant.analysis.decomposition.AbstractExpression;
 import jsdeodorant.analysis.decomposition.AbstractFunctionFragment;
 import jsdeodorant.analysis.decomposition.AbstractStatement;
 import jsdeodorant.analysis.decomposition.FunctionDeclaration;
 import jsdeodorant.analysis.decomposition.ObjectLiteralExpression;
+import jsdeodorant.analysis.util.IdentifierHelper;
 import jsdeodorant.language.PredefinedClasses;
 
 public class Program implements SourceContainer {
-	//private static final Logger log = Logger.getLogger(Program.class.getName());
+	// private static final Logger log = Logger.getLogger(Program.class.getName());
 	private List<SourceElement> sourceElements;
 
 	public Program() {
@@ -20,12 +24,13 @@ public class Program implements SourceContainer {
 
 	public void addSourceElement(SourceElement source) {
 		sourceElements.add(source);
-	//	if (source instanceof AbstractStatement)
-	//		log.debug(String.format("add %s to source program", ((AbstractStatement) source).getStatement().toString()));
+		// if (source instanceof AbstractStatement)
+		// log.debug(String.format("add %s to source program", ((AbstractStatement)
+		// source).getStatement().toString()));
 		/*
 		 * else if (source instanceof FunctionDeclaration)
-		 * log.debug(String.format("add %s function to program",
-		 * ((FunctionDeclaration) source).getName()));
+		 * log.debug(String.format("add %s function to program", ((FunctionDeclaration)
+		 * source).getName()));
 		 */
 	}
 
@@ -46,8 +51,12 @@ public class Program implements SourceContainer {
 				for (Creation creation : abstractFunctionFragment.getCreations())
 					if (creation instanceof ObjectCreation) {
 						ObjectCreation objectCreation = (ObjectCreation) creation;
-						if (!objectCreation.getOperandOfNew().toString().equalsIgnoreCase(PredefinedClasses.Array.toString()))
+						if (!objectCreation.getOperandOfNew().toString()
+								.equalsIgnoreCase(PredefinedClasses.Array.toString())) {
 							objectCreations.add(objectCreation);
+					//		System.err.println("Pegou a criação!!!");
+
+						}
 					}
 			}
 		}
@@ -62,7 +71,8 @@ public class Program implements SourceContainer {
 				for (Creation creation : abstractFunctionFragment.getCreations())
 					if (creation instanceof ObjectCreation) {
 						ObjectCreation objectCreation = (ObjectCreation) creation;
-						if (objectCreation.getOperandOfNew().toString().equalsIgnoreCase(PredefinedClasses.Array.toString()))
+						if (objectCreation.getOperandOfNew().toString()
+								.equalsIgnoreCase(PredefinedClasses.Array.toString()))
 							objectCreations.add(objectCreation);
 					}
 			}
@@ -105,15 +115,15 @@ public class Program implements SourceContainer {
 		return functionDeclarations;
 	}
 
+	
 	public List<FunctionInvocation> getFunctionInvocationList() {
 		List<FunctionInvocation> functionInvocations = new ArrayList<>();
 		for (SourceElement sourceElement : sourceElements) {
 			if (sourceElement instanceof AbstractFunctionFragment) {
 				AbstractFunctionFragment abstractFunctionFragment = (AbstractFunctionFragment) sourceElement;
-				for (FunctionInvocation functionInvocation : abstractFunctionFragment.getFunctionInvocationList())
+				for (FunctionInvocation functionInvocation : abstractFunctionFragment.getFunctionInvocationList()) {
 					functionInvocations.add(functionInvocation);
-				// TODO check if AnonymousFunctionDeclaration can be in the root
-				// of program
+				}
 			} else if (sourceElement instanceof FunctionInvocation)
 				functionInvocations.add((FunctionInvocation) sourceElement);
 		}
@@ -125,8 +135,10 @@ public class Program implements SourceContainer {
 		for (SourceElement sourceElement : sourceElements) {
 			if (sourceElement instanceof AbstractFunctionFragment) {
 				AbstractFunctionFragment abstractFunctionFragment = (AbstractFunctionFragment) sourceElement;
-				for (VariableDeclaration variableDeclaration : abstractFunctionFragment.getVariableDeclarationList())
+				for (VariableDeclaration variableDeclaration : abstractFunctionFragment.getVariableDeclarationList()) {
 					variableDeclarations.add(variableDeclaration);
+
+				}
 			} else if (sourceElement instanceof VariableDeclaration)
 				variableDeclarations.add((VariableDeclaration) sourceElement);
 		}

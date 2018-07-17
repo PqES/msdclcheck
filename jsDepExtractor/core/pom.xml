@@ -12,18 +12,18 @@
 		<sourceDirectory>${project.basedir}/src</sourceDirectory>
 		<testSourceDirectory>${project.basedir}/test</testSourceDirectory>
 		<plugins>
-		<plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifest>
-              <addClasspath>true</addClasspath>
-              <mainClass>ca.concordia.jsdeodorant.launcher.CLIRunner</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
-      </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>ca.concordia.jsdeodorant.launcher.CLIRunner</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
@@ -58,8 +58,15 @@
 		<dependency>
 			<groupId>com.google.javascript</groupId>
 			<artifactId>closure-compiler</artifactId>
-			<version>v20151216</version>
+			<version>v20160315</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.javascript/closure-compiler -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.google.javascript</groupId> -->
+<!-- 			<artifactId>closure-compiler</artifactId> -->
+<!-- 			<version>v20180610</version> -->
+<!-- 		</dependency> -->
+
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>

@@ -49,14 +49,12 @@ import com.google.javascript.jscomp.parsing.parser.trees.LiteralExpressionTree;
 import com.google.javascript.jscomp.parsing.parser.trees.MemberExpressionTree;
 import com.google.javascript.jscomp.parsing.parser.trees.MemberLookupExpressionTree;
 import com.google.javascript.jscomp.parsing.parser.trees.MissingPrimaryExpressionTree;
-import com.google.javascript.jscomp.parsing.parser.trees.ModuleImportTree;
 import com.google.javascript.jscomp.parsing.parser.trees.NewExpressionTree;
 import com.google.javascript.jscomp.parsing.parser.trees.NullTree;
 import com.google.javascript.jscomp.parsing.parser.trees.ObjectLiteralExpressionTree;
 import com.google.javascript.jscomp.parsing.parser.trees.ObjectPatternTree;
 import com.google.javascript.jscomp.parsing.parser.trees.ParenExpressionTree;
 import com.google.javascript.jscomp.parsing.parser.trees.ParseTree;
-import com.google.javascript.jscomp.parsing.parser.trees.PostfixExpressionTree;
 import com.google.javascript.jscomp.parsing.parser.trees.ProgramTree;
 import com.google.javascript.jscomp.parsing.parser.trees.PropertyNameAssignmentTree;
 import com.google.javascript.jscomp.parsing.parser.trees.RestParameterTree;
@@ -127,10 +125,11 @@ public class ExpressionExtractor {
 		return getExpressions(element);
 	}
 
-	public List<ParseTree> getPostfixExpressions(ParseTree element) {
-		instanceChecker = new InstanceOfPostfixExpression();
-		return getExpressions(element);
-	}
+//	public List<ParseTree> getPostfixExpressions(ParseTree element) {
+//		instanceChecker = new InstanceOfPostfixExpression();
+//		return getExpressions(element);
+	//}
+	
 
 	public List<ParseTree> getArrayPatterns(ParseTree element) {
 		instanceChecker = new InstanceOfArrayPattern();
@@ -410,14 +409,14 @@ public class ExpressionExtractor {
 				expressionList.add(memberExpression);
 		}
 
-		else if (element instanceof PostfixExpressionTree) {
-			PostfixExpressionTree postfixExpression = element.asPostfixExpression();
-
-			expressionList.addAll(getExpressions(postfixExpression.operand));
-
-			if (instanceChecker.instanceOf(postfixExpression))
-				expressionList.add(postfixExpression);
-		}
+//		else if (element instanceof PostfixExpressionTree) {
+//			PostfixExpressionTree postfixExpression = element.asPostfixExpression();
+//
+//			expressionList.addAll(getExpressions(postfixExpression.operand));
+//
+//			if (instanceChecker.instanceOf(postfixExpression))
+//				expressionList.add(postfixExpression);
+//		}
 
 		else if (element instanceof UnaryExpressionTree) {
 			UnaryExpressionTree unaryExpression = element.asUnaryExpression();
@@ -722,12 +721,12 @@ public class ExpressionExtractor {
 				expressionList.add(computedPropertySetterDefinitionExpression);
 		}
 
-		else if (element instanceof ModuleImportTree) {
-			ModuleImportTree moduleImportExpression = element.asModuleImport();
-
-			if (instanceChecker.instanceOf(moduleImportExpression))
-				expressionList.add(moduleImportExpression);
-		}
+//		else if (element instanceof ModuleImportTree) {
+//			ModuleImportTree moduleImportExpression = element.asModuleImport();
+//
+//			if (instanceChecker.instanceOf(moduleImportExpression))
+//				expressionList.add(moduleImportExpression);
+//		}
 
 		else if (element instanceof ExportDeclarationTree) {
 			ExportDeclarationTree exportDeclarationExpression = element.asExportDeclaration();
