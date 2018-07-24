@@ -89,7 +89,7 @@ function getFunctionExportName() {
 function checkRest(node){
 
      if(node.callee.property.name === 'get' || node.callee.property.name === 'delete' || node.callee.property.name === 'post'
-     || node.callee.property.name === 'update' && node.callee.object.name !== 'app'){
+     || node.callee.property.name === 'update'){
 
           return true;
      }
@@ -97,7 +97,7 @@ function checkRest(node){
      return false;
 }
 
-function getNodeValue(ast, n_node, parentStart){
+function getNodeValue(ast, n_node, parent_node){
 
      if(n_node.type === 'Identifier'){
           if (identifierIsParam(n_node.name)) {
@@ -108,6 +108,7 @@ function getNodeValue(ast, n_node, parentStart){
      // let nextNode
 
      let newAST = espree.parse(code);
+
 
      let removing = estraverse.replace(newAST, {
           enter: function(node, parent) {
@@ -122,13 +123,16 @@ function getNodeValue(ast, n_node, parentStart){
                          while (actualNode.type === 'MemberExpression') {
                               actualNode = actualNode.object;
                          }
-                         if (identifierIsParam(actualNode.name)) {
-                              retNode = espree.parse("''");
+                         if (identifierIsParam(actualNode.name) ) {
+                              retNode = {
+                                   type: 'Literal',
+                                   value: ''
+                              };
                          }
                     }
                }
-               if (node.start === parentStart) {
-                    retNode = espree.parse('module.exports.SECRET_VAR_STRING_VALUE = ' + code.substring(n_node.start, n_node.end) + ';');
+               if (node.start === parent_node.start) {
+                    retNode = espree.parse('module.exports.SECRET_VAR_STRING_VALUE = ' + code.substring(n_node.start, n_node.end) );
                     console.log("-------------------------------Substring: " + code.substring(n_node.start, n_node.end));
                }
 
@@ -139,19 +143,25 @@ function getNodeValue(ast, n_node, parentStart){
 
      let codeResult = escodegen.generate(newAST);
 
-     newAST = espree.parse(code);
-
      if(getFunctionExportName() !== undefined)
           codeResult += '\nmodule.exports.' + getFunctionExportName() + '();\n';
+     /*else if(nodeFunction !=== undefined)
+          codeResult += '\nmodule.exports.' +  + '();\n';*/
+
 
 
      let fileTemp = file.substring(0, file.length - 3) + '_temp.js';
      writeCode(codeResult, fileTemp);
-     console.log(codeResult);
+     // console.log(codeResult);
 
-     let aux = require(fileTemp).SECRET_VAR_STRING_VALUE;
-     console.log("-------------------------------Required value: " + aux);
-     return aux;
+
+     let rRequire = require(fileTemp).SECRET_VAR_STRING_VALUE;
+
+     if(rRequire === undefined)
+          return code.substring(n_node.start, n_node.end);
+
+     return rRequire;
+
 }
 
 
@@ -204,9 +214,9 @@ estraverse.traverse(ast, {
                          varRequireFromProject[parent.id.name] = node.arguments[0].value;
                     }
                }
-          } else if(node.type === 'CallExpression'
-          && parent.type === 'VariableDeclarator' && node.callee.type === 'MemberExpression'
-          && node.callee.object.name === 'express'){
+          }
+
+          if(node.type === 'CallExpression' && node.callee.name === 'express'){
                requireVarName.push(parent.id.name);
           }
           // nó de chamada de função pelo membro de um objeto, onde este objeto foi importado
@@ -222,99 +232,129 @@ estraverse.traverse(ast, {
                while (lastFunction !== undefined &&
                     lastFunction.end < node.end) {
                          lastFunction = actualFunction.pop();
+               }
+               if (lastFunction !== undefined) {
+                    let funcionId = 'f' + lastFunction.start;
+                    if (requestDependencyFromFunctions[funcionId] === undefined) {
+                         requestDependencyFromFunctions[funcionId] = [];
+                    }
+                    requestDependencyFromFunctions[funcionId].push(requestDependency);
+                    actualFunction.push(lastFunction);
+               } else {
+                    requestDependencyFromFunctions['global'].push(requestDependency);
+               }
+          }
+
+               // nó de chamada de função pelo objeto de uma biblioteca de requisições
+          if ((node.type === 'CallExpression' &&
+          ((node.callee.type === 'MemberExpression' &&
+          requireVarName.contains(node.callee.object.name) && checkRest(node)) ||
+          (node.callee.type === 'Identifier' &&
+          requireVarName.contains(node.callee.name))) && node.arguments.length > 0)) {
+
+               let requestURL;
+
+
+               var parent_aux = 0;
+
+               if(parent.type === 'CallExpression')
+                    parent_aux = parent;
+               else
+                    parent_aux = node;
+
+               // console.log(parent);
+
+               requestURL = getNodeValue(ast, node.arguments[0], parent_aux);
+
+               console.log("REQUESTED URLD: " + requestURL);
+
+               fs.unlinkSync(file.substring(0, file.length - 3) + '_temp.js', (err) => {if (err) throw err;});
+
+               delete require.cache[require.resolve(file.substring(0, file.length - 3) + '_temp.js')];
+
+               requestMs.push(requestURL);
+
+               let lastFunction = actualFunction.pop();
+               while (lastFunction !== undefined &&
+                    lastFunction.end < node.end) {
+                         lastFunction = actualFunction.pop();
                     }
                     if (lastFunction !== undefined) {
                          let funcionId = 'f' + lastFunction.start;
-                         if (requestDependencyFromFunctions[funcionId] === undefined) {
-                              requestDependencyFromFunctions[funcionId] = [];
+                         if (requestMsFromFunctions[funcionId] === undefined) {
+                              requestMsFromFunctions[funcionId] = [];
                          }
-                         requestDependencyFromFunctions[funcionId].push(requestDependency);
+                         requestMsFromFunctions[funcionId].push(requestURL);
                          actualFunction.push(lastFunction);
                     } else {
-                         requestDependencyFromFunctions['global'].push(requestDependency);
+                         requestMsFromFunctions['global'].push(requestURL);
                     }
                }
+               // nó de definição de uma função
+          if (node.type === 'FunctionExpression' ||
+          node.type === 'ArrowFunctionExpression') {
+               let lastFunction = actualFunction.pop();
+               while (lastFunction !== undefined && lastFunction.end < node.end) {
+                    lastFunction = actualFunction.pop();
+               }
+               if (lastFunction !== undefined) {
+                    actualFunction.push(lastFunction);
+               }
+               actualFunction.push(node);
+          }
+          // nó de definição de membro de exportação do módulo do arquivo
+          if (node.type === 'AssignmentExpression' &&
+               node.operator === '=' &&
+               node.left.type === 'MemberExpression' &&
+               node.left.object.type === 'MemberExpression' &&
+               node.left.object.object.name === 'module' &&
+               node.left.object.property.name === 'exports') {
+               if (node.right.type === 'FunctionExpression' ||
+                    node.right.type === 'ArrowFunctionExpression') {
+                    requestMsFromExportsInv['f' + node.right.start] = node.left.property.name;
+                    requestMsFromExports[node.left.property.name] = 'f' + node.right.start;
+               } else if (node.right.type === 'Identifier') {
+                    requestMsFromExportsInv[node.right.name] = node.left.property.name;
+                    requestMsFromExports[node.left.property.name] = node.right.name;
+               }
+          }
+     },
+     leave: function(node, parent) {}
+});
 
-               // nó de chamada de função pelo objeto de uma biblioteca de requisições
-               if ((node.type === 'CallExpression' &&
-               ((node.callee.type === 'MemberExpression' &&
-               requireVarName.contains(node.callee.object.name) && checkRest(node)) ||
-               (node.callee.type === 'Identifier' &&
-               requireVarName.contains(node.callee.name))) && node.arguments.length > 0)) {
 
-                    let requestURL;
+let local_file = __filename;
+local_file = local_file.substring(local_file.indexOf('api'), local_file.length - 1);
 
+let ms_name = local_file.substring(local_file.indexOf('api/'), local_file.indexOf('/index.js'));
 
-                    var parent_aux = 0;
+let output_file = 'communications_' + ms_name + '.txt';
 
-                    if(parent.type === 'CallExpression')
-                         parent_aux = parent.start;
-                    else
-                         parent_aux = node.start;
+console.log("LOCAL FILE: " + local_file);
 
-                    requestURL = getNodeValue(ast, node.arguments[0], parent_aux);
+let input_text;
 
+requestMs.forEach(function(item, index, array){
+     input_text += local_file + ' communicates ' + ms_name + ' using ' + item + '\n';
+});
 
-                    // fs.unlinkSync(file.substring(0, file.length - 3) + '_temp.js', (err) => {if (err) throw err;});
+requestDependencyFromFunctions.forEach(function(item, index, array){
+     input_text += local_file + ' communicates ' + item.file + ' using ' + item.member + '\n';
+});
 
-                    requestMs.push(requestURL);
+requestMsFromFunctions.forEach(function(item, index, array){
+     input_text += local_file + ' communicates ' + ms_name + ' using ' + item + '\n';
+});
 
-                    let lastFunction = actualFunction.pop();
-                    while (lastFunction !== undefined &&
-                         lastFunction.end < node.end) {
-                              lastFunction = actualFunction.pop();
-                         }
-                         if (lastFunction !== undefined) {
-                              let funcionId = 'f' + lastFunction.start;
-                              if (requestMsFromFunctions[funcionId] === undefined) {
-                                   requestMsFromFunctions[funcionId] = [];
-                              }
-                              requestMsFromFunctions[funcionId].push(requestURL);
-                              actualFunction.push(lastFunction);
-                         } else {
-                              requestMsFromFunctions['global'].push(requestURL);
-                         }
-                    }
-                    // nó de definição de uma função
-                    if (node.type === 'FunctionExpression' ||
-                    node.type === 'ArrowFunctionExpression') {
-                         let lastFunction = actualFunction.pop();
-                         while (lastFunction !== undefined &&
-                              lastFunction.end < node.end) {
-                                   lastFunction = actualFunction.pop();
-                              }
-                              if (lastFunction !== undefined) {
-                                   actualFunction.push(lastFunction);
-                              }
-                              actualFunction.push(node);
-                         }
-                         // nó de definição de membro de exportação do módulo do arquivo
-                         if (node.type === 'AssignmentExpression' &&
-                         node.operator === '=' &&
-                         node.left.type === 'MemberExpression' &&
-                         node.left.object.type === 'MemberExpression' &&
-                         node.left.object.object.name === 'module' &&
-                         node.left.object.property.name === 'exports') {
-                              if (node.right.type === 'FunctionExpression' ||
-                              node.right.type === 'ArrowFunctionExpression') {
-                                   requestMsFromExportsInv['f' + node.right.start] = node.left.property.name;
-                                   requestMsFromExports[node.left.property.name] = 'f' + node.right.start;
-                              } else if (node.right.type === 'Identifier') {
-                                   requestMsFromExportsInv[node.right.name] = node.left.property.name;
-                                   requestMsFromExports[node.left.property.name] = node.right.name;
-                              }
-                         }
-                    },
-                    leave: function(node, parent) {}
-               });
+writeCode(output_file, input_text);
 
-               console.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n');
-               console.log("###Relatório###");
-               console.log('requestMs');
-               console.log(requestMs);
-               console.log('requestDependencyFromFunctions');
-               console.log(requestDependencyFromFunctions);
-               console.log('requestMsFromFunctions');
-               console.log(requestMsFromFunctions);
-               console.log('requestMsFromExports');
-               console.log(requestMsFromExports);
+console.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n');
+console.log("###Relatório###");
+console.log('requestMs');
+console.log(requestMs);
+console.log('requestDependencyFromFunctions');
+console.log(requestDependencyFromFunctions);
+console.log('requestMsFromFunctions');
+console.log(requestMsFromFunctions);
+console.log('requestMsFromExports');
+console.log(requestMsFromExports);
