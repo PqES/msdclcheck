@@ -100,12 +100,3 @@
 /home/alfarr/Equals/interno-equals-conciliacaobancaria-master/node-middleware/src/conciliacaoBancaria/attributesSet/attributesSet communicates entries using /cliente/$clientId/conjuntoAtributos/$idAtributoCfg
 /home/alfarr/Equals/interno-equals-conciliacaobancaria-master/node-middleware/src/conciliacaoBancaria/attributesSet/attributesSet communicates entries using /cliente/$clientId/salvarAtributo
 /home/alfarr/Equals/interno-equals-conciliacaobancaria-master/node-middleware/src/conciliacaoBancaria/cities/cities communicates entries using /cidades/$uf
-/home/alfarr/Equals/interno-equals-conciliacaobancaria-master/node-middleware/src/conciliacaoBancaria/client/client communicates authorization using /aplicacao/$applicationId/usuario/$userId/clientes
-/home/alfarr/Equals/interno-equals-conciliacaobancaria-master/node-middleware/src/conciliacaoBancaria/client/client communicates authorization using /aplicacao/$aplicationId/cliente/$clientId/usuario/$idUser/operador
-/home/alfarr/Equals/interno-equals-conciliacaobancaria-master/node-middleware/src/conciliacaoBancaria/client/client communicates authorization using /cliente/$idCliente/usuario/$idUsuario/aplicacoes
-/home/alfarr/Equals/interno-equals-conciliacaobancaria-master/node-middleware/src/conciliacaoBancaria/client/client communicates authorization using /aplicacao/$applicationId/usuario/$userId/clientes
-/home/alfarr/Equals/interno-equals-conciliacaobancaria-master/node-middleware/src/conciliacaoBancaria/client/client communicates authorization using /aplicacao/$aplicationId/cliente/$clientId/usuario/$idUser/operador
-/home/alfarr/Equals/interno-equals-conciliacaobancaria-master/node-middleware/src/conciliacaoBancaria/client/client communicates authorization using /cliente/$idCliente/usuario/$idUsuario/aplicacoes
-/home/alfarr/Equals/interno-equals-conciliacaobancaria-master/node-middleware/src/conciliacaoBancaria/client/client communicates authorization using /aplicacao/$applicationId/usuario/$userId/clientes
-/home/alfarr/Equals/interno-equals-conciliacaobancaria-master/node-middleware/src/conciliacaoBancaria/client/client communicates authorization using /aplicacao/$aplicationId/cliente/$clientId/usuario/$idUser/operador
-/home/alfarr/Equals/interno-equals-conciliacaobancaria-master/node-middleware/src/conciliacaoBancaria/client/client communicates authorization using /cliente/$idCliente/usuario/$idUsuario/aplicacoes
