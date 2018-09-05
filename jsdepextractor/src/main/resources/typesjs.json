@@ -1,0 +1,153 @@
+[
+    {
+        "name": "Array",
+        "defaultMemberType": "Array",
+        "memberTypes": {
+            "length": "Number",
+            "isArray": "Boolean",
+            "every": "Boolean",
+            "find": "Object",
+            "findIndex": "Number",
+            "includes": "Boolean",
+            "indexOf": "Number",
+            "join": "String",
+            "lastIndexOf": "Number",
+            "pop": "Object",
+            "push": "Number",
+            "reduce": "Object",
+            "reduceRight": "Object",
+            "shift": "Object",
+            "some": "Boolean",
+            "toLocaleString": "String",
+            "toString": "String",
+            "unshift": "Number"
+        }
+    },
+    {
+        "name": "Boolean",
+        "defaultMemberType": "Object",
+        "memberTypes": {
+            "toString": "String"
+        }
+    },
+    {
+        "name": "Date",
+        "defaultMemberType": "Number",
+        "memberTypes": {
+            "UTC": "Date",
+            "now": "Date",
+            "parse": "Date",
+            "toDateString": "String",
+            "toISOString": "String",
+            "toLocaleDateString": "String",
+            "toLocaleString": "String",
+            "toString": "String",
+            "toTimeString": "String",
+            "toUTCString": "String"
+        }
+    },
+    {
+        "name": "Error",
+        "defaultMemberType": "Object",
+        "memberTypes": {
+            "message": "String",
+            "name": "String",
+            "toString": "String"
+        }
+    },
+    {
+        "name": "JSON",
+        "defaultMemberType": "Object",
+        "memberTypes": {
+            "parse": "Object",
+            "stringify": "String"
+        }
+    },
+    {
+        "name": "Map",
+        "defaultMemberType": "Object",
+        "memberTypes": {
+            "size": "Number",
+            "delete": "Boolean",
+            "has": "Boolean",
+            "set": "Map"
+        }
+    },
+    {
+        "name": "Math",
+        "defaultMemberType": "Number",
+        "memberTypes": {
+        }
+    },
+    {
+        "name": "Number",
+        "defaultMemberType": "String",
+        "memberTypes": {
+            "isFinite": "Boolean",
+            "isInteger": "Boolean",
+            "isNaN": "Boolean",
+            "isSafeInteger": "Boolean",
+            "parseFloat": "Number",
+            "parseInt": "Number",
+            "valueOf": "Number"
+        }
+    },
+    {
+        "name": "Object",
+        "defaultMemberType": "Object",
+        "memberTypes": {
+            "hasOwnProperty": "Boolean",
+            "isPrototypeOf": "Boolean",
+            "propertyIsEnumerable": "Boolean",
+            "toString": "String"
+        }
+    },
+    {
+        "name": "Promise",
+        "defaultMemberType": "Promise",
+        "memberTypes": {
+        }
+    },
+    {
+        "name": "RegExp",
+        "defaultMemberType": "Object",
+        "memberTypes": {
+            "test": "Boolean",
+            "toString": "String"
+        }
+    },
+    {
+        "name": "Set",
+        "defaultMemberType": "Object",
+        "memberTypes": {
+            "size": "Number",
+            "add": "Set",
+            "delete": "Boolean",
+            "has": "Boolean"
+        }
+    },
+    {
+        "name": "String",
+        "defaultMemberType": "String",
+        "memberTypes": {
+            "length": "Number",
+            "charCodeAt": "Number",
+            "codePointAt": "Number",
+            "endsWith": "Boolean",
+            "includes": "Boolean",
+            "indexOf": "Number",
+            "lastIndexOf": "Number",
+            "localeCompare": "Number",
+            "match": "Array",
+            "search": "Number",
+            "split": "Array",
+            "startsWith": "Boolean"
+        }
+    },
+    {
+        "name": "undefined",
+        "defaultMemberType": "undefined",
+        "memberTypes": {
+        }
+    }
+]
