@@ -16,7 +16,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableEurekaClient
 @EnableDiscoveryClient
 @EnableAutoConfiguration
-//@SpringBootApplication
 @EnableFeignClients(basePackages = {"com.elena.application.MsCustomer.intercomm", "com.elena.application.MsCustomer.controller"})
 @SpringBootApplication(scanBasePackages={"com.elena.application.MsCustomer.intercomm","com.elena.application.MsCustomer.DAO","com.elena.application.MsCustomer.entities","com.elena.application.MsCustomer.controller"})
 public class CustomerApp {

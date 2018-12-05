@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 
-@FeignClient(value="MsProduct",  configuration = FeignConfiguration.class)
+@FeignClient(value="MsProduct")
 public interface CustomerProductInterface {
 	
 	@RequestMapping( method = RequestMethod.GET,value ="/product/getProduct/{id}")
