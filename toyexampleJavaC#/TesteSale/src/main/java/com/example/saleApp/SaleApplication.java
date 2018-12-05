@@ -24,10 +24,10 @@ import org.springframework.web.client.RestTemplate;
 
 
 @SpringBootApplication(scanBasePackages={"com.elena.application.MsSaleSpring.intercomm","com.elena.application.MsSaleSpring.controller"})
-public class TesteSaleApplication {
+public class SaleApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TesteSaleApplication.class, args);
+		SpringApplication.run(SaleApplication.class, args);
 	}
 	
 	 @LoadBalanced
