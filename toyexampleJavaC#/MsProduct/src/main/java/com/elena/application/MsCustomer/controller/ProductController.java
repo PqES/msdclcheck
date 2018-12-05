@@ -20,10 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RestController
 public class ProductController {
 
-	// atributo inserido para retornar uma violação DCL
-	@Autowired
-	private ProductDAO productDAO;
-	
 	@Autowired
 	private ProductService productService;
 
