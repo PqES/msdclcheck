@@ -1,2 +1,0 @@
-Divergence: MsProduct CANNOT_COMMUNICATE MsCustomer (MsProduct communicate MsCustomer using /getCustomer)
-Abscence: MsCustomer MUST_COMMUNICATE MsNewsletter

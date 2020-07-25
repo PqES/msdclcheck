@@ -1,0 +1,10 @@
+	Structural Violates: 
+		[divergence],[inflexion.gestaofinanceira.microservices.plt.audit.AuditApplication,access,org.apache.catalina.deploy.NamingResourcesImpl],[Main can-access-only Controller, SpringApplication, Logger, $java]
+		[divergence],[inflexion.gestaofinanceira.microservices.plt.audit.AuditApplication,access,org.apache.catalina.Context],[Main can-access-only Controller, SpringApplication, Logger, $java]
+		[divergence],[inflexion.gestaofinanceira.microservices.plt.audit.AuditApplication,access,org.apache.catalina.startup.Tomcat],[Main can-access-only Controller, SpringApplication, Logger, $java]
+		[divergence],[inflexion.gestaofinanceira.microservices.plt.audit.AuditApplication,access,org.apache.tomcat.util.descriptor.web.ContextResource],[Main can-access-only Controller, SpringApplication, Logger, $java]
+		[divergence],[inflexion.gestaofinanceira.microservices.plt.audit.AuditApplication,access,org.springframework.jndi.JndiObjectFactoryBean],[Main can-access-only Controller, SpringApplication, Logger, $java]
+		[divergence],[inflexion.gestaofinanceira.microservices.plt.audit.AuditApplication,access,org.springframework.boot.SpringApplication],[Main can-access-only Controller, SpringApplication, Logger, $java]
+		[divergence],[inflexion.gestaofinanceira.microservices.plt.audit.AuditApplication,useannotation,org.springframework.context.annotation.Bean],[Main can-useannotation-only SpringApplication, EurekaCliente, Spring]
+		[divergence],[inflexion.gestaofinanceira.microservices.plt.audit.AuditApplication,useannotation,java.lang.Override],[Main can-useannotation-only SpringApplication, EurekaCliente, Spring]
+		[divergence],[inflexion.gestaofinanceira.microservices.plt.audit.AuditApplication,useannotation,org.springframework.beans.factory.annotation.Value],[Main can-useannotation-only SpringApplication, EurekaCliente, Spring]

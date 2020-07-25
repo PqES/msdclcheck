@@ -1,0 +1,203 @@
+/home/.../conciliacaoBancaria/occurrenceReport/occurrenceReport.js communicates reports using /cliente/$clientId/motivoOcorrencia/relatorio
+
+/home/.../conciliacaoBancaria/occurrenceReport/occurrenceReport.js communicates entries using /cliente/$clientId/atributos
+
+/home/.../conciliacaoBancaria/categories/categories.js communicates entries using /cliente/$clientId/categorias
+
+/home/.../conciliacaoBancaria/categories/categories.js communicates entries using /cliente/$clientId/categoria/$categoryId
+
+/home/.../conciliacaoBancaria/categories/categories.js communicates entries using /cliente/$clientId/categoria
+
+/home/.../conciliacaoBancaria/establishmentGroups/establishmentGroups.js communicates entries using /cliente/$clientId/gruposEstabelecimento
+
+/home/.../conciliacaoBancaria/operator/operatorUtil.js communicates authorization using /aplicacao/$aplicationId/cliente/$clientId/operadores
+
+/home/.../conciliacaoBancaria/operator/operator.js communicates authorization using /operador
+
+/home/.../conciliacaoBancaria/operator/operator.js communicates authorization using /aplicacao/$aplicationId/cliente/$clientId/usuario/$idUser/operador
+
+/home/.../conciliacaoBancaria/operator/operator.js communicates authorization using /aplicacao/$aplicationId/cliente/$clientId/funcionalidade/$functionalityId/operadores
+
+/home/.../conciliacaoBancaria/accessProfile/functionalitiesGroups/functionalitiesGroupsUtil.js communicates authorization using /cliente/$clienteId/aplicacao/$applicationId/gruposFuncionalidades
+
+/home/.../conciliacaoBancaria/accessProfile/accessProfile.js communicates authorization using /perfilAcesso
+
+/home/.../conciliacaoBancaria/accessProfile/accessProfile.js communicates authorization using /cliente/$clientId/aplicacao/$applicationId/perfil/$idProfile
+
+/home/.../conciliacaoBancaria/accessProfile/accessProfileUtil.js communicates authorization using /cliente/$clientId/perfisAcesso
+
+/home/.../conciliacaoBancaria/task/task.js communicates entries using /cliente/$clientId/tarefaEmMassa
+
+/home/.../conciliacaoBancaria/task/task.js communicates entries using /cliente/$clientId/tarefa
+
+/home/.../conciliacaoBancaria/task/task.js communicates entries using /cliente/$clientId/historicoTarefas
+
+/home/.../conciliacaoBancaria/task/task.js communicates entries using /cliente/$clientId/tarefa/ocorrencia
+
+/home/.../conciliacaoBancaria/task/task.js communicates entries using /cliente/$clientId/tarefa/$tarefaId
+
+/home/.../conciliacaoBancaria/task/task.js communicates entries using /cliente/$clientId/tarefa/reabrir
+
+/home/.../conciliacaoBancaria/task/task.js communicates entries using /cliente/$clientId/tarefa/assumir
+
+/home/.../conciliacaoBancaria/manualConciliation/manualConciliation.js communicates conciliation using /cliente/$clientId/conciliacaoManual
+
+/home/.../conciliacaoBancaria/manualConciliation/manualConciliation.js communicates conciliation using /cliente/$clientId/lotes
+
+/home/.../conciliacaoBancaria/manualConciliation/manualConciliation.js communicates conciliation using /cliente/$clientId/conciliacao
+
+/home/.../conciliacaoBancaria/manualConciliation/manualConciliation.js communicates conciliation using /cliente/$clientId/lote/reabrir
+
+/home/.../conciliacaoBancaria/manualConciliation/manualConciliation.js communicates conciliation using /cliente/$clientId/justificativa
+
+/home/.../conciliacaoBancaria/manualConciliation/manualConciliation.js communicates conciliation using /cliente/$clientId/lote/$allotmentId
+
+/home/.../conciliacaoBancaria/manualConciliation/manualConciliation.js communicates entries using /cliente/$clientId/atributos
+
+/home/.../conciliacaoBancaria/manualConciliation/manualConciliation.js communicates entries using /cliente/$clientId/categorias
+
+/home/.../conciliacaoBancaria/conciliationPlan/conciliationPlan.js communicates entries using /cliente/$clientId/planoConciliacao/$conciliationPlanId/find
+
+/home/.../conciliacaoBancaria/conciliationPlan/conciliationPlan.js communicates entries using /cliente/$clientId/planoConciliacao
+
+/home/.../conciliacaoBancaria/conciliationPlan/conciliationPlanUtil.js communicates entries using /cliente/$clientId/planosConciliacao
+
+/home/.../conciliacaoBancaria/states/states.js communicates entries using /estados
+
+/home/.../conciliacaoBancaria/fileUpload/fileUpload.js communicates entries using /cliente/$clientId/layoutArquivo
+
+/home/.../conciliacaoBancaria/fileUpload/fileUpload.js communicates entries using /cliente/$clientId/layoutArquivo/logAuditoria
+
+/home/.../conciliacaoBancaria/financialMovements/financialMovements.js communicates reports using /cliente/$clientId/movimentacaoFinanceira
+
+/home/.../conciliacaoBancaria/financialMovements/financialMovements.js communicates reports using /cliente/$clientId/movimentacaoFinanceira/$idMovimentacaoFinanceira
+
+/home/.../conciliacaoBancaria/financialMovements/financialMovements.js communicates reports using /cliente/$clientId/movimentacaoFinanceira/$financialMovementId/historico
+
+/home/.../conciliacaoBancaria/financialMovements/financialMovements.js communicates reports using /cliente/$clientId/obeterDetalhesLotePorMovFinId/$idMovimentacao
+
+/home/.../conciliacaoBancaria/financialMovements/financialMovements.js communicates entries using /cliente/$clientId/atributos
+
+/home/.../conciliacaoBancaria/processedFiles/processedFiles.js communicates reports using /cliente/$clientId/arquivosProcessados
+
+/home/.../conciliacaoBancaria/processedFiles/processedFiles.js communicates reports using /cliente/$clientId/arquivoProcessado/$idProcessament
+
+/home/.../conciliacaoBancaria/assignment/assignment.js communicates entries using /cliente/$clientId/tarefas
+
+/home/.../conciliacaoBancaria/assignment/assignment.js communicates reports using /cliente/$clientId/movimentacaoFinanceira/$idMovimentacaoFinanceira
+
+/home/.../conciliacaoBancaria/assignment/assignment.js communicates reports using /cliente/$clientId/contaLancamento/$idContaLancamento
+
+/home/.../conciliacaoBancaria/assignment/assignment.js communicates reports using /cliente/$clientId/movimentacaoFinanceira/$financialMovementId/historico
+
+/home/.../conciliacaoBancaria/assignment/assignment.js communicates reports using /cliente/$clientId/movimentacaoBancaria/$idBankStat/historico
+
+/home/.../conciliacaoBancaria/assignment/assignment.js communicates reports using /cliente/$clientId/obeterDetalhesLotePorMovFinId/$idMovimentacao
+
+/home/.../conciliacaoBancaria/assignment/assignment.js communicates reports using /cliente/$clientId/arquivoProcessado/$idProcessament
+
+/home/.../conciliacaoBancaria/assignment/assignment.js communicates entries using /cliente/$clientId/tarefaTipoVinculo/$tarefaId
+
+/home/.../conciliacaoBancaria/home/functionalities/functionalities.js communicates authorization using /cliente/$clientId/perfil/$profileId/aplicacao/$applicationId/gruposFuncionalidades
+
+/home/.../conciliacaoBancaria/bankStatement/bankStatement.js communicates reports using /cliente/$clientId/lancamentos
+
+/home/.../conciliacaoBancaria/bankStatement/bankStatement.js communicates reports using /cliente/$clientId/saldoInicial
+
+/home/.../conciliacaoBancaria/bankStatement/bankStatement.js communicates reports using /cliente/$clientId/movimentacaoBancaria/$idMovimentacaoBancaria
+
+/home/.../conciliacaoBancaria/bankStatement/bankStatement.js communicates reports using /cliente/$clientId/movimentacaoBancaria/$idMovimentacaoBancaria
+
+/home/.../conciliacaoBancaria/bankStatement/bankStatement.js communicates reports using /cliente/$clientId/movimentacaoBancaria/$idBankStat/historico
+
+/home/.../conciliacaoBancaria/bankStatement/bankStatement.js communicates reports using /cliente/$clientId/obeterDetalhesLotePorMovBanId/$idMovimentacao
+
+/home/.../conciliacaoBancaria/establishment/establishment.js communicates entries using /cliente/$clientId/estabelecimento/$establishmentId/find
+
+/home/.../conciliacaoBancaria/establishment/establishment.js communicates entries using /cliente/$clientId/estabelecimento
+
+/home/.../conciliacaoBancaria/establishment/establishment.js communicates entries using /cliente/$clientId/atributos
+
+/home/.../conciliacaoBancaria/establishment/establishmentUtil.js communicates entries using /cliente/$clientId/estabelecimentos
+
+/home/.../conciliacaoBancaria/establishment/establishmentUtil.js communicates entries using /cliente/$clientId/estabelecimentosDetalhes
+
+/home/.../conciliacaoBancaria/conciliationReport/conciliationReport.js communicates summary using /cliente/$clientId/detalheConciliacao
+
+/home/.../conciliacaoBancaria/conciliationReport/conciliationReport.js communicates summary using /cliente/$clientId/detalheConciliacaoDownload
+
+/home/.../conciliacaoBancaria/conciliationReport/conciliationReport.js communicates reports using /cliente/$clientId/movimentacaoFinanceira/$conciliationReportId/historico
+
+/home/.../conciliacaoBancaria/conciliationReport/conciliationReport.js communicates reports using /cliente/$clientId/movimentacaoBancaria/$conciliationReportId/historico
+
+/home/.../conciliacaoBancaria/conciliationReport/conciliationReport.js communicates entries using /cliente/$clientId/atributos
+
+/home/.../conciliacaoBancaria/conciliationReport/conciliationReport.js communicates entries using /cliente/$clientId/categorias
+
+/home/.../conciliacaoBancaria/occurrenceReason/occurenceReasonUtil.js communicates entries using /cliente/$clientId/motivosOcorrencia
+
+/home/.../conciliacaoBancaria/occurrenceReason/occurrenceReason.js communicates entries using /cliente/$clientId/motivosOcorrencia
+
+/home/.../conciliacaoBancaria/occurrenceReason/occurrenceReason.js communicates entries using /cliente/$clientId/motivoOcorrencia/$occurrenceReasonId/find
+
+/home/.../conciliacaoBancaria/occurrenceReason/occurrenceReason.js communicates entries using /cliente/$clientId/motivoOcorrencia
+
+/home/.../conciliacaoBancaria/occurrenceReason/occurrenceReason.js communicates entries using /cliente/$clientId/categorias
+
+/home/.../conciliacaoBancaria/bankAccounts/bankAccounts.js communicates entries using /cliente/$clientId/contaBancaria
+
+/home/.../conciliacaoBancaria/bankAccounts/bankAccounts.js communicates entries using /bancos
+
+/home/.../conciliacaoBancaria/bankAccounts/bankAccounts.js communicates entries using /cliente/$clientId/contaBancaria/$bankAccountId/find
+
+/home/.../conciliacaoBancaria/bankAccounts/bankAccountUtil.js communicates entries using /cliente/$clientId/contasBancarias
+
+/home/.../conciliacaoBancaria/client/client.js communicates authorization using /aplicacao/$applicationId/usuario/$userId/clientes
+
+/home/.../conciliacaoBancaria/client/client.js communicates authorization using /aplicacao/$aplicationId/cliente/$clientId/usuario/$idUser/operador
+
+/home/.../conciliacaoBancaria/client/client.js communicates authorization using /cliente/$idCliente/usuario/$idUsuario/aplicacoes
+
+/home/.../conciliacaoBancaria/dashboard/dashboard.js communicates dashboard using /cliente/$clientId/perfil/$profileId/usuario/$userId/gadgets
+
+/home/.../conciliacaoBancaria/dashboard/dashboard.js communicates dashboard using /cliente/$clientId/estatistica/resumoConciliacao
+
+/home/.../conciliacaoBancaria/dashboard/dashboard.js communicates dashboard using /cliente/$clientId/estatistica/resumoFinanceiro
+
+/home/.../conciliacaoBancaria/dashboard/dashboard.js communicates dashboard using /cliente/$clientId/estatistica/resumoConciliacao
+
+/home/.../conciliacaoBancaria/dashboard/dashboard.js communicates dashboard using /cliente/$clientId/gadget
+
+/home/.../conciliacaoBancaria/dashboard/dashboard.js communicates dashboard using /cliente/$clientId/gadgets
+
+/home/.../conciliacaoBancaria/dashboard/dashboard.js communicates dashboard using /cliente/$clientId/estatistica/saldoBancario
+
+/home/.../conciliacaoBancaria/dashboard/dashboard.js communicates dashboard using /cliente/$clientId/estatistica/tarefas
+
+/home/.../conciliacaoBancaria/auditLog/audits/audits.js communicates audit using /$clientId/cliente/$auditId/auditoria
+
+/home/.../conciliacaoBancaria/auditLog/audits/audits.js communicates audit using /auditorias
+
+/home/.../conciliacaoBancaria/auditLog/entities/entities.js communicates entries using /entidades
+
+/home/.../conciliacaoBancaria/conciliationSummary/conciliationSummary.js communicates reports using /cliente/$clientId/resumoConciliacao
+
+/home/.../conciliacaoBancaria/conciliationSummary/conciliationSummary.js communicates entries using /cliente/$clientId/atributos
+
+/home/.../conciliacaoBancaria/user/updateAccount/updateAccount.js communicates authentication using /alteraCadastro
+
+/home/.../conciliacaoBancaria/user/loginEmulado/loginEmulado.js communicates authentication using /loginEmulado
+
+/home/.../conciliacaoBancaria/user/login/login.js communicates authentication using /cliente/$idCliente/usuario/$idUsuario/aplicacao/$idAplicacao/perfil/$idPerfil/lang/$lang/trocaAplicacao
+
+/home/.../conciliacaoBancaria/user/changeApplication/changeApplication.js communicates authentication using /loginTrocaAplicacao
+
+/home/.../conciliacaoBancaria/attributesSet/attributesSet.js communicates entries using /cliente/$clientId/conjuntoAtributos
+
+/home/.../conciliacaoBancaria/attributesSet/attributesSet.js communicates entries using /cliente/$clientId/tipoAtributos
+
+/home/.../conciliacaoBancaria/attributesSet/attributesSet.js communicates entries using /cliente/$clientId/conjuntoAtributos/$idAtributoCfg
+
+/home/.../conciliacaoBancaria/attributesSet/attributesSet.js communicates entries using /cliente/$clientId/salvarAtributo
+
+/home/.../conciliacaoBancaria/cities/cities.js communicates entries using /cidades/$uf

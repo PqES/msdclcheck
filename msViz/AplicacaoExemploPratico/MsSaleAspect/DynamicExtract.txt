@@ -1,2 +1,0 @@
-MsAutenticacao using /api/authenticate
-MsProduto using /getProducts/

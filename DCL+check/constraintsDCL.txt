@@ -1,0 +1,387 @@
+audit: http://localhost:8085; /home/microservices/audit/; Java
+	module Controller: inflexion.gestaofinanceira.microservices.plt.audit.controller.*
+	module Domain: inflexion.gestaofinanceira.microservices.plt.audit.domain.*
+	module Main: inflexion.gestaofinanceira.microservices.plt.audit.AuditApplication
+	module Service: inflexion.gestaofinanceira.microservices.plt.audit.services.[a-zA-Z]*Impl
+	module ExceptionCommons: br.com.inflexion.gestaofinanceira.plt.exception.SpcInternalException
+	module ControllerAnnotations: org.springframework.web.bind.annotation.RequestMapping, org.springframework.web.bind.annotation.RestController
+	module MainAnnotations: org.springframework.boot.context.properties.EnableConfigurationProperties, org.springframework.boot.autoconfigure.SpringBootApplication, org.springframework.cloud.client.discovery.EnableDiscoveryClient,  org.springframework.boot.SpringApplication, $java
+	module Apache: org.apache.**
+	module ServiceAnnotation: org.springframework.stereotype.Service, org.springframework.beans.factory.annotation.Autowired
+	module Multitenancy: xxx.gestaofinanceira.microservices.cba.basecommons.multitenancy.properties.MultitenancyProperties
+	module JPA: javax.persistence.**
+	module Beans: org.springframework.context.**, org.springframework.beans.**
+	module Jndi: org.springframework.jndi.**
+	module Logger: org.apache.logging.log4j.**
+
+	only Controller, Service can-depend Service
+	Main cannot-depend Multitenancy
+	Main can-access-only Controller, MainAnnotations, Logger, Apache, $java
+	Service must-useannotation ServiceAnnotation
+	only Controller can-useannotation ControllerAnnotations
+	Main can-useannotation-only MainAnnotations
+	Domain cannot-depend JPA
+	only Service can-depend Jndi
+	only Service can-throw ExceptionCommons
+
+authentication: http://localhost:8082/; /home/microservices/authentication/; Java
+	module Controller: inflexion.gestaofinanceira.microservices.plt.authentication.controller.**
+	module Domain: inflexion.gestaofinanceira.microservices.plt.authentication.domain.**
+	module Main: inflexion.gestaofinanceira.microservices.plt.authentication.AuthenticationApplication
+	module Service: inflexion.gestaofinanceira.microservices.plt.authentication.service.**
+
+	module BaseCommons: xxx.gestaofinanceira.microservices.cba.basecommons.**
+	module ControllerAnnotations: org.springframework.web.bind.annotation.RequestMapping, org.springframework.web.bind.annotation.RestController, org.springframework.web.bind.annotation.RequestBody, org.springframework.web.bind.annotation.PathVariable
+	module MainAnnotations: org.springframework.boot.context.properties.EnableConfigurationProperties, org.springframework.boot.autoconfigure.SpringBootApplication, org.springframework.cloud.client.discovery.EnableDiscoveryClient,  org.springframework.boot.SpringApplication
+	module MyBatis: inflexion.gestaofinanceira.microservices.plt.commons.mybatis.**
+	module PltDomain: br.com.inflexion.gestaofinanceira.plt.domain.**
+	module ServiceAnnotation: org.springframework.stereotype.Service, ServiceAnnotation.*
+
+	%Restricoes only-can
+	only Controller can-useannotation ControllerAnnotations
+	only Main can-useannotation MainAnnotations
+	only Service can-useannotation ServiceAnnotation
+	only Domain, Controller, Service can-depend PltDomain
+	only Service can-depend MyBatis
+
+	%Restricoes cannot
+	$system cannot-depend BaseCommons
+	Service cannot-access Controller
+
+	%Restricoes must
+	Controller must-access Service, Domain
+	Service must-useannotation ServiceAnnotation
+     	Main must-useannotation MainAnnotations
+
+authorization: http://localhost:8083; /home/microservices/authorization/; Java
+
+	module Controller: inflexion.gestaofinanceira.microservices.plt.authorization.controller.*
+	module Main: inflexion.gestaofinanceira.microservices.plt.authorization.*
+	module ServiceInterface: inflexion.gestaofinanceira.microservices.plt.authorization.services.[a-zA-Z]*Service
+	module ServiceImpl: inflexion.gestaofinanceira.microservices.plt.authorization.services.[a-zA-Z]*Impl
+
+	module Apache: org.apache.tomcat.**, org.apache.catalina.**, org.apache.logging.log4j.Logger
+	module BaseCommonsMultitenancy: xxx.gestaofinanceira.microservices.cba.basecommons.multitenancy.**
+	module Beans: org.springframework.beans.**, org.springframework.boot.context.**, org.springframework.context.**
+	module ControllerAnnotations: org.springframework.web.bind.annotation.RequestMapping, org.springframework.web.bind.annotation.RestController
+	module Jndi: org.springframework.jndi.**
+	module MainAnnotations: org.springframework.boot.context.properties.EnableConfigurationProperties, org.springframework.boot.autoconfigure.SpringBootApplication, org.springframework.cloud.client.discovery.EnableDiscoveryClient,  org.springframework.boot.SpringApplication
+	module ServiceAnnotation: org.springframework.stereotype.Service
+
+
+	%Restricoes only-can
+	only Controller, Service can-depend Service
+	only Controller can-useannotation ControllerAnnotations
+	only Service can-depend Jndi
+	only Main can-depend MainAnnotations
+
+	%Restricoes can-only
+	Main can-depend-only $java, MainAnnotations, Apache
+
+	%Restricoes cannot
+	Controller cannot-access Main
+	$system cannot-depend BaseCommonsMultitenancy
+	Service cannot-access Controller
+
+	%Restricoes must
+	ServiceImpl must-useannotation ServiceAnnotation
+	ServiceImpl must-implement ServiceInterface
+	Controller must-useannotation ControllerAnnotations
+
+conciliation: http://localhost:8093; /home/microservices/cba-conciliation/; Java
+	module Controller: xxx.gestaofinanceira.microservices.cba.conciliation.controller.*
+	module DAO: xxx.gestaofinanceira.microservices.cba.conciliation.dao.*
+	module Domain: xxx.gestaofinanceira.microservices.cba.conciliation.domain.*
+	module ImplementDAO: xxx.gestaofinanceira.microservices.cba.conciliation.dao.[a-zA-Z]*DaoImpl
+	module Util: xxx.gestaofinanceira.microservices.cba.conciliation.util.*
+	module Main: xxx.gestaofinanceira.microservices.cba.conciliation.ConciliationApplication
+	module Service: xxx.gestaofinanceira.microservices.cba.conciliation.service.**
+	module Scheduled: xxx.gestaofinanceira.microservices.cba.conciliation.scheduled.**
+
+	module AmazonSQS: com.amazonaws.services.sqs.AmazonSQS
+	module Beans: org.springframework.beans.**, org.springframework.stereotype.Component
+	module BaseCommonsModel: xxx.gestaofinanceira.microservices.cba.basecommons.models.*
+	module BaseCommonsEnumeration: xxx.gestaofinanceira.microservices.cba.basecommons.enumeration.*
+	module BaseCommonsController: xxx.gestaofinanceira.microservices.cba.basecommons.controller.*
+	module BaseCommonsDAO: xxx.gestaofinanceira.microservices.cba.basecommons.daos.**
+	module BaseCommonsDomain: xxx.gestaofinanceira.microservices.cba.basecommons.domain.*
+	module BaseCommonsMultitenancy: xxx.gestaofinanceira.microservices.cba.basecommons.multitenancy.**
+	module ControllerAnnotations: org.springframework.web.bind.annotation.RequestMapping, org.springframework.web.bind.annotation.RestController
+	module JPA: javax.persistence.**
+	module Logger: org.apache.logging.log4j.Logger
+	module MainAnnotations: org.springframework.boot.context.properties.EnableConfigurationProperties, org.springframework.boot.autoconfigure.SpringBootApplication, org.springframework.cloud.client.discovery.EnableDiscoveryClient,  org.springframework.boot.SpringApplication
+	module ServiceAnnotation: org.springframework.stereotype.Service
+	module SpringRepository: org.springframework.stereotype.Repository
+	module Serializable: java.io.Serializable
+
+
+	%Restricoes only-can
+	only Controller can-useannotation ControllerAnnotations
+	only Scheduled can-depend AmazonSQS
+	only Service can-access DAO
+	only Controller, Service can-access Service
+	only Main can-depend BaseCommonsMultitenancy
+	only DAO, Service can-depend BaseCommonsDAO
+
+	%Restricoes can-only
+	Util can-depend-only Util, $java, Logger
+	Domain can-access-only CbaCommonsModel, BaseCommonsDomain, $java
+	ImplementDAO can-depend-only JPA, Hibernate, $java, SpringRepository, BaseCommonsModel
+	Main can-access-only Controller, MainAnnotations, Logger,  $java
+
+	%Restricoes must
+	Main must-useannotation MainAnnotations
+	ImplementDAO must-depend SpringRepository
+	Service must-useannotation ServiceAnnotation
+
+	%Restricoes cannot
+	Domain cannot-depend JPA
+	Controller cannot-access DAO
+
+dashboard: http://localhost:8095/; /home/microservices/cba-dashboard/; Java
+	module Controller: xxx.gestaofinanceira.microservices.cba.dashboard.controller.*
+	module DAO: xxx.gestaofinanceira.microservices.cba.dashboard.dao.**
+	module DAOInterface: xxx.gestaofinanceira.microservices.cba.dashboard.dao.[a-zA-Z]*Dao
+	module Domain: xxx.gestaofinanceira.microservices.cba.dashboard.domain.*
+	module Service: xxx.gestaofinanceira.microservices.cba.dashboard.service.*
+
+	module BaseCommonsController: xxx.gestaofinanceira.microservices.cba.basecommons.controller.**
+	module BaseCommonsDomain: xxx.gestaofinanceira.microservices.cba.basecommons.domain.**
+	module BaseCommonsModel: xxx.gestaofinanceira.microservices.cba.basecommons.models.**
+	module BaseCommonsMultitenancy: xxx.gestaofinanceira.microservices.cba.basecommons.multitenancy.**
+	module ControllerAnnotations: org.springframework.web.bind.annotation.RequestMapping, org.springframework.web.bind.annotation.RestController
+	module Hibernate: org.hibernate.**
+
+	module MainAnnotations: org.springframework.boot.context.properties.EnableConfigurationProperties, org.springframework.boot.autoconfigure.SpringBootApplication, org.springframework.cloud.client.discovery.EnableDiscoveryClient,  org.springframework.boot.SpringApplication, $java
+
+	module Serializable: java.io.Serializable.*
+	module ServiceAnnotation: org.springframework.stereotype.Service
+	module SpringRepository: org.springframework.stereotype.Repository
+
+	%Restricoes only-can
+	only Controller can-useannotation ControllerAnnotations
+	only Controller can-depend BaseCommonsController
+	only Main can-depend Multitenancy
+	only Service, DAO can-access DAO
+
+	%Restricoes can-only
+	ImplementDAO can-depend-only JPA, Hibernate, $java, SpringRepository, BaseCommonsModel
+
+	%Restricoes must
+	Main must-useannotation MainAnnotations
+	Controller must-access Service
+	ImplementDAO must-implement DAOInterface
+	ImplementDAO must-depend SpringRepository
+	Service must-useannotation ServiceAnnotation
+
+	%Restricoes cannot
+	Controller cannot-access DAO
+	Service cannot-depend Controller
+
+entries: http://localhost:8000; /home/microservices/cba-entries/; Java
+	module Util: xxx.gestaofinanceira.microservices.cba.entries.utils.*
+	module Controller: xxx.gestaofinanceira.microservices.cba.entries.controller.*
+	module DAO: xxx.gestaofinanceira.microservices.cba.entries.dao.*
+	module ImplementDAO: xxx.gestaofinanceira.microservices.cba.entries.dao.[a-zA-Z]*DaoImpl
+	module Main: xxx.gestaofinanceira.microservices.cba.entries.EntriesApplication
+	module Model: xxx.gestaofinanceira.microservices.cba.entries.model.**, xxx.gestaofinanceira.microservices.cba.entries.email.model.**, xxx.gestaofinanceira.microservices.cba.entries.models.**
+	module Service: xxx.gestaofinanceira.microservices.cba.entries.service.*
+	module ServiceImplement: xxx.gestaofinanceira.microservices.cba.entries.service.*[a-zA-Z]*ServiceImpl
+	module Serializer: xxx.gestaofinanceira.microservices.cba.entries.serializer.*
+
+	module CbaMultitenancy: xxx.gestaofinanceira.microservices.cba.basecommons.multitenancy.**
+	module ControllerAnnotations: org.springframework.web.bind.annotation.RequestMapping, org.springframework.web.bind.annotation.RestController
+	module Hibernate: org.hibernate.**
+	module JPA: javax.persistence.**
+	module MainAnnotations: org.springframework.boot.context.properties.EnableConfigurationProperties, org.springframework.boot.autoconfigure.SpringBootApplication, org.springframework.cloud.client.discovery.EnableDiscoveryClient,  org.springframework.boot.SpringApplication, $java
+	module Serializable: java.io.Serializable
+	module ServiceAnnotation: org.springframework.stereotype.Service
+	module SpringRepository: org.springframework.stereotype.Repository
+
+	only Controller can-useannotation ControllerAnnotations
+	only Controller, Service can-access Service
+	only Service can-access DAO
+	only Main can-depend CbaMultitenancy
+
+	Util can-depend-only Util, $java
+	ImplementDAO can-depend-only JPA, Hibernate, SpringRepository, $java,
+
+	Main must-useannotation MainAnnotations
+	Controller must-useannotation ControllerAnnotations
+	Service must-useannotation ServiceAnnotation
+	Model, Serializer must-implement Serializable
+	ImplementDAO must-implement SpringRepository
+
+	Controller cannot-access DAO, CbaDAO
+
+fileload: http://localhost:8095/; /home/microservices/cba-file-load/; Java
+
+	module DAO: xxx.gestaofinanceira.microservices.cba.fileload.daos.*
+	module DAOInterface: xxx.gestaofinanceira.microservices.cba.fileload.daos.[a-zA-Z]*Dao
+	module ImplementDAO: xxx.gestaofinanceira.microservices.cba.fileload.daos.[a-zA-Z]*DaoImpl
+	module Main: xxx.gestaofinanceira.microservices.cba.fileload.*
+	module Model: xxx.gestaofinanceira.microservices.cba.fileload.models.**
+	module Service: xxx.gestaofinanceira.microservices.cba.fileload.services.*
+
+	module BaseCommonsDAO: xxx.gestaofinanceira.microservices.cba.basecommons.daos.**
+	module BaseCommonsModel: xxx.gestaofinanceira.microservices.cba.basecommons.models.*
+	module BaseCommonsMultitenancy: xxx.gestaofinanceira.microservices.cba.basecommons.multitenancy.properties.MultitenancyProperties
+	module Beans: javax.validation.**
+	module DataSource: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+	module Hibernate: org.hibernate.**
+	module JPA: javax.persistence.**
+	module MainAnnotations: org.springframework.boot.context.properties.EnableConfigurationProperties, org.springframework.boot.autoconfigure.SpringBootApplication, org.springframework.cloud.client.discovery.EnableDiscoveryClient,  org.springframework.boot.SpringApplication
+
+
+	module Serializable: java.io.Serializable
+	module ServiceAnnotation: org.springframework.stereotype.Service
+	module SpringRepository: org.springframework.stereotype.Repository
+
+	%Restricoes only-can
+	only Model, DAO can-depend JPA, Beans
+	only Main can-useannotation MainAnnotations, DataSource
+	only Main can-depend BaseCommonsMultitenancy
+	only Service can-useannotation ServiceAnnotation
+
+
+	%Restricoes can-only
+	ImplementDAO can-depend-only JPA, Hibernate, $java, SpringRepository, BaseCommonsModel
+
+	%Restricoes cannot
+	Main cannot-depend DAO, Model, BaseCommonsDAO
+	Service cannot-access Main
+
+	%Restricoes must
+	ImplementDAO must-implement DAOInterface
+	ImplementDAO must-depend SpringRepository
+	Model must-implement Serializable
+	Service must-useannotation ServiceAnnotation
+
+fileprocess: http://localhost:8076; /home/microservices/cba-file-process/; Java
+
+	module DAO: xxx.gestaofinanceira.microservices.cba.process.dao.**
+	module DAOInterface: xxx.gestaofinanceira.microservices.cba.process.dao.[a-zA-Z]*Dao
+	module ImplementDAO: xxx.gestaofinanceira.microservices.cba.process.dao.[a-zA-Z]*DaoImpl
+	module Main: xxx.gestaofinanceira.microservices.cba.process.Application
+	module Model: xxx.gestaofinanceira.microservices.cba.process.model.**
+	module Scheduling: xxx.gestaofinanceira.microservices.cba.process.schedule.**
+	module Service: xxx.gestaofinanceira.microservices.cba.process.service.**
+	module Util: xxx.gestaofinanceira.microservices.cba.process.util.**
+
+	module AmazonService: com.amazonaws.services.**
+	module BaseCommonsDomain: xxx.gestaofinanceira.microservices.cba.basecommons.domain.**
+	module BaseCommonsUtil: xxx.gestaofinanceira.microservices.cba.basecommons.utils.**
+	module BaseCommonsMultitenancy: xxx.gestaofinanceira.microservices.cba.basecommons.multitenancy.properties.MultitenancyProperties
+	module JPA: javax.persistence.**
+	module Logger: org.apache.logging.log4j.Logger
+	module MainAnnotations: org.springframework.boot.context.properties.EnableConfigurationProperties, org.springframework.boot.autoconfigure.SpringBootApplication, org.springframework.cloud.client.discovery.EnableDiscoveryClient,  org.springframework.boot.SpringApplication
+	module SchedulingAnnotation: org.springframework.scheduling.annotation.EnableScheduling
+	module SchedulingFramework: org.springframework.scheduling.**
+	module Serializable: java.io.Serializable
+	module ServiceAnnotation: org.springframework.stereotype.Service
+	module SpringBeans: org.springframework.stereotype.Component, org.springframework.beans.**
+	module SpringRepository: org.springframework.stereotype.Repository
+	module Transactional: javax.transaction.**
+
+
+	module Java: java.lang.**, javax.xml.**, javax.annotation.**, Stream.**, xxx.gestaofinanceira.microservices.cba.process.enums.**
+
+
+
+	%Restricoes only-can
+	only Main can-useannotation MainAnnotations
+	only Scheduling can-access SchedulingFramework
+	only Main can-depend BaseCommonsMultitenancy
+	only DAO, Model can-depend Transactional, JPA
+	only Service, Scheduling can-depend AmazonService
+
+
+	%Restricoes  can-only
+	Util can-depend-only Util, BaseCommonsUtil, $java, Logger
+
+
+	%Restricoes cannot
+	Service cannot-depend Controller
+
+	%Restricoes must
+	Main must-useannotation MainAnnotations
+	Service must-useannotation ServiceAnnotation
+	ImplementDAO must-implement DAOInterface, SpringRepository
+	Model must-implement Serializable
+	Scheduling must-depend SchedulingFramework
+	Scheduling must-useannotation SchedulingAnnotation
+
+reports: http://localhost:8094/; /home/microservices/cba-reports/; Java
+	module Controller: xxx.gestaofinanceira.microservices.cba.reports.controller.*
+	module Main: xxx.gestaofinanceira.microservices.cba.reports.ReportsApplication
+	module Serializer: xxx.gestaofinanceira.microservices.cba.reports.serializer.*
+	module Service: xxx.gestaofinanceira.microservices.cba.reports.service.*
+
+	module BaseCommonsController: xxx.gestaofinanceira.microservices.cba.basecommons.controller.BaseController
+	module BaseCommonsMultitenancy: xxx.gestaofinanceira.microservices.cba.basecommons.multitenancy.properties.MultitenancyProperties
+	module ControllerAnnotations: org.springframework.web.bind.annotation.RequestMapping, org.springframework.web.bind.annotation.RestController, ControllerAnnotations.**
+	module JPA: javax.persistence.**
+	module JSONSerializer: flexjson.JSONSerializer.*
+	module MainAnnotations: org.springframework.boot.context.properties.EnableConfigurationProperties, org.springframework.boot.autoconfigure.SpringBootApplication, org.springframework.cloud.client.discovery.EnableDiscoveryClient,  org.springframework.boot.SpringApplication
+	module ServiceAnnotation: org.springframework.stereotype.Service
+
+	module Java: java.lang.**, javax.xml.**, javax.annotation.**, Stream.**
+
+	%Restricoes only-can
+	only Controller can-useannotation ControllerAnnotations
+	only Main can-depend BaseCommonsMultitenancy
+	only Main can-useannotation MainAnnotations
+
+	%Restricoes can-only
+
+	%Restricoes cannot
+	Service cannot-access Controller
+
+	%Restricoes must
+	Main must-useannotation MainAnnotations
+	Controller must-useannotation ControllerAnnotations
+	Controller must-extend BaseCommonsController
+	Service must-useannotation ServiceAnnotation
+	Serializer must-depend JSONSerializer
+
+
+summary: http://localhost:8096/; /home/microservices/cba-summary/; Java
+	module BaseService: xxx.gestaofinanceira.microservices.cba.summary.service.BaseService
+	module Controller: xxx.gestaofinanceira.microservices.cba.summary.controller.*
+
+	module DAO: xxx.gestaofinanceira.microservices.cba.summary.dao.*
+	module DAOInterface: xxx.gestaofinanceira.microservices.cba.summary.dao.[a-zA-Z]*Dao
+    	module ImplementDAO: xxx.gestaofinanceira.microservices.cba.summary.dao.[a-zA-Z]*Impl
+	module Main: xxx.gestaofinanceira.microservices.cba.summary.SummaryApplication
+	module Service: xxx.gestaofinanceira.microservices.cba.summary.service.*
+	module ServiceSubClass:  xxx.gestaofinanceira.microservices.cba.summary.service.AtributoService, xxx.gestaofinanceira.microservices.cba.summary.service.ConciliacaoService, xxx.gestaofinanceira.microservices.cba.summary.service.TreegridService
+	module Stream: xxx.gestaofinanceira.microservices.cba.summary.stream.*
+	module Util: xxx.gestaofinanceira.microservices.cba.summary.util.**
+
+	module BaseCommonsMultitenancy: xxx.gestaofinanceira.microservices.cba.summary.multitenacy.
+	module ControllerAnnotations: org.springframework.web.bind.annotation.RequestMapping, org.springframework.web.bind.annotation.RestController, ControllerAnnotations.**
+	module MainAnnotations: org.springframework.boot.context.properties.EnableConfigurationProperties, org.springframework.boot.autoconfigure.SpringBootApplication, org.springframework.cloud.client.discovery.EnableDiscoveryClient,  org.springframework.boot.SpringApplication
+
+	module Repository: org.springframework.stereotype.Repository
+	module ServiceAnnotation: org.springframework.stereotype.Service, ServiceAnnotation.**
+	module Java: java.lang.**, javax.xml.**, javax.annotation.**, Stream.**
+	module Multi: xxx.gestaofinanceira.microservices.cba.summary.multitenacy.**, xxx.gestaofinanceira.microservices.cba.summary.typehandler.**, xxx.gestaofinanceira.microservices.cba.summary.enums.**
+
+
+	%Restricoes only-can
+	only Service can-useannotation ServiceAnnotation
+	only Controller can-useannotation ControllerAnnotations
+	only Main can-useannotation MainAnnotations
+	only Main can-depend BaseCommonsMultitenancy
+
+	%Restricoes can-only
+	Util can-access-only Util, $java
+
+	%Restricoes must
+	Main must-useannotation MainAnnotations
+	Service must-useannotation ServiceAnnotation
+	Controller must-useannotation ControllerAnnotations
+	ServiceSubClass must-extend BaseService
+	ImplementDAO must-implement DAOInterface
+	ImplementDAO must-useannotation Repository
+	Controller must-access Stream

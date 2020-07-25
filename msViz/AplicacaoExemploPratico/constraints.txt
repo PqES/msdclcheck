@@ -1,7 +1,0 @@
-: ; /home/elena/Documentos/msViz/Zull
-MsProduto: http://localhost:9092; /home/elena/Documentos/msViz/MsProductAspect
-MsAutenticacao: ; /home/elena/Documentos/msViz/MsAutenticacao
-MsCliente: http://localhost:9093; /home/elena/Documentos/msViz/MsCustomerAspect
-MsNewsLetter: ; /home/elena/Documentos/msViz/MsNewsLetter
-eureka-server: ; /home/elena/Documentos/msViz/EurekaServer
-MsVenda: http://localhost:9097; /home/elena/Documentos/msViz/MsSaleAspect

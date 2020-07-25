@@ -1,0 +1,35 @@
+Communication Violates:
+
+	ManualConciliation
+	Divergence: [/home/.../conciliacaoBancaria/manualConciliation/manualConciliation.js(ManualConciliation) CAN_COMMUNICATE_ONLY conciliation (/home/.../conciliacaoBancaria/manualConciliation/manualConciliation.js (ManualConciliation) communicate entries using /cliente/$clientId/categorias)
+	Divergence: [/home/.../conciliacaoBancaria/manualConciliation/manualConciliation.js(ManualConciliation) CAN_COMMUNICATE_ONLY conciliation (/home/.../conciliacaoBancaria/manualConciliation/manualConciliation.js (ManualConciliation) communicate entries using /cliente/$clientId/atributos)
+
+	Assignment
+	Divergence: [/home/.../conciliacaoBancaria/assignment/assignment.js(Assignment) CAN_COMMUNICATE_ONLY reports (/home/.../conciliacaoBancaria/assignment/assignment.js (Assignment) communicate entries using /cliente/$clientId/tarefaTipoVinculo/$tarefaId)
+	Divergence: [/home/.../conciliacaoBancaria/assignment/assignment.js(Assignment) CAN_COMMUNICATE_ONLY reports (/home/.../conciliacaoBancaria/assignment/assignment.js (Assignment) communicate entries using /cliente/$clientId/tarefas)
+
+	ConciliationReport
+	Divergence: [/home/.../conciliacaoBancaria/conciliationReport/conciliationReport.js(ConciliationReport) CAN_COMMUNICATE_ONLY reports (/home/.../conciliacaoBancaria/conciliationReport/conciliationReport.js (ConciliationReport) communicate entries using /cliente/$clientId/atributos)
+	Divergence: [/home/.../conciliacaoBancaria/conciliationReport/conciliationReport.js(ConciliationReport) CAN_COMMUNICATE_ONLY reports (/home/.../conciliacaoBancaria/conciliationReport/conciliationReport.js (ConciliationReport) communicate summary using /cliente/$clientId/detalheConciliacaoDownload)
+	Divergence: [/home/.../conciliacaoBancaria/conciliationReport/conciliationReport.js(ConciliationReport) CAN_COMMUNICATE_ONLY reports (/home/.../conciliacaoBancaria/conciliationReport/conciliationReport.js (ConciliationReport) communicate summary using /cliente/$clientId/detalheConciliacao)
+	Divergence: [/home/.../conciliacaoBancaria/conciliationReport/conciliationReport.js(ConciliationReport) CAN_COMMUNICATE_ONLY reports (/home/.../conciliacaoBancaria/conciliationReport/conciliationReport.js (ConciliationReport) communicate entries using /cliente/$clientId/categorias)
+
+	AuditLog
+	Divergence: [/home/.../conciliacaoBancaria/auditLog/entities/entities.js(AuditLog) CAN_COMMUNICATE_ONLY audit (/home/.../conciliacaoBancaria/auditLog/entities/entities.js (AuditLog) communicate entries using /entidades)
+
+	FinancialMovements
+	Divergence: [/home/.../conciliacaoBancaria/financialMovements/financialMovements.js(FinancialMovements) CAN_COMMUNICATE_ONLY reports (/home/.../conciliacaoBancaria/financialMovements/financialMovements.js (FinancialMovements) communicate entries using /cliente/$clientId/atributos)
+
+	ProcessedFiles
+	Divergence: [/home/.../conciliacaoBancaria/processedFiles/processedFiles.js(ProcessedFiles) CANNOT_COMMUNICATE reports (/home/.../conciliacaoBancaria/processedFiles/processedFiles.js (ProcessedFiles) communicate reports using /cliente/$clientId/arquivosProcessados)
+	Divergence: [/home/.../conciliacaoBancaria/processedFiles/processedFiles.js(ProcessedFiles) CANNOT_COMMUNICATE reports (/home/.../conciliacaoBancaria/processedFiles/processedFiles.js (ProcessedFiles) communicate reports using /cliente/$clientId/arquivoProcessado/$idProcessament)
+
+	ConciliationSummary
+	Abscence: [/home/.../conciliacaoBancaria/conciliationSummary/conciliationSummary.js(ConciliationSummary) MUST_COMMUNICATE summary
+	Divergence: [/home/.../conciliacaoBancaria/conciliationSummary/conciliationSummary.js(ConciliationSummary) CAN_COMMUNICATE_ONLY summary (/home/.../conciliacaoBancaria/conciliationSummary/conciliationSummary.js (ConciliationSummary) communicate entries using /cliente/$clientId/atributos)
+	Divergence: [/home/.../conciliacaoBancaria/conciliationSummary/conciliationSummary.js(ConciliationSummary) CAN_COMMUNICATE_ONLY summary (/home/.../conciliacaoBancaria/conciliationSummary/conciliationSummary.js (ConciliationSummary) communicate reports using /cliente/$clientId/resumoConciliacao)
+	Divergence: [/home/.../conciliacaoBancaria/conciliationSummary/conciliationSummary.js(ConciliationSummary) ONLY_CAN_COMMUNICATE summary (/home/.../conciliacaoBancaria/conciliationReport/conciliationReport.js (ConciliationReport) communicate summary using /cliente/$clientId/detalheConciliacaoDownload)
+	Divergence: [/home/.../conciliacaoBancaria/conciliationSummary/conciliationSummary.js(ConciliationSummary) ONLY_CAN_COMMUNICATE summary (/home/.../conciliacaoBancaria/conciliationReport/conciliationReport.js (ConciliationReport) communicate summary using /cliente/$clientId/detalheConciliacao)
+
+	OccurrenceReport
+	Divergence: [/home/.../conciliacaoBancaria/occurrenceReport/occurrenceReport.js(OccurrenceReport) CAN_COMMUNICATE_ONLY reports (/home/.../conciliacaoBancaria/occurrenceReport/occurrenceReport.js (OccurrenceReport) communicate entries using /cliente/$clientId/atributos)
