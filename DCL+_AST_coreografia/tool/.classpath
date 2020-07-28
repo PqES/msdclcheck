@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-io-2.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/javax.inject_1.0.0.v20091030.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.core.contenttype_3.4.200.v20130326-1255.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.core.jobs_3.5.300.v20130429-1813.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.equinox.app_1.3.100.v20130327-1442.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.equinox.common_3.6.200.v20130402-1505.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.equinox.preferences_3.5.100.v20130422-1538.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.equinox.registry_3.5.301.v20130717-1549.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.jdt.compiler.apt_1.0.600.v20130530-1010.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.jdt.compiler.tool_1.0.200.v20130530-1010.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.jdt.core.manipulation_1.5.0.v20130605-1748.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.ui_3.105.0.v20130522-1122.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.ui.editors_3.8.100.v20130513-1637.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.core.resources_3.8.101.v20130717-0806.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.core.contenttype-3.4.200.v20140207-1251.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.equinox.common-3.6.200.v20130402-1505.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.equinox.preferences-3.6.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.jdt.core-3.12.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.text_3.5.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.core.jobs-3.8.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.osgi.framework-1.8.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.osgi-3.9.0.v20130529-1710.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.equinox.common-3.9.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.equinox.p2.core-2.4.101.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/runtime-3.10.0-v20140318-2214.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/common-3.6.200-v20130402-1505.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/javadepextractor.jar"/>
+	<classpathentry exported="true" kind="lib" path="pi-dclcheck.jar"/>
+	<classpathentry kind="lib" path="lib/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/aopalliance-repackaged-2.4.0-b06-sources.jar"/>
+	<classpathentry kind="lib" path="lib/aopalliance-1.0-sources.jar"/>
+	<classpathentry kind="lib" path="lib/aspectj-1.8.13.jar"/>
+	<classpathentry kind="lib" path="lib/byte-buddy-1.7.9.jar"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry exported="true" kind="lib" path="/opt/eclipse/plugins/org.eclipse.jdt.core_3.13.100.v20171123-1049.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.core.runtime-3.10.0.v20140318-2214.jar"/>
+	<classpathentry kind="lib" path="/home/elena/Documentos/Projeto/msdclcheck/MsDCL_AST/tool/lib/aopalliance-1.0-sources.jar"/>
+	<classpathentry kind="lib" path="/home/elena/Documentos/Projeto/msdclcheck/MsDCL_AST/tool/lib/jgraphx.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
